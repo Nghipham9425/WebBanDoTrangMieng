@@ -1,0 +1,286 @@
+﻿@{
+    ViewBag.Title = "Thanh toán";
+}
+
+<style>
+    .checkout-container {
+        background-color: white;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+        margin-bottom: 40px;
+    }
+
+    .checkout-header {
+        border-bottom: 2px solid #e9ecef;
+        padding-bottom: 15px;
+        margin-bottom: 30px;
+    }
+
+        .checkout-header h2 {
+            color: #3a5a40;
+            font-weight: bold;
+        }
+
+    .form-label {
+        color: #3a5a40;
+        font-weight: 600;
+    }
+
+    .form-control {
+        border-radius: 6px;
+        border-color: #ddd;
+        padding: 12px;
+    }
+
+        .form-control:focus {
+            border-color: #588157;
+            box-shadow: 0 0 0 0.2rem rgba(88, 129, 87, 0.25);
+        }
+
+    .section-title {
+        color: #3a5a40;
+        font-weight: bold;
+        margin: 25px 0 15px;
+        font-size: 20px;
+    }
+
+    .order-summary {
+        background-color: #f8f4e5;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .order-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .order-total {
+        font-weight: bold;
+        font-size: 18px;
+        color: #3a5a40;
+        border-top: 2px solid #588157;
+        padding-top: 10px;
+        margin-top: 10px;
+    }
+
+    .payment-option {
+        margin-bottom: 15px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+        .payment-option:hover, .payment-option.selected {
+            border-color: #588157;
+            background-color: rgba(88, 129, 87, 0.05);
+        }
+
+        .payment-option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+    /* Cải thiện style cho nút checkout để nổi bật hơn */
+    .checkout-btn {
+        background-color: #2d6a4f; /* Màu xanh đậm hơn tạo độ tương phản */
+        color: #ffffff;
+        border: none;
+        padding: 12px 25px;
+        font-weight: bold;
+        border-radius: 5px;
+        font-size: 18px;
+        width: 100%;
+        margin-top: 20px;
+        box-shadow: 0 4px 8px rgba(45, 106, 79, 0.3); /* Thêm bóng đổ tạo chiều sâu */
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+        .checkout-btn:hover {
+            background-color: #1b4332; /* Màu xanh tối hơn khi hover */
+            transform: translateY(-3px); /* Hiệu ứng nút nhô lên khi hover */
+            box-shadow: 0 6px 12px rgba(45, 106, 79, 0.4); /* Bóng đổ lớn hơn khi hover */
+        }
+
+    /* Style đặc biệt cho nút thanh toán trong order summary để tạo sự nổi bật */
+    .order-summary .checkout-btn {
+        border: 2px solid #fff; /* Viền trắng để tạo độ tương phản */
+        background-image: linear-gradient(to right, #2d6a4f, #3a5a40); /* Gradient background */
+    }
+
+        .order-summary .checkout-btn:hover {
+            background-image: linear-gradient(to right, #1b4332, #2d6a4f); /* Gradient tối hơn khi hover */
+        }
+</style>
+
+<div class="checkout-container">
+    <div class="checkout-header">
+        <h2>Thanh toán</h2>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <form id="checkout-form">
+                <!-- Thông tin giao hàng -->
+                <h3 class="section-title">Thông tin giao hàng</h3>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="fullName" class="form-label">Họ và tên</label>
+                        <input type="text" class="form-control" id="fullName" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="phone" class="form-label">Số điện thoại</label>
+                        <input type="tel" class="form-control" id="phone" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Địa chỉ</label>
+                    <input type="text" class="form-control" id="address" required>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="province" class="form-label">Tỉnh/Thành phố</label>
+                        <select class="form-control" id="province" required>
+                            <option value="">Chọn Tỉnh/Thành phố</option>
+                            <option value="Hà Nội">Hà Nội</option>
+                            <option value="Hồ Chí Minh">Hồ Chí Minh</option>
+                            <option value="Đà Nẵng">Đà Nẵng</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="district" class="form-label">Quận/Huyện</label>
+                        <select class="form-control" id="district" required>
+                            <option value="">Chọn Quận/Huyện</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="ward" class="form-label">Xã/Phường</label>
+                        <select class="form-control" id="ward" required>
+                            <option value="">Chọn Xã/Phường</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="note" class="form-label">Ghi chú (tùy chọn)</label>
+                    <textarea class="form-control" id="note" rows="3"></textarea>
+                </div>
+
+                <!-- Phương thức thanh toán -->
+                <h3 class="section-title">Phương thức thanh toán</h3>
+                <div class="payment-option selected">
+                    <input type="radio" name="payment" id="cod" value="cod" checked>
+                    <label for="cod">Thanh toán khi nhận hàng (COD)</label>
+                </div>
+                <div class="payment-option">
+                    <input type="radio" name="payment" id="bank-transfer" value="bank-transfer">
+                    <label for="bank-transfer">Chuyển khoản ngân hàng</label>
+                </div>
+                <div class="payment-option">
+                    <input type="radio" name="payment" id="momo" value="momo">
+                    <label for="momo">Ví điện tử MoMo</label>
+                </div>
+
+                <!-- Nút đặt hàng cho thiết bị di động -->
+                <button type="submit" class="checkout-btn d-md-none mt-4">ĐẶT HÀNG</button>
+            </form>
+        </div>
+
+        <div class="col-md-4">
+            <div class="order-summary">
+                <h3 class="section-title mb-3">Tóm tắt đơn hàng</h3>
+                <div class="order-item">
+                    <div>Bánh Mousse Matcha x1</div>
+                    <div>75.000đ</div>
+                </div>
+                <div class="order-item">
+                    <div>Cupcake Matcha x2</div>
+                    <div>80.000đ</div>
+                </div>
+                <div class="order-item">
+                    <div>Tạm tính:</div>
+                    <div>155.000đ</div>
+                </div>
+                <div class="order-item">
+                    <div>Phí vận chuyển:</div>
+                    <div>20.000đ</div>
+                </div>
+                <div class="order-total d-flex justify-content-between">
+                    <div>Tổng cộng:</div>
+                    <div>175.000đ</div>
+                </div>
+
+                <!-- Nút đặt hàng cho desktop -->
+                <button type="submit" form="checkout-form" class="checkout-btn d-none d-md-block">ĐẶT HÀNG</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            // Chọn phương thức thanh toán
+            $('.payment-option').click(function () {
+                $('.payment-option').removeClass('selected');
+                $(this).addClass('selected');
+                $(this).find('input[type="radio"]').prop('checked', true);
+            });
+
+            // Xử lý form submit
+            $('#checkout-form').submit(function (e) {
+                e.preventDefault();
+                alert('Cảm ơn bạn đã đặt hàng! Chúng tôi sẽ liên hệ sớm nhất có thể.');
+                // Ở đây sẽ gọi AJAX để xử lý đơn hàng
+            });
+
+            // Giả lập dữ liệu quận huyện
+            $('#province').change(function () {
+                var province = $(this).val();
+                var districts = [];
+
+                if (province === 'Hà Nội') {
+                    districts = ['Ba Đình', 'Hoàn Kiếm', 'Hai Bà Trưng'];
+                } else if (province === 'Hồ Chí Minh') {
+                    districts = ['Quận 1', 'Quận 2', 'Quận 3'];
+                } else if (province === 'Đà Nẵng') {
+                    districts = ['Hải Châu', 'Thanh Khê', 'Sơn Trà'];
+                }
+
+                var options = '<option value="">Chọn Quận/Huyện</option>';
+                districts.forEach(function (district) {
+                    options += '<option value="' + district + '">' + district + '</option>';
+                });
+
+                $('#district').html(options);
+            });
+
+            // Hiển thị dữ liệu xã/phường khi chọn quận/huyện
+            $('#district').change(function () {
+                var district = $(this).val();
+                if (district) {
+                    // Giả lập dữ liệu xã phường - trong thực tế sẽ lấy từ API
+                    var wards = ['Phường 1', 'Phường 2', 'Phường 3'];
+
+                    var options = '<option value="">Chọn Xã/Phường</option>';
+                    wards.forEach(function (ward) {
+                        options += '<option value="' + ward + '">' + ward + '</option>';
+                    });
+
+                    $('#ward').html(options);
+                } else {
+                    $('#ward').html('<option value="">Chọn Xã/Phường</option>');
+                }
+            });
+        });
+    </script>
+}
