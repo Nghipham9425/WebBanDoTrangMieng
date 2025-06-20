@@ -1,743 +1,261 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Đồ Tráng Miệng</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="@ViewBag.Description ?? 'Cửa hàng đồ tráng miệng online chất lượng cao với bánh flan, tiramisu, cheesecake và nhiều món ngon khác.'">
+    <meta name="keywords" content="bánh flan, tiramisu, cheesecake, đồ tráng miệng, bánh ngọt, pudding">
+    <meta name="author" content="Đồ Tráng Miệng">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico">
+    
+    <!-- CSS Files -->
     @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <!-- Custom CSS -->
-    <style>
-        /* Matcha theme colors */
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background-color: #f8f4e5; /* Cream/ivory background */
-            color: #3a5a40; /* Soft matcha green text */
-        }
-
-        /* Header styles */
-        .top-header {
-            background-color: #3a5a40; /* Darker matcha green */
-            color: #f8f4e5; /* Cream text */
-            padding: 10px 0;
-        }
-
-        .top-header-content {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .contact-info span {
-            margin-right: 20px;
-        }
-
-        .social-icons a {
-            margin-left: 15px;
-            color: #f8f4e5; /* Cream icons */
-        }
-
-        /* Navigation bar */
-        .main-navbar {
-            background-color: #588157; /* Medium matcha green */
-            padding: 10px 0;
-        }
-
-        .navbar-brand {
-            color: #f8f4e5 !important; /* Cream text */
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .nav-link {
-            color: #f8f4e5 !important; /* Cream text */
-            font-weight: bold;
-            padding: 10px 15px !important;
-            position: relative;
-        }
-
-            .nav-link:hover {
-                background-color: #344e41; /* Darker green for hover */
-            }
-
-        /* Dropdown menu styles - IMPROVED */
-        .nav-item.dropdown {
-            position: relative;
-        }
-
-        .dropdown-menu {
-            background-color: white;
-            border: none;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            padding: 8px 0;
-            margin-top: 0; /* Reduced space between menu and dropdown */
-            min-width: 220px;
-            overflow: hidden;
-            z-index: 1000;
-            position: absolute;
-            top: 100%; /* Position directly below nav item */
-            left: 0;
-            display: block;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            pointer-events: none;
-        }
-
-            /* Larger buffer space above dropdown */
-            .dropdown-menu::before {
-                content: '';
-                position: absolute;
-                top: -20px; /* Increased buffer above the menu */
-                left: 0;
-                right: 0;
-                height: 20px;
-                background-color: transparent;
-            }
-
-        .nav-item.dropdown:hover .dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-        }
-
-        .dropdown-item {
-            padding: 12px 20px;
-            color: #3a5a40 !important;
-            font-weight: normal;
-            transition: all 0.3s;
-            position: relative;
-            display: block;
-        }
-
-            .dropdown-item:hover {
-                background-color: #f8f4e5;
-                color: #588157 !important;
-                text-decoration: none;
-            }
-
-            /* Hover line effect */
-            .dropdown-item::after {
-                content: '';
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                width: 0;
-                height: 2px;
-                background-color: #588157;
-                transition: width 0.3s ease;
-            }
-
-            .dropdown-item:hover::after {
-                width: 100%;
-            }
-
-        /* Custom dropdown arrow */
-        .dropdown-toggle::after {
-            display: none;
-        }
-
-        .dropdown-icon {
-            font-size: 12px;
-            margin-left: 5px;
-            transition: transform 0.3s;
-        }
-
-        .nav-item.dropdown:hover .dropdown-icon {
-            transform: rotate(180deg);
-        }
-
-        /* Footer */
-        footer {
-            background-color: #3a5a40; /* Darker matcha green */
-            color: #f8f4e5; /* Cream text */
-            padding: 30px 0 10px;
-            margin-top: 30px;
-        }
-
-        .footer-widget h4 {
-            color: #a3b18a; /* Light matcha green */
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        .footer-widget ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-            .footer-widget ul li {
-                margin-bottom: 10px;
-            }
-
-                .footer-widget ul li a {
-                    color: #f8f4e5; /* Cream text */
-                    text-decoration: none;
-                }
-
-                    .footer-widget ul li a:hover {
-                        color: #dad7cd; /* Slightly darker cream for hover */
-                        text-decoration: underline;
-                    }
-
-        .copyright {
-            background-color: #344e41; /* Darkest matcha green */
-            text-align: center;
-            padding: 15px 0;
-            margin-top: 20px;
-            color: #f8f4e5; /* Cream text */
-        }
-
-        /* Content section */
-        .body-content {
-            padding: 20px 0;
-            min-height: 400px;
-        }
-
-            /* Links in the content area */
-            .body-content a {
-                color: #588157; /* Medium matcha green */
-            }
-
-                .body-content a:hover {
-                    color: #3a5a40; /* Darker matcha green */
-                }
-
-        /* Buttons with matcha theme */
-        .btn-matcha {
-            background-color: #588157; /* Medium matcha green */
-            color: #f8f4e5; /* Cream text */
-            border: none;
-        }
-
-            .btn-matcha:hover {
-                background-color: #3a5a40; /* Darker matcha green */
-                color: #f8f4e5; /* Cream text */
-            }
-
-        /* ===== ENHANCED MODAL LOGIN/REGISTER STYLES ===== */
-        .auth-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            z-index: 1050;
-            overflow: auto;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(5px);
-        }
-
-            .auth-modal.show {
-                display: flex;
-                animation: fadeIn 0.3s ease-out;
-            }
-
-        @@keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        .auth-container {
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            width: 95%;
-            max-width: 480px;
-            position: relative;
-            padding: 0;
-            overflow: hidden;
-            animation: slideUp 0.4s ease-out;
-        }
-
-        @@keyframes slideUp {
-            from {
-                transform: translateY(30px);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .auth-close {
-            position: absolute;
-            top: 18px;
-            right: 18px;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            color: #999;
-            cursor: pointer;
-            z-index: 1051;
-            border-radius: 50%;
-            background-color: #f1f1f1;
-            transition: all 0.2s;
-        }
-
-            .auth-close:hover {
-                background-color: #e0e0e0;
-                transform: rotate(90deg);
-            }
-
-        .auth-tabs {
-            display: flex;
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #eee;
-        }
-
-        .auth-tab {
-            flex: 1;
-            padding: 18px 0;
-            text-align: center;
-            font-weight: 600;
-            color: #6c757d;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.3s;
-        }
-
-            .auth-tab.active {
-                color: #3a5a40;
-                background-color: white;
-            }
-
-                .auth-tab.active::after {
-                    content: '';
-                    position: absolute;
-                    bottom: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 3px;
-                    background-color: #588157;
-                }
-
-            .auth-tab i {
-                margin-right: 8px;
-            }
-
-        .auth-content {
-            padding: 35px;
-        }
-
-        .auth-form {
-            display: none;
-        }
-
-            .auth-form.active {
-                display: block;
-                animation: fadeIn 0.4s ease;
-            }
-
-        .form-heading {
-            font-size: 26px;
-            color: #3a5a40;
-            margin-bottom: 25px;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        .form-group {
-            margin-bottom: 22px;
-            position: relative;
-        }
-
-            .form-group label {
-                display: block;
-                margin-bottom: 8px;
-                font-weight: 500;
-                color: #3a5a40;
-                font-size: 15px;
-            }
-
-            .form-group .input-icon {
-                position: absolute;
-                left: 15px;
-                top: 43px;
-                color: #588157;
-                font-size: 18px;
-            }
-
-        .auth-form .form-control {
-            width: 100%;
-            padding: 15px 15px 15px 45px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            transition: all 0.3s;
-            font-size: 16px;
-        }
-
-            .auth-form .form-control:focus {
-                border-color: #588157;
-                box-shadow: 0 0 0 0.2rem rgba(88, 129, 87, 0.15);
-                outline: none;
-            }
-
-        .toggle-password {
-            position: absolute;
-            right: 15px;
-            top: 47px;
-            color: #777;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-            .toggle-password:hover {
-                color: #3a5a40;
-            }
-
-        .form-check {
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-        }
-
-            .form-check .form-check-input {
-                margin-top: 0;
-                margin-right: 10px;
-                width: 18px;
-                height: 18px;
-            }
-
-            .form-check .form-check-label {
-                line-height: 1.2;
-                margin-bottom: 0;
-            }
-
-        .auth-btn {
-            background-color: #588157;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 14px;
-            font-weight: 600;
-            font-size: 16px;
-            width: 100%;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 6px rgba(88, 129, 87, 0.2);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-            .auth-btn:hover {
-                background-color: #3a5a40;
-                transform: translateY(-2px);
-                box-shadow: 0 6px 12px rgba(88, 129, 87, 0.25);
-            }
-
-            .auth-btn:active {
-                transform: translateY(0);
-            }
-
-            .auth-btn i {
-                margin-right: 8px;
-            }
-
-        .form-divider {
-            text-align: center;
-            margin: 20px 0;
-            position: relative;
-        }
-
-            .form-divider::before {
-                content: '';
-                position: absolute;
-                left: 0;
-                top: 50%;
-                width: 43%;
-                height: 1px;
-                background-color: #ddd;
-            }
-
-            .form-divider::after {
-                content: '';
-                position: absolute;
-                right: 0;
-                top: 50%;
-                width: 43%;
-                height: 1px;
-                background-color: #ddd;
-            }
-
-            .form-divider span {
-                background-color: white;
-                padding: 0 10px;
-                color: #888;
-                font-size: 14px;
-                position: relative;
-                z-index: 1;
-            }
-
-        .social-login {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-            .social-login .social-btn {
-                flex: 1;
-                padding: 10px;
-                border: 1px solid #ddd;
-                border-radius: 8px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: #555;
-                transition: all 0.2s;
-                text-decoration: none;
-                background-color: white;
-            }
-
-                .social-login .social-btn:hover {
-                    background-color: #f5f5f5;
-                    transform: translateY(-2px);
-                }
-
-                .social-login .social-btn i {
-                    margin-right: 8px;
-                    font-size: 18px;
-                }
-
-                .social-login .social-btn.facebook i {
-                    color: #3b5998;
-                }
-
-                .social-login .social-btn.google i {
-                    color: #db4437;
-                }
-
-        .form-footer {
-            margin-top: 25px;
-            text-align: center;
-            color: #6c757d;
-            font-size: 15px;
-        }
-
-            .form-footer a {
-                color: #588157;
-                text-decoration: none;
-                font-weight: 500;
-                transition: all 0.2s;
-            }
-
-                .form-footer a:hover {
-                    color: #3a5a40;
-                    text-decoration: underline;
-                }
-
-        /* Reset Password Form */
-        #resetPasswordForm {
-            text-align: center;
-        }
-
-            #resetPasswordForm .form-icon {
-                font-size: 60px;
-                color: #588157;
-                margin-bottom: 20px;
-            }
-
-            #resetPasswordForm p {
-                color: #555;
-                margin-bottom: 25px;
-                font-size: 15px;
-                line-height: 1.5;
-            }
-
-            #resetPasswordForm .back-link {
-                display: block;
-                margin-top: 20px;
-                color: #588157;
-                font-size: 15px;
-            }
-
-        .auth-alert {
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: none;
-            animation: fadeIn 0.5s;
-            font-size: 14px;
-        }
-
-            .auth-alert.success {
-                background-color: rgba(76, 175, 80, 0.1);
-                border-left: 4px solid #4CAF50;
-                color: #1e881e;
-            }
-
-            .auth-alert.error {
-                background-color: rgba(244, 67, 54, 0.1);
-                border-left: 4px solid #F44336;
-                color: #d32f2f;
-            }
-
-            .auth-alert i {
-                margin-right: 8px;
-            }
-
-        /* Responsive adjustments for dropdown */
-        @@media (max-width: 992px) {
-            .dropdown-menu {
-                border: none;
-                box-shadow: none;
-                background-color: rgba(58, 90, 64, 0.1);
-                margin-top: 0;
-                padding-left: 20px;
-                border-radius: 0;
-                transition: none;
-                display: none;
-                opacity: 1;
-                visibility: visible;
-                position: static;
-            }
-
-            .dropdown-item {
-                padding: 10px 15px;
-            }
-
-                .dropdown-item:hover::after {
-                    width: 0;
-                }
-        }
-
-        @@media (max-width: 576px) {
-            .auth-content {
-                padding: 25px 20px;
-            }
-
-            .auth-tab {
-                padding: 15px 0;
-                font-size: 14px;
-            }
-
-            .form-heading {
-                font-size: 22px;
-                margin-bottom: 20px;
-            }
-
-            .social-login {
-                flex-direction: column;
-                gap: 10px;
-            }
-        }
-    </style>
+    <link href="~/Content/layout.css" rel="stylesheet" />
+    <link href="~/Content/auth-modal.css" rel="stylesheet" />
+    <link href="~/Content/components.css" rel="stylesheet" />
+    <link href="~/Content/home.css" rel="stylesheet" />
+    <link href="~/Content/product.css" rel="stylesheet" />
+    <link href="~/Content/cart.css" rel="stylesheet" />
+    <link href="~/Content/contact.css" rel="stylesheet" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
-    <!-- Top Header -->
+    <!-- ==========================================
+         TOP HEADER SECTION
+         ========================================== -->
     <div class="top-header">
         <div class="container">
             <div class="top-header-content">
                 <div class="contact-info">
-                    <span><i class="fas fa-phone-alt"></i> 0123 456 789</span>
-                    <span><i class="far fa-envelope"></i> info@dotrangmieng.com</span>
+                    <span><i class="fas fa-phone"></i> Hotline: 0123-456-789</span>
+                    <span><i class="fas fa-envelope"></i> info@dotrangmieng.com</span>
+                    <span><i class="fas fa-clock"></i> Mở cửa: 8:00 - 22:00</span>
                 </div>
                 <div class="social-icons">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Main Navigation -->
+    <!-- ==========================================
+         MAIN NAVIGATION
+         ========================================== -->
     <nav class="navbar navbar-expand-lg main-navbar">
         <div class="container">
+            <!-- Brand Logo -->
             @Html.ActionLink("Đồ Tráng Miệng", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+            
+            <!-- Mobile Menu Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon">
+                    <i class="fas fa-bars"></i>
+                </span>
             </button>
-            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">@Html.ActionLink("Trang chủ", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
 
-                    <!-- Sản phẩm with dropdown -->
+            <!-- Navigation Menu -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        @Html.ActionLink("Trang chủ", "Index", "Home", new { area = "" }, new { @class = "nav-link" })
+                    </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" role="button">
                             Sản phẩm <i class="fas fa-chevron-down dropdown-icon"></i>
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">Tất cả sản phẩm</a></li>
-                            <li><a class="dropdown-item" href="#">Bánh ngọt</a></li>
-                            <li><a class="dropdown-item" href="#">Bánh kem</a></li>
-                            <li><a class="dropdown-item" href="#">Kem các loại</a></li>
-                            <li><a class="dropdown-item" href="#">Trà sữa</a></li>
-                            <li><a class="dropdown-item" href="#">Đồ uống matcha</a></li>
-                            <li><a class="dropdown-item" href="#">Đồ ăn vặt</a></li>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Tất cả sản phẩm", "Index", "Product", new { area = "" }, new { @class = "dropdown-item" })</li>
+                            <li>@Html.ActionLink("Bánh Flan", "Index", "Product", new { category = "flan" }, new { @class = "dropdown-item" })</li>
+                            <li>@Html.ActionLink("Tiramisu", "Index", "Product", new { category = "tiramisu" }, new { @class = "dropdown-item" })</li>
+                            <li>@Html.ActionLink("Cheesecake", "Index", "Product", new { category = "cheesecake" }, new { @class = "dropdown-item" })</li>
+                            <li>@Html.ActionLink("Pudding", "Index", "Product", new { category = "pudding" }, new { @class = "dropdown-item" })</li>
                         </ul>
                     </li>
-
-                    <li class="nav-item">@Html.ActionLink("Giới thiệu", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li class="nav-item">@Html.ActionLink("Liên hệ", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li class="nav-item">
-                        <a href="@Url.Action("Index", "Cart")" class="nav-link">
-                            <i class="fas fa-shopping-cart"></i> Giỏ hàng
+                        @Html.ActionLink("Giới thiệu", "About", "Home", new { area = "" }, new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Liên hệ", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })
+                    </li>
+                </ul>
+
+                <!-- Action Buttons -->
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link search-toggle" title="Tìm kiếm">
+                            <i class="fas fa-search"></i>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link" id="loginBtn">
-                            <i class="fas fa-user"></i> Đăng nhập
+                        <a href="@Url.Action("Index", "Cart")" class="nav-link cart-toggle" title="Giỏ hàng">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count">0</span>
                         </a>
+                    </li>
+                    <li class="nav-item user-menu">
+                        @if (Session["UserId"] != null)
+                        {
+                            <!-- User is logged in -->
+                            <div class="user-dropdown">
+                                <a href="#" class="nav-link user-toggle" title="Tài khoản">
+                                    <i class="fas fa-user"></i>
+                                    <span class="user-name">@Session["UserName"]</span>
+                                    <i class="fas fa-chevron-down dropdown-arrow"></i>
+                                </a>
+                                <div class="user-dropdown-menu">
+                                    <div class="user-info">
+                                        <div class="user-avatar">
+                                            <i class="fas fa-user-circle"></i>
+                                        </div>
+                                        <div class="user-details">
+                                            <strong>@Session["UserName"]</strong>
+                                            <small>@Session["Email"]</small>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                    <a href="#" class="dropdown-item">
+                                        <i class="fas fa-user"></i>
+                                        <span>Thông tin cá nhân</span>
+                                    </a>
+                                    <a href="#" class="dropdown-item">
+                                        <i class="fas fa-shopping-bag"></i>
+                                        <span>Lịch sử đơn hàng</span>
+                                    </a>
+                                    <a href="#" class="dropdown-item">
+                                        <i class="fas fa-heart"></i>
+                                        <span>Sản phẩm yêu thích</span>
+                                    </a>
+                                    <a href="#" class="dropdown-item">
+                                        <i class="fas fa-cog"></i>
+                                        <span>Cài đặt</span>
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a href="@Url.Action("Logout", "User")" class="dropdown-item logout">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                        <span>Đăng xuất</span>
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <!-- User is not logged in -->
+                            <a href="#" class="nav-link user-toggle" title="Tài khoản">
+                                <i class="fas fa-user"></i>
+                            </a>
+                        }
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <div class="container body-content">
-        @RenderBody()
-    </div>
+    <!-- ==========================================
+         MAIN CONTENT AREA
+         ========================================== -->
+    <main class="body-content">
+        <div class="container">
+            @RenderBody()
+        </div>
+    </main>
 
-    <!-- Enhanced Login/Register Modal -->
-    <div class="auth-modal" id="authModal">
-        <div class="auth-container">
-            <span class="auth-close" id="authClose">&times;</span>
-
-            <div class="auth-tabs">
-                <div class="auth-tab active" data-tab="login"><i class="fas fa-sign-in-alt"></i>Đăng nhập</div>
-                <div class="auth-tab" data-tab="register"><i class="fas fa-user-plus"></i>Đăng ký</div>
-            </div>
-
-            <div class="auth-content">
-                <!-- Auth Alert -->
-                <div id="authAlert" class="auth-alert">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <span id="authAlertMessage"></span>
+    <!-- ==========================================
+         FOOTER SECTION
+         ========================================== -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <!-- Company Info -->
+                <div class="col-lg-4 col-md-6 footer-widget">
+                    <h4>Đồ Tráng Miệng</h4>
+                    <p>Cửa hàng đồ tráng miệng online chất lượng cao với đa dạng các món bánh ngon và hấp dẫn.</p>
+                    <div class="contact-details">
+                        <p><i class="fas fa-map-marker-alt"></i> 123 Đường ABC, Quận 1, TP.HCM</p>
+                        <p><i class="fas fa-phone"></i> 0123-456-789</p>
+                        <p><i class="fas fa-envelope"></i> info@dotrangmieng.com</p>
+                    </div>
                 </div>
 
+                <!-- Quick Links -->
+                <div class="col-lg-2 col-md-6 footer-widget">
+                    <h4>Liên kết</h4>
+                    <ul>
+                        <li>@Html.ActionLink("Trang chủ", "Index", "Home")</li>
+                        <li>@Html.ActionLink("Sản phẩm", "Index", "Product")</li>
+                        <li>@Html.ActionLink("Giới thiệu", "About", "Home")</li>
+                        <li>@Html.ActionLink("Liên hệ", "Contact", "Home")</li>
+                    </ul>
+                </div>
+
+                <!-- Product Categories -->
+                <div class="col-lg-3 col-md-6 footer-widget">
+                    <h4>Danh mục</h4>
+                    <ul>
+                        <li><a href="#">Bánh Flan</a></li>
+                        <li><a href="#">Tiramisu</a></li>
+                        <li><a href="#">Cheesecake</a></li>
+                        <li><a href="#">Pudding</a></li>
+                        <li><a href="#">Bánh kem</a></li>
+                    </ul>
+                </div>
+
+                <!-- Customer Service -->
+                <div class="col-lg-3 col-md-6 footer-widget">
+                    <h4>Hỗ trợ</h4>
+                    <ul>
+                        <li><a href="#">Chính sách bảo mật</a></li>
+                        <li><a href="#">Điều khoản sử dụng</a></li>
+                        <li><a href="#">Hướng dẫn đặt hàng</a></li>
+                        <li><a href="#">Chính sách đổi trả</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="copyright">
+                <p>&copy; @DateTime.Now.Year Đồ Tráng Miệng. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==========================================
+         AUTH MODAL
+         ========================================== -->
+    <div id="authModal" class="auth-modal">
+        <div class="auth-container">
+            <span class="auth-close">&times;</span>
+            
+            <!-- Simple Tabs -->
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-target="loginForm">
+                    <i class="fas fa-sign-in-alt"></i> Đăng nhập
+                </div>
+                <div class="auth-tab" data-target="registerForm">
+                    <i class="fas fa-user-plus"></i> Đăng ký
+                </div>
+            </div>
+            
+            <div class="auth-content">
                 <!-- Login Form -->
-                <div class="auth-form active" id="loginForm">
+                <div id="loginForm" class="auth-form active">
                     <h3 class="form-heading">Đăng nhập</h3>
-                    <div class="social-login">
-                        <a href="#" class="social-btn facebook">
-                            <i class="fab fa-facebook-f"></i> Facebook
-                        </a>
-                        <a href="#" class="social-btn google">
-                            <i class="fab fa-google"></i> Google
-                        </a>
-                    </div>
-                    <div class="form-divider">
-                        <span>hoặc đăng nhập với</span>
-                    </div>
                     <form>
                         <div class="form-group">
                             <label for="loginEmail">Email</label>
@@ -748,339 +266,94 @@
                             <label for="loginPassword">Mật khẩu</label>
                             <i class="fas fa-lock input-icon"></i>
                             <input type="password" id="loginPassword" class="form-control" placeholder="Nhập mật khẩu" required>
-                            <span class="toggle-password" onclick="togglePassword('loginPassword')">
-                                <i class="far fa-eye"></i>
-                            </span>
+                            <i class="fas fa-eye toggle-password" data-target="loginPassword"></i>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="rememberMe">
-                            <label class="form-check-label" for="rememberMe">
-                                Ghi nhớ đăng nhập
-                            </label>
+                            <input type="checkbox" id="rememberMe" class="form-check-input">
+                            <label for="rememberMe" class="form-check-label">Ghi nhớ đăng nhập</label>
                         </div>
                         <button type="submit" class="auth-btn">
                             <i class="fas fa-sign-in-alt"></i> Đăng nhập
                         </button>
                     </form>
+                    
                     <div class="form-footer">
-                        <p>Quên mật khẩu? <a href="#" id="forgotPasswordLink">Lấy lại mật khẩu</a></p>
+                        <a href="#" id="forgotPassword">Quên mật khẩu?</a>
                     </div>
                 </div>
 
                 <!-- Register Form -->
-                <div class="auth-form" id="registerForm">
-                    <h3 class="form-heading">Đăng ký tài khoản</h3>
+                <div id="registerForm" class="auth-form">
+                    <h3 class="form-heading">Đăng ký</h3>
                     <form>
                         <div class="form-group">
-                            <label for="registerName">Họ tên</label>
+                            <label for="fullName">Họ và tên</label>
                             <i class="fas fa-user input-icon"></i>
-                            <input type="text" id="registerName" class="form-control" placeholder="Nhập họ tên đầy đủ" required>
+                            <input type="text" id="fullName" class="form-control" placeholder="Nhập họ và tên" required>
                         </div>
                         <div class="form-group">
                             <label for="registerEmail">Email</label>
                             <i class="fas fa-envelope input-icon"></i>
-                            <input type="email" id="registerEmail" class="form-control" placeholder="Nhập địa chỉ email" required>
+                            <input type="email" id="registerEmail" class="form-control" placeholder="Nhập email của bạn" required>
                         </div>
                         <div class="form-group">
                             <label for="registerPassword">Mật khẩu</label>
                             <i class="fas fa-lock input-icon"></i>
-                            <input type="password" id="registerPassword" class="form-control" placeholder="Tạo mật khẩu mới" required>
-                            <span class="toggle-password" onclick="togglePassword('registerPassword')">
-                                <i class="far fa-eye"></i>
-                            </span>
+                            <input type="password" id="registerPassword" class="form-control" placeholder="Nhập mật khẩu (tối thiểu 6 ký tự)" required>
+                            <i class="fas fa-eye toggle-password" data-target="registerPassword"></i>
                         </div>
                         <div class="form-group">
                             <label for="confirmPassword">Xác nhận mật khẩu</label>
                             <i class="fas fa-lock input-icon"></i>
                             <input type="password" id="confirmPassword" class="form-control" placeholder="Nhập lại mật khẩu" required>
-                            <span class="toggle-password" onclick="togglePassword('confirmPassword')">
-                                <i class="far fa-eye"></i>
-                            </span>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="agreeTerms" required>
-                            <label class="form-check-label" for="agreeTerms">
-                                Tôi đồng ý với <a href="#">điều khoản sử dụng</a> và <a href="#">chính sách bảo mật</a>
-                            </label>
+                            <i class="fas fa-eye toggle-password" data-target="confirmPassword"></i>
                         </div>
                         <button type="submit" class="auth-btn">
                             <i class="fas fa-user-plus"></i> Đăng ký
                         </button>
                     </form>
-                    <div class="form-footer">
-                        <p>Đã có tài khoản? <a href="#" class="switch-to-login">Đăng nhập ngay</a></p>
-                    </div>
                 </div>
 
                 <!-- Reset Password Form -->
-                <div class="auth-form" id="resetPasswordForm">
+                <div id="resetPasswordForm" class="auth-form">
+                    <h3 class="form-heading">Đặt lại mật khẩu</h3>
                     <div class="form-icon">
                         <i class="fas fa-key"></i>
                     </div>
-                    <h3 class="form-heading">Lấy lại mật khẩu</h3>
-                    <p>Vui lòng nhập địa chỉ email của bạn. Chúng tôi sẽ gửi một liên kết để đặt lại mật khẩu.</p>
+                    <p>Nhập email của bạn và chúng tôi sẽ gửi liên kết đặt lại mật khẩu</p>
                     <form>
                         <div class="form-group">
+                            <label for="resetEmail">Email</label>
                             <i class="fas fa-envelope input-icon"></i>
                             <input type="email" id="resetEmail" class="form-control" placeholder="Nhập email của bạn" required>
                         </div>
                         <button type="submit" class="auth-btn">
-                            <i class="fas fa-paper-plane"></i> Gửi email khôi phục
+                            <i class="fas fa-paper-plane"></i> GỬI LIÊN KẾT
                         </button>
                     </form>
-                    <a href="#" class="back-link" id="backToLogin">
-                        <i class="fas fa-arrow-left"></i> Quay lại đăng nhập
-                    </a>
+                    <div class="form-footer">
+                        <a href="#" class="back-link" id="backToLogin">
+                            <i class="fas fa-arrow-left"></i> Quay lại đăng nhập
+                        </a>
+                    </div>
                 </div>
+
+
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6 footer-widget">
-                    <h4>Về chúng tôi</h4>
-                    <p>Chuyên cung cấp các loại đồ tráng miệng ngon và chất lượng cao. Với nhiều năm kinh nghiệm trong ngành.</p>
-                </div>
-                <div class="col-lg-3 col-md-6 footer-widget">
-                    <h4>Liên kết</h4>
-                    <ul>
-                        <li><a href="#">Trang chủ</a></li>
-                        <li><a href="#">Sản phẩm</a></li>
-                        <li><a href="#">Giới thiệu</a></li>
-                        <li><a href="#">Liên hệ</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-3 col-md-6 footer-widget">
-                    <h4>Dịch vụ</h4>
-                    <ul>
-                        <li><a href="#">Đặt hàng trực tuyến</a></li>
-                        <li><a href="#">Giao hàng tận nơi</a></li>
-                        <li><a href="#">Đổi trả</a></li>
-                        <li><a href="#">Khuyến mãi</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-3 col-md-6 footer-widget">
-                    <h4>Liên hệ</h4>
-                    <p>
-                        <i class="fas fa-map-marker-alt"></i> 123 Đường ABC, Quận XYZ, Thành phố<br>
-                        <i class="fas fa-phone-alt"></i> 0123 456 789<br>
-                        <i class="far fa-envelope"></i> info@dotrangmieng.com
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="copyright">
-            <div class="container">
-                <p>&copy; @DateTime.Now.Year - Đồ Tráng Miệng - Bản quyền thuộc về chúng tôi</p>
-            </div>
-        </div>
-    </footer>
-
+    <!-- ==========================================
+         JAVASCRIPT FILES
+         ========================================== -->
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/layout.js"></script>
+    <script src="~/Scripts/auth-modal.js"></script>
+    <script src="~/Scripts/home-video.js"></script>
+    
+
+    
     @RenderSection("scripts", required: false)
-
-    <script>
-        // Function to toggle password visibility
-        function togglePassword(inputId) {
-            const input = document.getElementById(inputId);
-            const icon = input.nextElementSibling.querySelector('i');
-
-            if (input.type === "password") {
-                input.type = "text";
-                icon.classList.remove("fa-eye");
-                icon.classList.add("fa-eye-slash");
-            } else {
-                input.type = "password";
-                icon.classList.remove("fa-eye-slash");
-                icon.classList.add("fa-eye");
-            }
-        }
-
-        // Function to show alert
-        function showAlert(type, message) {
-            const alert = document.getElementById('authAlert');
-            const alertMessage = document.getElementById('authAlertMessage');
-
-            alert.className = 'auth-alert ' + type;
-            alertMessage.textContent = message;
-            alert.style.display = 'block';
-
-            // Auto hide after 4 seconds
-            setTimeout(() => {
-                alert.style.display = 'none';
-            }, 4000);
-        }
-
-        $(document).ready(function () {
-            // Toggle dropdown on mobile
-            if ($(window).width() < 992) {
-                $('.dropdown-toggle').click(function (e) {
-                    e.preventDefault();
-                    $(this).next('.dropdown-menu').slideToggle();
-                });
-            } else {
-                // Desktop dropdown behavior - correct implementation
-                $('.navbar .dropdown').hover(
-                    function () {
-                        $(this).find('.dropdown-menu').stop(true, true).css({
-                            'opacity': '1',
-                            'visibility': 'visible',
-                            'pointer-events': 'auto'
-                        });
-                    },
-                    function () {
-                        $(this).find('.dropdown-menu').stop(true, true).css({
-                            'opacity': '0',
-                            'visibility': 'hidden',
-                            'pointer-events': 'none'
-                        });
-                    }
-                );
-            }
-
-            // Reset dropdowns on window resize
-            $(window).resize(function () {
-                if ($(window).width() >= 992) {
-                    $('.dropdown-menu').removeAttr('style');
-                }
-            });
-
-            // Login/Register modal functionality
-            $('#loginBtn').click(function (e) {
-                e.preventDefault();
-                $('#authModal').addClass('show');
-                $('body').css('overflow', 'hidden'); // Prevent scrolling when modal is open
-            });
-
-            // Close modal when clicking close button or outside the modal
-            $('#authClose, .auth-modal').click(function (e) {
-                if (e.target === this) {
-                    $('#authModal').removeClass('show');
-                    $('body').css('overflow', '');
-                }
-            });
-
-            // Prevent modal close when clicking inside modal content
-            $('.auth-container').click(function (e) {
-                e.stopPropagation();
-            });
-
-            // Switch between forms
-            $('.auth-tab').click(function () {
-                const tab = $(this).data('tab');
-
-                // Update active tab
-                $('.auth-tab').removeClass('active');
-                $(this).addClass('active');
-
-                // Show appropriate form
-                $('.auth-form').removeClass('active');
-                $('#' + tab + 'Form').addClass('active');
-            });
-
-            // Switch to login from register
-            $('.switch-to-login').click(function (e) {
-                e.preventDefault();
-                $('.auth-tab[data-tab="login"]').click();
-            });
-
-            // Forgot password link
-            $('#forgotPasswordLink').click(function (e) {
-                e.preventDefault();
-                $('.auth-form').removeClass('active');
-                $('#resetPasswordForm').addClass('active');
-                $('.auth-tab').removeClass('active');
-            });
-
-            // Back to login from reset password
-            $('#backToLogin').click(function (e) {
-                e.preventDefault();
-                $('.auth-form').removeClass('active');
-                $('#loginForm').addClass('active');
-                $('.auth-tab[data-tab="login"]').addClass('active');
-            });
-
-            // Login form submission
-            $('#loginForm form').submit(function (e) {
-                e.preventDefault();
-
-                const email = $('#loginEmail').val();
-                const password = $('#loginPassword').val();
-
-                // Simulate validation
-                if (email === "" || password === "") {
-                    showAlert('error', 'Vui lòng nhập đầy đủ thông tin đăng nhập.');
-                    return;
-                }
-
-                // Simulate login success
-                showAlert('success', 'Đăng nhập thành công!');
-                setTimeout(function () {
-                    $('#authModal').removeClass('show');
-                    $('body').css('overflow', '');
-                }, 1500);
-            });
-
-            // Register form submission
-            $('#registerForm form').submit(function (e) {
-                e.preventDefault();
-
-                const name = $('#registerName').val();
-                const email = $('#registerEmail').val();
-                const password = $('#registerPassword').val();
-                const confirmPassword = $('#confirmPassword').val();
-                const agreeTerms = $('#agreeTerms').is(':checked');
-
-                // Simulate validation
-                if (name === "" || email === "" || password === "" || confirmPassword === "") {
-                    showAlert('error', 'Vui lòng nhập đầy đủ thông tin đăng ký.');
-                    return;
-                }
-
-                if (password !== confirmPassword) {
-                    showAlert('error', 'Mật khẩu xác nhận không khớp.');
-                    return;
-                }
-
-                if (!agreeTerms) {
-                    showAlert('error', 'Bạn cần đồng ý với điều khoản sử dụng.');
-                    return;
-                }
-
-                // Simulate register success
-                showAlert('success', 'Đăng ký thành công! Vui lòng kiểm tra email để xác minh tài khoản.');
-                setTimeout(function () {
-                    $('#authModal').removeClass('show');
-                    $('body').css('overflow', '');
-                }, 2000);
-            });
-
-            // Reset password form submission
-            $('#resetPasswordForm form').submit(function (e) {
-                e.preventDefault();
-
-                const email = $('#resetEmail').val();
-
-                // Simulate validation
-                if (email === "") {
-                    showAlert('error', 'Vui lòng nhập địa chỉ email.');
-                    return;
-                }
-
-                // Simulate password reset request
-                showAlert('success', 'Liên kết đặt lại mật khẩu đã được gửi đến email của bạn!');
-                setTimeout(function () {
-                    // Go back to login form
-                    $('.auth-form').removeClass('active');
-                    $('#loginForm').addClass('active');
-                    $('.auth-tab[data-tab="login"]').addClass('active');
-                }, 2000);
-            });
-        });
-    </script>
 </body>
 </html>
