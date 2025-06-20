@@ -1,0 +1,37 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Admin Dashboard";
+}
+<div class="admin-dashboard">
+    <h2 class="mb-4">Bảng điều khiển quản trị</h2>
+    <div class="row g-4">
+        <div class="col-md-3">
+            <a href="@Url.Action("Index", "Product", new { area = "Admin" })" class="admin-card card text-center">
+                <div class="card-body">
+                    <h5>Quản lý sản phẩm</h5>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="@Url.Action("Index", "Order", new { area = "Admin" })" class="admin-card card text-center">
+                <div class="card-body">
+                    <h5>Quản lý đơn hàng</h5>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="@Url.Action("Index", "User", new { area = "Admin" })" class="admin-card card text-center">
+                <div class="card-body">
+                    <h5>Quản lý người dùng</h5>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="@Url.Action("Index", "Dashboard", new { area = "Admin" })" class="admin-card card text-center">
+                <div class="card-body">
+                    <h5>Thống kê</h5>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

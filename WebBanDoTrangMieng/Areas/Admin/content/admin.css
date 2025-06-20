@@ -1,0 +1,24 @@
+﻿.admin-dashboard {
+    margin-top: 40px;
+}
+
+.admin-card {
+    margin-bottom: 20px;
+    border: 1px solid #588157;
+    transition: box-shadow 0.2s, border-color 0.2s;
+    text-decoration: none;
+    color: inherit;
+}
+
+    .admin-card:hover {
+        box-shadow: 0 4px 16px rgba(88, 129, 87, 0.2);
+        border-color: #3a5a40;
+        background: #f8f4e5;
+    }
+
+    .admin-card .card-body i {
+        font-size: 2.5rem;
+        color: #588157;
+        margin-bottom: 10px;
+        display: block;
+    }

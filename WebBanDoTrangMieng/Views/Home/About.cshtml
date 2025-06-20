@@ -1,9 +1,379 @@
 ﻿@{
-    ViewBag.Title = "About";
+    ViewBag.Title = "Giới thiệu";
 }
-<main aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title.</h2>
-    <h3>@ViewBag.Message</h3>
 
-    <p>Use this area to provide additional information.</p>
-</main>
+<style>
+    .about-banner {
+        height: 300px;
+        background-image: url('https://images.unsplash.com/photo-1516685125522-3c528e8c782d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+        background-size: cover;
+        background-position: center;
+        border-radius: 10px;
+        position: relative;
+        margin-bottom: 40px;
+    }
+
+    .about-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(58, 90, 64, 0.7);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .about-title {
+        color: #fff;
+        font-size: 2.5rem;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .about-section {
+        margin-bottom: 50px;
+    }
+
+    .about-section h3 {
+        color: #3a5a40;
+        position: relative;
+        padding-bottom: 15px;
+        margin-bottom: 25px;
+        font-weight: 600;
+    }
+
+    .about-section h3::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 70px;
+        height: 3px;
+        background-color: #588157;
+    }
+
+    .about-image {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        height: 100%;
+    }
+
+    .about-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s;
+    }
+
+    .about-image:hover img {
+        transform: scale(1.05);
+    }
+
+    .timeline {
+        position: relative;
+        padding: 20px 0;
+        margin-top: 30px;
+    }
+
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background-color: #e9ecef;
+        transform: translateX(-50%);
+    }
+
+    .timeline-item {
+        position: relative;
+        margin-bottom: 30px;
+    }
+
+    .timeline-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .timeline-content {
+        padding: 20px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+        width: 45%;
+    }
+
+    .timeline-item:nth-child(odd) .timeline-content {
+        margin-left: auto;
+    }
+
+    .timeline-item:nth-child(odd)::before {
+        content: '';
+        position: absolute;
+        top: 20px;
+        left: calc(55% - 10px);
+        width: 20px;
+        height: 2px;
+        background-color: #e9ecef;
+    }
+
+    .timeline-item:nth-child(even)::before {
+        content: '';
+        position: absolute;
+        top: 20px;
+        right: calc(55% - 10px);
+        width: 20px;
+        height: 2px;
+        background-color: #e9ecef;
+    }
+
+    .timeline-year {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 40px;
+        background-color: #588157;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        z-index: 1;
+    }
+
+    .team-member {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .team-img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin: 0 auto 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .team-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .team-name {
+        color: #3a5a40;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .team-position {
+        color: #588157;
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+    }
+
+    .team-social {
+        margin-top: 10px;
+    }
+
+    .team-social a {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        background-color: #f8f4e5;
+        border-radius: 50%;
+        line-height: 30px;
+        margin: 0 5px;
+        color: #3a5a40;
+        transition: all 0.3s;
+    }
+
+    .team-social a:hover {
+        background-color: #588157;
+        color: white;
+    }
+
+    @@media (max-width: 768px) {
+        .timeline::before {
+            left: 30px;
+        }
+
+        .timeline-content {
+            width: calc(100% - 60px);
+            margin-left: 60px !important;
+        }
+
+        .timeline-year {
+            left: 30px;
+            transform: none;
+        }
+
+        .timeline-item::before {
+            left: 50px !important;
+            right: auto !important;
+            width: 10px !important;
+        }
+    }
+</style>
+
+<div class="about-banner">
+    <div class="about-overlay">
+        <h1 class="about-title">Về Chúng Tôi</h1>
+    </div>
+</div>
+
+<div class="container">
+    <div class="about-section">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h3>Câu chuyện của chúng tôi</h3>
+                <p>Chào mừng bạn đến với <strong>Đồ Tráng Miệng</strong> - nơi mang đến những trải nghiệm ẩm thực ngọt ngào và tinh tế nhất. Chúng tôi bắt đầu hành trình của mình từ năm 2015 với một cửa hàng nhỏ và niềm đam mê lớn dành cho ẩm thực.</p>
+                <p>Từ những ngày đầu tiên, chúng tôi đã luôn giữ vững triết lý "Chất lượng là trên hết". Mỗi món tráng miệng được chúng tôi chế biến đều sử dụng nguyên liệu tươi ngon nhất, không chất bảo quản, mang đến hương vị thuần khiết và tự nhiên.</p>
+                <p>Với đội ngũ đầu bếp giàu kinh nghiệm và sáng tạo, chúng tôi liên tục nghiên cứu và phát triển những công thức mới, kết hợp giữa ẩm thực truyền thống và hiện đại, đặc biệt là dòng sản phẩm matcha cao cấp được nhập khẩu trực tiếp từ Nhật Bản.</p>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1556910103-1c02745aaf4d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Câu chuyện của chúng tôi">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="about-section">
+        <h3>Hành trình phát triển</h3>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-year">2015</div>
+                <div class="timeline-content">
+                    <h4>Thành lập</h4>
+                    <p>Cửa hàng đầu tiên được mở tại quận 1, TP.HCM với diện tích nhỏ chỉ 30m² và 5 nhân viên.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2017</div>
+                <div class="timeline-content">
+                    <h4>Mở rộng</h4>
+                    <p>Mở thêm 2 chi nhánh mới tại quận 3 và quận 7, phát triển dòng sản phẩm matcha cao cấp.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2019</div>
+                <div class="timeline-content">
+                    <h4>Đổi mới</h4>
+                    <p>Ra mắt dịch vụ đặt hàng online và giao hàng tận nơi, phục vụ hơn 1000 khách hàng mỗi ngày.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2021</div>
+                <div class="timeline-content">
+                    <h4>Phát triển</h4>
+                    <p>Mở rộng thêm 5 chi nhánh mới và phát triển hệ thống bán hàng online, xuất hiện trên các sàn thương mại điện tử lớn.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2023</div>
+                <div class="timeline-content">
+                    <h4>Hiện tại</h4>
+                    <p>Trở thành thương hiệu đồ tráng miệng uy tín với 10+ chi nhánh trên toàn quốc và dịch vụ giao hàng 24/7.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="about-section">
+        <h3>Sứ mệnh & Tầm nhìn</h3>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4 class="card-title text-center mb-4"><i class="fas fa-rocket text-success me-2"></i> Sứ mệnh</h4>
+                        <p class="card-text">Mang đến những trải nghiệm ẩm thực ngọt ngào và tinh tế cho khách hàng, thông qua những sản phẩm chất lượng cao, được làm từ nguyên liệu tự nhiên và quy trình sản xuất đảm bảo an toàn vệ sinh thực phẩm.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4 class="card-title text-center mb-4"><i class="fas fa-eye text-success me-2"></i> Tầm nhìn</h4>
+                        <p class="card-text">Trở thành thương hiệu đồ tráng miệng hàng đầu Việt Nam, được yêu thích bởi sự sáng tạo không ngừng và chất lượng vượt trội, đồng thời mở rộng thị trường ra khu vực Đông Nam Á.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="about-section">
+        <h3>Đội ngũ của chúng tôi</h3>
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <div class="team-member">
+                    <div class="team-img">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Nguyễn Văn An">
+                    </div>
+                    <h4 class="team-name">Nguyễn Văn An</h4>
+                    <p class="team-position">Giám đốc điều hành</p>
+                    <p>Với hơn 15 năm kinh nghiệm trong ngành ẩm thực và quản lý.</p>
+                    <div class="team-social">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="team-member">
+                    <div class="team-img">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Trần Thị Bình">
+                    </div>
+                    <h4 class="team-name">Trần Thị Bình</h4>
+                    <p class="team-position">Bếp trưởng</p>
+                    <p>Tốt nghiệp từ Le Cordon Bleu Paris với chuyên môn về bánh ngọt.</p>
+                    <div class="team-social">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="team-member">
+                    <div class="team-img">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Lê Đức Cường">
+                    </div>
+                    <h4 class="team-name">Lê Đức Cường</h4>
+                    <p class="team-position">Giám đốc Marketing</p>
+                    <p>Chuyên gia marketing với hơn 10 năm kinh nghiệm trong F&B.</p>
+                    <div class="team-social">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="team-member">
+                    <div class="team-img">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Phạm Thị Dung">
+                    </div>
+                    <h4 class="team-name">Phạm Thị Dung</h4>
+                    <p class="team-position">Quản lý chuỗi cung ứng</p>
+                    <p>Chuyên gia về chuỗi cung ứng và đảm bảo chất lượng sản phẩm.</p>
+                    <div class="team-social">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

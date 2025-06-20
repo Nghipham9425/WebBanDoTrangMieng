@@ -1,0 +1,818 @@
+﻿@{
+    ViewBag.Title = "Chi tiết sản phẩm";
+}
+
+<style>
+    .breadcrumb {
+        background-color: transparent;
+        padding: 0;
+        margin-bottom: 30px;
+    }
+
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: ">";
+    }
+
+    .breadcrumb-item a {
+        color: #588157;
+    }
+
+    .product-detail-container {
+        margin-bottom: 60px;
+    }
+
+    .product-main-image {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+
+    .product-thumbnails {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 30px;
+    }
+
+    .product-thumbnail {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 5px;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: all 0.3s;
+    }
+
+    .product-thumbnail:hover, .product-thumbnail.active {
+        opacity: 1;
+        border: 2px solid #588157;
+    }
+
+    .product-title {
+        color: #3a5a40;
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .product-price {
+        color: #588157;
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .product-badges {
+        margin-bottom: 15px;
+    }
+
+    .product-badge {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-right: 10px;
+    }
+
+    .badge-new {
+        background-color: #588157;
+        color: white;
+    }
+
+    .badge-bestseller {
+        background-color: #f8b400;
+        color: #3a5a40;
+    }
+
+    .product-divider {
+        height: 1px;
+        background-color: #e9ecef;
+        margin: 20px 0;
+    }
+
+    .product-description {
+        color: #555;
+        line-height: 1.7;
+        margin-bottom: 20px;
+    }
+
+    .product-quantity {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .quantity-label {
+        margin-right: 15px;
+        font-weight: 600;
+        color: #3a5a40;
+    }
+
+    .quantity-controls {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    .quantity-btn {
+        width: 40px;
+        height: 40px;
+        background-color: #f1f1f1;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .quantity-input {
+        width: 60px;
+        height: 40px;
+        border: none;
+        text-align: center;
+        font-size: 16px;
+    }
+
+    .product-actions {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .add-to-cart-btn {
+        flex-grow: 1;
+        background-color: #588157;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 5px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+    }
+
+    .add-to-cart-btn:hover {
+        background-color: #3a5a40;
+        transform: translateY(-2px);
+    }
+
+    .add-to-cart-btn i {
+        margin-right: 10px;
+    }
+
+    .wishlist-btn {
+        width: 50px;
+        background-color: #f8f4e5;
+        border: none;
+        border-radius: 5px;
+        color: #588157;
+        font-size: 18px;
+        transition: all 0.3s;
+    }
+
+    .wishlist-btn:hover {
+        background-color: #ffecd1;
+        color: #e76f51;
+    }
+
+    .product-info-item {
+        display: flex;
+        margin-bottom: 10px;
+    }
+
+    .info-label {
+        width: 120px;
+        color: #3a5a40;
+        font-weight: 600;
+    }
+
+    .info-value {
+        color: #555;
+    }
+
+    .product-share {
+        margin-top: 20px;
+    }
+
+    .share-label {
+        font-weight: 600;
+        color: #3a5a40;
+        margin-right: 15px;
+    }
+
+    .share-links a {
+        display: inline-block;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background-color: #f8f4e5;
+        color: #3a5a40;
+        text-align: center;
+        line-height: 35px;
+        margin-right: 10px;
+        transition: all 0.3s;
+    }
+
+    .share-links a:hover {
+        background-color: #588157;
+        color: white;
+        transform: translateY(-3px);
+    }
+
+    .product-tabs {
+        margin-top: 50px;
+    }
+
+    .nav-tabs {
+        border-bottom: 2px solid #e9ecef;
+        margin-bottom: 20px;
+    }
+
+    .nav-tabs .nav-link {
+        border: none;
+        color: #6c757d;
+        font-weight: 600;
+        padding: 12px 20px;
+        position: relative;
+    }
+
+    .nav-tabs .nav-link:hover {
+        color: #3a5a40;
+    }
+
+    .nav-tabs .nav-link.active {
+        color: #3a5a40;
+        background-color: transparent;
+    }
+
+    .nav-tabs .nav-link.active::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: #588157;
+    }
+
+    .tab-content {
+        padding: 20px 0;
+    }
+
+    .review-item {
+        border-bottom: 1px solid #e9ecef;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .review-author {
+        font-weight: 600;
+        color: #3a5a40;
+    }
+
+    .review-date {
+        color: #6c757d;
+        font-size: 14px;
+    }
+
+    .review-stars {
+        margin-bottom: 10px;
+        color: #f8b400;
+    }
+
+    .review-content {
+        color: #555;
+        line-height: 1.6;
+    }
+
+    .review-form {
+        margin-top: 30px;
+    }
+
+    .star-rating {
+        display: flex;
+        margin-bottom: 20px;
+    }
+
+    .star-rating input {
+        display: none;
+    }
+
+    .star-rating label {
+        cursor: pointer;
+        color: #ddd;
+        font-size: 24px;
+        padding: 0 5px;
+    }
+
+    .star-rating input:checked ~ label,
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+        color: #f8b400;
+    }
+
+    .related-products {
+        margin-top: 60px;
+    }
+
+    .related-products h3 {
+        color: #3a5a40;
+        position: relative;
+        padding-bottom: 15px;
+        margin-bottom: 25px;
+        font-weight: 600;
+    }
+
+    .related-products h3::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 70px;
+        height: 3px;
+        background-color: #588157;
+    }
+
+    .related-product-card {
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .related-product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .related-product-img {
+        height: 180px;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .related-product-body {
+        padding: 15px;
+    }
+
+    .related-product-title {
+        font-weight: 600;
+        color: #3a5a40;
+        margin-bottom: 5px;
+        font-size: 16px;
+    }
+
+    .related-product-price {
+        color: #588157;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .related-product-btn {
+        width: 100%;
+        background-color: #f8f4e5;
+        color: #3a5a40;
+        border: none;
+        padding: 8px;
+        border-radius: 4px;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+
+    .related-product-btn:hover {
+        background-color: #588157;
+        color: white;
+    }
+
+    /* Toast notification for add to cart */
+    .toast-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+    }
+
+    .toast {
+        background-color: rgba(88, 129, 87, 0.9);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 4px;
+        margin-top: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .toast.show {
+        opacity: 1;
+    }
+
+    .toast i {
+        margin-right: 10px;
+    }
+
+    @@media (max-width: 768px) {
+        .product-thumbnails {
+            justify-content: center;
+        }
+
+        .product-main-image {
+            height: 300px;
+        }
+
+        .product-actions {
+            flex-direction: column;
+        }
+
+        .wishlist-btn {
+            width: 100%;
+            height: 45px;
+        }
+    }
+</style>
+
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Trang chủ</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Product")">Sản phẩm</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Product", new { categoryId = 1 })">Bánh ngọt</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Bánh Mousse Matcha</li>
+        </ol>
+    </nav>
+
+    <div class="product-detail-container">
+        <div class="row">
+            <div class="col-lg-6">
+                <img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Bánh Mousse Matcha" class="product-main-image" id="mainImage">
+                <div class="product-thumbnails">
+                    <img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Thumbnail 1" class="product-thumbnail active" onclick="changeImage(this)">
+                    <img src="https://images.unsplash.com/photo-1552066379-e7bfd22155c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Thumbnail 2" class="product-thumbnail" onclick="changeImage(this)">
+                    <img src="https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Thumbnail 3" class="product-thumbnail" onclick="changeImage(this)">
+                    <img src="https://images.unsplash.com/photo-1550617931-e17a7b70dce2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Thumbnail 4" class="product-thumbnail" onclick="changeImage(this)">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <h1 class="product-title">Bánh Mousse Matcha</h1>
+                <div class="product-badges">
+                    <span class="product-badge badge-new">Mới</span>
+                    <span class="product-badge badge-bestseller">Bán chạy</span>
+                </div>
+                <div class="product-price">75.000đ</div>
+                <div class="product-description">
+                    <p>Bánh mousse matcha với lớp kem mịn và hương vị trà xanh đặc trưng. Được làm từ bột matcha nguyên chất nhập khẩu từ Nhật Bản, mang đến hương vị độc đáo và tinh tế.</p>
+                    <p>Sản phẩm được chế biến mỗi ngày, đảm bảo độ tươi ngon và không sử dụng chất bảo quản.</p>
+                </div>
+                <div class="product-divider"></div>
+                <div class="product-quantity">
+                    <span class="quantity-label">Số lượng:</span>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn" onclick="decreaseQuantity()">-</button>
+                        <input type="text" class="quantity-input" id="quantityInput" value="1" readonly>
+                        <button class="quantity-btn" onclick="increaseQuantity()">+</button>
+                    </div>
+                </div>
+                <div class="product-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart()">
+                        <i class="fas fa-shopping-cart"></i> Thêm vào giỏ hàng
+                    </button>
+                    <button class="wishlist-btn">
+                        <i class="far fa-heart"></i>
+                    </button>
+                </div>
+                <div class="product-divider"></div>
+                <div class="product-info">
+                    <div class="product-info-item">
+                        <div class="info-label">SKU:</div>
+                        <div class="info-value">CAKE-001</div>
+                    </div>
+                    <div class="product-info-item">
+                        <div class="info-label">Danh mục:</div>
+                        <div class="info-value">Bánh ngọt</div>
+                    </div>
+                    <div class="product-info-item">
+                        <div class="info-label">Khối lượng:</div>
+                        <div class="info-value">250g</div>
+                    </div>
+                    <div class="product-info-item">
+                        <div class="info-label">Tình trạng:</div>
+                        <div class="info-value">Còn hàng</div>
+                    </div>
+                </div>
+                <div class="product-share">
+                    <span class="share-label">Chia sẻ:</span>
+                    <div class="share-links d-inline-block">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-tabs">
+        <ul class="nav nav-tabs" id="productTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab" aria-controls="description" aria-selected="true">Mô tả</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="ingredients-tab" data-bs-toggle="tab" data-bs-target="#ingredients" type="button" role="tab" aria-controls="ingredients" aria-selected="false">Thành phần</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false">Đánh giá (3)</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="productTabContent">
+            <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                <h4>Giới thiệu về Bánh Mousse Matcha</h4>
+                <p>Bánh mousse matcha là sự kết hợp hoàn hảo giữa kem mousse mềm mịn và hương vị trà xanh đặc trưng của Nhật Bản. Lớp bánh gato mềm mịn phía dưới, kết hợp với lớp mousse matcha béo ngậy tạo nên hương vị hài hòa, không quá ngọt và rất thích hợp cho những người yêu thích hương vị thanh nhẹ.</p>
+                <p>Điểm đặc biệt của bánh mousse matcha tại Đồ Tráng Miệng là chúng tôi sử dụng 100% bột matcha nguyên chất được nhập khẩu trực tiếp từ Uji, Kyoto - nơi nổi tiếng với những vườn trà xanh lâu đời và chất lượng cao nhất Nhật Bản.</p>
+                <p>Bánh được chế biến mỗi ngày và nên được sử dụng trong vòng 24-48 giờ để đảm bảo độ tươi ngon nhất. Sản phẩm không sử dụng chất bảo quản, màu thực phẩm hay hương liệu nhân tạo.</p>
+                <h4>Hướng dẫn bảo quản</h4>
+                <p>Bánh nên được bảo quản trong tủ lạnh ở nhiệt độ từ 2-5°C. Nên lấy bánh ra khỏi tủ lạnh khoảng 15-20 phút trước khi thưởng thức để có hương vị tốt nhất.</p>
+            </div>
+            <div class="tab-pane fade" id="ingredients" role="tabpanel" aria-labelledby="ingredients-tab">
+                <h4>Thành phần</h4>
+                <ul>
+                    <li>Bột matcha nguyên chất (Nhật Bản)</li>
+                    <li>Kem tươi</li>
+                    <li>Trứng gà tươi</li>
+                    <li>Bột mì</li>
+                    <li>Đường</li>
+                    <li>Gelatin</li>
+                    <li>Sữa tươi</li>
+                    <li>Bơ</li>
+                </ul>
+                <h4>Thông tin dinh dưỡng</h4>
+                <p>Phần ăn: 100g</p>
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <td>Năng lượng</td>
+                            <td>250 kcal</td>
+                        </tr>
+                        <tr>
+                            <td>Protein</td>
+                            <td>5g</td>
+                        </tr>
+                        <tr>
+                            <td>Carbohydrate</td>
+                            <td>30g</td>
+                        </tr>
+                        <tr>
+                            <td>Chất béo</td>
+                            <td>12g</td>
+                        </tr>
+                        <tr>
+                            <td>Đường</td>
+                            <td>20g</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p><strong>Lưu ý:</strong> Sản phẩm có chứa gluten, trứng, sữa. Không phù hợp cho người bị dị ứng với các thành phần trên.</p>
+            </div>
+            <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                <h4>Đánh giá từ khách hàng</h4>
+                <div class="review-item">
+                    <div class="review-header">
+                        <span class="review-author">Nguyễn Văn A</span>
+                        <span class="review-date">20/04/2023</span>
+                    </div>
+                    <div class="review-stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="review-content">
+                        <p>Bánh rất ngon, hương vị matcha đậm đà nhưng không gắt. Kem mềm mịn, bánh mềm và rất vừa miệng. Sẽ mua lại!</p>
+                    </div>
+                </div>
+                <div class="review-item">
+                    <div class="review-header">
+                        <span class="review-author">Trần Thị B</span>
+                        <span class="review-date">15/04/2023</span>
+                    </div>
+                    <div class="review-stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                    <div class="review-content">
+                        <p>Bánh khá ngon, nhưng phần kem hơi ít. Mẫu mã đẹp, đóng gói cẩn thận.</p>
+                    </div>
+                </div>
+                <div class="review-item">
+                    <div class="review-header">
+                        <span class="review-author">Lê Văn C</span>
+                        <span class="review-date">10/04/2023</span>
+                    </div>
+                    <div class="review-stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <div class="review-content">
+                        <p>Tôi rất thích hương vị matcha ở đây, đúng chuẩn vị Nhật, không quá ngọt. Giao hàng nhanh, bánh vẫn giữ được form đẹp.</p>
+                    </div>
+                </div>
+
+                <div class="review-form">
+                    <h4>Viết đánh giá</h4>
+                    <form id="reviewForm">
+                        <div class="mb-3">
+                            <label for="reviewName" class="form-label">Tên của bạn</label>
+                            <input type="text" class="form-control" id="reviewName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="reviewEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="reviewEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Đánh giá</label>
+                            <div class="star-rating">
+                                <input type="radio" id="star5" name="rating" value="5">
+                                <label for="star5"><i class="fas fa-star"></i></label>
+                                <input type="radio" id="star4" name="rating" value="4">
+                                <label for="star4"><i class="fas fa-star"></i></label>
+                                <input type="radio" id="star3" name="rating" value="3">
+                                <label for="star3"><i class="fas fa-star"></i></label>
+                                <input type="radio" id="star2" name="rating" value="2">
+                                <label for="star2"><i class="fas fa-star"></i></label>
+                                <input type="radio" id="star1" name="rating" value="1">
+                                <label for="star1"><i class="fas fa-star"></i></label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="reviewContent" class="form-label">Nội dung đánh giá</label>
+                            <textarea class="form-control" id="reviewContent" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success">Gửi đánh giá</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="related-products">
+        <h3>Sản phẩm liên quan</h3>
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <div class="related-product-card">
+                    <img src="https://images.unsplash.com/photo-1602351447937-745c6bb00ad8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Cupcake Matcha" class="related-product-img">
+                    <div class="related-product-body">
+                        <h5 class="related-product-title">Cupcake Matcha</h5>
+                        <div class="related-product-price">40.000đ</div>
+                        <button class="related-product-btn" onclick="addRelatedToCart(2, 'Cupcake Matcha', 40000)">Thêm vào giỏ</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="related-product-card">
+                    <img src="https://images.unsplash.com/photo-1591638246754-77e0a960a8ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Tiramisu Matcha" class="related-product-img">
+                    <div class="related-product-body">
+                        <h5 class="related-product-title">Tiramisu Matcha</h5>
+                        <div class="related-product-price">65.000đ</div>
+                        <button class="related-product-btn" onclick="addRelatedToCart(3, 'Tiramisu Matcha', 65000)">Thêm vào giỏ</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="related-product-card">
+                    <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Bánh Crepe Matcha" class="related-product-img">
+                    <div class="related-product-body">
+                        <h5 class="related-product-title">Bánh Crepe Matcha</h5>
+                        <div class="related-product-price">55.000đ</div>
+                        <button class="related-product-btn" onclick="addRelatedToCart(4, 'Bánh Crepe Matcha', 55000)">Thêm vào giỏ</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="related-product-card">
+                    <img src="https://images.unsplash.com/photo-1558326567-98166ebaa59a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Kem Matcha" class="related-product-img">
+                    <div class="related-product-body">
+                        <h5 class="related-product-title">Kem Matcha</h5>
+                        <div class="related-product-price">35.000đ</div>
+                        <button class="related-product-btn" onclick="addRelatedToCart(5, 'Kem Matcha', 35000)">Thêm vào giỏ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast notifications container -->
+<div class="toast-container"></div>
+
+@section scripts {
+    <script>
+        // Change main image when clicking thumbnails
+        function changeImage(element) {
+            document.getElementById('mainImage').src = element.src;
+
+            // Update active thumbnail
+            document.querySelectorAll('.product-thumbnail').forEach(thumb => {
+                thumb.classList.remove('active');
+            });
+            element.classList.add('active');
+        }
+
+        // Increase quantity
+        function increaseQuantity() {
+            var input = document.getElementById('quantityInput');
+            input.value = parseInt(input.value) + 1;
+        }
+
+        // Decrease quantity
+        function decreaseQuantity() {
+            var input = document.getElementById('quantityInput');
+            var value = parseInt(input.value);
+            if (value > 1) {
+                input.value = value - 1;
+            }
+        }
+
+        // Add to cart function
+        function addToCart() {
+            var quantity = document.getElementById('quantityInput').value;
+            // For now, just show a toast notification
+            showToast('Đã thêm Bánh Mousse Matcha vào giỏ hàng!');
+
+            // In a real application, you would call an AJAX function to add to cart
+            // $.ajax({
+            //     url: '@Url.Action("AddToCart", "Cart")',
+            //     type: 'POST',
+            //     data: { productId: @ViewBag.ProductId, quantity: quantity },
+            //     success: function(result) {
+            //         if (result.success) {
+            //             showToast(result.message);
+            //         }
+            //     }
+            // });
+        }
+
+        // Add related product to cart
+        function addRelatedToCart(productId, productName, price) {
+            // For now, just show a toast notification
+            showToast('Đã thêm ' + productName + ' vào giỏ hàng!');
+
+            // In a real application, you would call an AJAX function
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            var toast = $('<div class="toast"><i class="fas fa-check-circle"></i>' + message + '</div>');
+            $('.toast-container').append(toast);
+
+            setTimeout(function() {
+                toast.addClass('show');
+            }, 100);
+
+            setTimeout(function() {
+                toast.removeClass('show');
+                setTimeout(function() {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        $(document).ready(function() {
+            // Handle review form submission
+            $('#reviewForm').submit(function(e) {
+                e.preventDefault();
+
+                // Get form data
+                var name = $('#reviewName').val();
+                var rating = $('input[name="rating"]:checked').val() || 5;
+
+                // Show confirmation
+                alert('Cảm ơn ' + name + ' đã gửi đánh giá ' + rating + ' sao!');
+
+                // Reset form
+                this.reset();
+            });
+        });
+    </script>
+}
