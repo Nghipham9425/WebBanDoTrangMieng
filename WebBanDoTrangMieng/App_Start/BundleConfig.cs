@@ -24,7 +24,14 @@ namespace WebBanDoTrangMieng
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/layout.css",
+                      "~/Content/home.css",
+                      "~/Content/contact.css",
+                      "~/Content/about.css",
+                      "~/Content/auth-modal.css",
+                      "~/Content/cart.css",
+                      "~/Content/product.css",
+                      "~/Content/components.css"));
         }
     }
 }
