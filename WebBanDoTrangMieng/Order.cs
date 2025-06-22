@@ -22,7 +22,6 @@ namespace WebBanDoTrangMieng
     
         public int OrderId { get; set; }
         public Nullable<System.DateTime> OrderDate { get; set; }
-        public decimal TotalAmount { get; set; }
         public string ShippingAddress { get; set; }
         public string PaymentMethod { get; set; }
         public string Status { get; set; }

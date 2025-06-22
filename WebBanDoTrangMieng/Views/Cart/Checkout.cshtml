@@ -2,108 +2,182 @@
     ViewBag.Title = "Thanh toán";
 }
 
-<div class="checkout-container">
-    <div class="checkout-header">
-        <h2>Thanh toán</h2>
+<div class="container my-5">
+    <!-- Header Section -->
+    <div class="text-center mb-5">
+        <h2 class="text-success fw-bold mb-3">
+            <i class="fas fa-credit-card me-2"></i>
+            Thanh toán
+        </h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Cart")" class="text-success">Giỏ hàng</a></li>
+                <li class="breadcrumb-item active text-muted" aria-current="page">Thanh toán</li>
+            </ol>
+        </nav>
     </div>
 
     <div class="row">
-        <div class="col-md-8">
+        <!-- Form Section -->
+        <div class="col-lg-8 mb-4">
             <form id="checkout-form">
-                <!-- Thông tin giao hàng -->
-                <h3 class="section-title">Thông tin giao hàng</h3>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="fullName" class="form-label">Họ và tên</label>
-                        <input type="text" class="form-control" id="fullName" required>
+                <!-- Shipping Information -->
+                <div class="card border-success shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="mb-0">
+                            <i class="fas fa-truck me-2"></i>
+                            Thông tin giao hàng
+                        </h4>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="phone" class="form-label">Số điện thoại</label>
-                        <input type="tel" class="form-control" id="phone" required>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="fullName" class="form-label text-success fw-bold">Họ và tên</label>
+                                <input type="text" class="form-control border-success" id="fullName" placeholder="Nhập họ và tên" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="phone" class="form-label text-success fw-bold">Số điện thoại</label>
+                                <input type="tel" class="form-control border-success" id="phone" placeholder="Nhập số điện thoại" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label text-success fw-bold">Email</label>
+                            <input type="email" class="form-control border-success" id="email" placeholder="Nhập địa chỉ email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label text-success fw-bold">Địa chỉ</label>
+                            <input type="text" class="form-control border-success" id="address" placeholder="Nhập địa chỉ chi tiết" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="province" class="form-label text-success fw-bold">Tỉnh/Thành phố</label>
+                                <select class="form-select border-success" id="province" required>
+                                    <option value="">Chọn Tỉnh/Thành phố</option>
+                                    <option value="Hà Nội">Hà Nội</option>
+                                    <option value="Hồ Chí Minh">Hồ Chí Minh</option>
+                                    <option value="Đà Nẵng">Đà Nẵng</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="district" class="form-label text-success fw-bold">Quận/Huyện</label>
+                                <select class="form-select border-success" id="district" required>
+                                    <option value="">Chọn Quận/Huyện</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="ward" class="form-label text-success fw-bold">Xã/Phường</label>
+                                <select class="form-select border-success" id="ward" required>
+                                    <option value="">Chọn Xã/Phường</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="note" class="form-label text-success fw-bold">Ghi chú (tùy chọn)</label>
+                            <textarea class="form-control border-success" id="note" rows="3" placeholder="Nhập ghi chú cho đơn hàng"></textarea>
+                        </div>
                     </div>
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" required>
-                </div>
-                <div class="mb-3">
-                    <label for="address" class="form-label">Địa chỉ</label>
-                    <input type="text" class="form-control" id="address" required>
-                </div>
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <label for="province" class="form-label">Tỉnh/Thành phố</label>
-                        <select class="form-control" id="province" required>
-                            <option value="">Chọn Tỉnh/Thành phố</option>
-                            <option value="Hà Nội">Hà Nội</option>
-                            <option value="Hồ Chí Minh">Hồ Chí Minh</option>
-                            <option value="Đà Nẵng">Đà Nẵng</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="district" class="form-label">Quận/Huyện</label>
-                        <select class="form-control" id="district" required>
-                            <option value="">Chọn Quận/Huyện</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="ward" class="form-label">Xã/Phường</label>
-                        <select class="form-control" id="ward" required>
-                            <option value="">Chọn Xã/Phường</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label for="note" class="form-label">Ghi chú (tùy chọn)</label>
-                    <textarea class="form-control" id="note" rows="3"></textarea>
                 </div>
 
-                <!-- Phương thức thanh toán -->
-                <h3 class="section-title">Phương thức thanh toán</h3>
-                <div class="payment-option selected">
-                    <input type="radio" name="payment" id="cod" value="cod" checked>
-                    <label for="cod">Thanh toán khi nhận hàng (COD)</label>
-                </div>
-                <div class="payment-option">
-                    <input type="radio" name="payment" id="bank-transfer" value="bank-transfer">
-                    <label for="bank-transfer">Chuyển khoản ngân hàng</label>
-                </div>
-                <div class="payment-option">
-                    <input type="radio" name="payment" id="momo" value="momo">
-                    <label for="momo">Ví điện tử MoMo</label>
+                <!-- Payment Method -->
+                <div class="card border-success shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="mb-0">
+                            <i class="fas fa-wallet me-2"></i>
+                            Phương thức thanh toán
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-check mb-3 p-3 border border-success rounded">
+                            <input class="form-check-input" type="radio" name="payment" id="cod" value="cod" checked>
+                            <label class="form-check-label fw-bold w-100" for="cod">
+                                <i class="fas fa-money-bill-wave text-success me-2"></i>
+                                Thanh toán khi nhận hàng (COD)
+                                <small class="d-block text-muted mt-1">Thanh toán bằng tiền mặt khi nhận hàng</small>
+                            </label>
+                        </div>
+                        <div class="form-check mb-3 p-3 border rounded">
+                            <input class="form-check-input" type="radio" name="payment" id="bank-transfer" value="bank-transfer">
+                            <label class="form-check-label fw-bold w-100" for="bank-transfer">
+                                <i class="fas fa-university text-success me-2"></i>
+                                Chuyển khoản ngân hàng
+                                <small class="d-block text-muted mt-1">Chuyển khoản qua ngân hàng hoặc ví điện tử</small>
+                            </label>
+                        </div>
+                        <div class="form-check mb-3 p-3 border rounded">
+                            <input class="form-check-input" type="radio" name="payment" id="momo" value="momo">
+                            <label class="form-check-label fw-bold w-100" for="momo">
+                                <i class="fab fa-paypal text-success me-2"></i>
+                                Ví điện tử MoMo
+                                <small class="d-block text-muted mt-1">Thanh toán qua ví điện tử MoMo</small>
+                            </label>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Nút đặt hàng cho thiết bị di động -->
-                <button type="submit" class="checkout-btn d-md-none mt-4">ĐẶT HÀNG</button>
+                <!-- Mobile Order Button -->
+                <button type="submit" class="btn btn-success btn-lg w-100 d-lg-none">
+                    <i class="fas fa-shopping-cart me-2"></i>
+                    ĐẶT HÀNG
+                </button>
             </form>
         </div>
 
-        <div class="col-md-4">
-            <div class="order-summary">
-                <h3 class="section-title mb-3">Tóm tắt đơn hàng</h3>
-                <div class="order-item">
-                    <div>Bánh Mousse Matcha x1</div>
-                    <div>75.000đ</div>
+        <!-- Order Summary Section -->
+        <div class="col-lg-4">
+            <div class="card border-success shadow-sm position-sticky" style="top: 20px;">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-receipt me-2"></i>
+                        Tóm tắt đơn hàng
+                    </h4>
                 </div>
-                <div class="order-item">
-                    <div>Cupcake Matcha x2</div>
-                    <div>80.000đ</div>
-                </div>
-                <div class="order-item">
-                    <div>Tạm tính:</div>
-                    <div>155.000đ</div>
-                </div>
-                <div class="order-item">
-                    <div>Phí vận chuyển:</div>
-                    <div>20.000đ</div>
-                </div>
-                <div class="order-total d-flex justify-content-between">
-                    <div>Tổng cộng:</div>
-                    <div>175.000đ</div>
-                </div>
+                <div class="card-body">
+                    <!-- Order Items -->
+                    <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                        <div>
+                            <strong>Bánh Mousse Matcha</strong>
+                            <small class="text-muted d-block">Số lượng: 1</small>
+                        </div>
+                        <div class="text-success fw-bold">75.000đ</div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                        <div>
+                            <strong>Cupcake Matcha</strong>
+                            <small class="text-muted d-block">Số lượng: 2</small>
+                        </div>
+                        <div class="text-success fw-bold">80.000đ</div>
+                    </div>
+                    
+                    <!-- Subtotal -->
+                    <div class="d-flex justify-content-between py-2 border-bottom">
+                        <span>Tạm tính:</span>
+                        <span>155.000đ</span>
+                    </div>
+                    <div class="d-flex justify-content-between py-2 border-bottom">
+                        <span>Phí vận chuyển:</span>
+                        <span>20.000đ</span>
+                    </div>
+                    
+                    <!-- Total -->
+                    <div class="d-flex justify-content-between py-3 border-bottom border-success border-2">
+                        <strong class="text-success fs-5">Tổng cộng:</strong>
+                        <strong class="text-success fs-5">175.000đ</strong>
+                    </div>
 
-                <!-- Nút đặt hàng cho desktop -->
-                <button type="submit" form="checkout-form" class="checkout-btn d-none d-md-block">ĐẶT HÀNG</button>
+                    <!-- Desktop Order Button -->
+                    <button type="submit" form="checkout-form" class="btn btn-success btn-lg w-100 mt-3 d-none d-lg-block">
+                        <i class="fas fa-shopping-cart me-2"></i>
+                        ĐẶT HÀNG
+                    </button>
+                    
+                    <!-- Security Info -->
+                    <div class="text-center mt-3">
+                        <small class="text-muted">
+                            <i class="fas fa-shield-alt text-success me-1"></i>
+                            Thanh toán an toàn và bảo mật
+                        </small>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -112,21 +186,34 @@
 @section scripts {
     <script>
         $(document).ready(function () {
-            // Chọn phương thức thanh toán
-            $('.payment-option').click(function () {
-                $('.payment-option').removeClass('selected');
-                $(this).addClass('selected');
-                $(this).find('input[type="radio"]').prop('checked', true);
+            // Payment method selection with Bootstrap styling
+            $('input[name="payment"]').change(function () {
+                // Remove selected styling from all options
+                $('.form-check').removeClass('border-success bg-light');
+                
+                // Add selected styling to chosen option
+                $(this).closest('.form-check').addClass('border-success bg-light');
             });
 
-            // Xử lý form submit
+            // Initialize first option as selected
+            $('#cod').closest('.form-check').addClass('border-success bg-light');
+
+            // Form submission
             $('#checkout-form').submit(function (e) {
                 e.preventDefault();
-                alert('Cảm ơn bạn đã đặt hàng! Chúng tôi sẽ liên hệ sớm nhất có thể.');
-                // Ở đây sẽ gọi AJAX để xử lý đơn hàng
+                
+                // Show loading state
+                $('button[type="submit"]').html('<i class="fas fa-spinner fa-spin me-2"></i>Đang xử lý...').prop('disabled', true);
+                
+                // Simulate API call
+                setTimeout(function() {
+                    alert('Cảm ơn bạn đã đặt hàng! Chúng tôi sẽ liên hệ sớm nhất có thể.');
+                    // Reset button
+                    $('button[type="submit"]').html('<i class="fas fa-shopping-cart me-2"></i>ĐẶT HÀNG').prop('disabled', false);
+                }, 2000);
             });
 
-            // Giả lập dữ liệu quận huyện
+            // Province data simulation
             $('#province').change(function () {
                 var province = $(this).val();
                 var districts = [];
@@ -145,13 +232,13 @@
                 });
 
                 $('#district').html(options);
+                $('#ward').html('<option value="">Chọn Xã/Phường</option>');
             });
 
-            // Hiển thị dữ liệu xã/phường khi chọn quận/huyện
+            // District change handler
             $('#district').change(function () {
                 var district = $(this).val();
                 if (district) {
-                    // Giả lập dữ liệu xã phường - trong thực tế sẽ lấy từ API
                     var wards = ['Phường 1', 'Phường 2', 'Phường 3'];
 
                     var options = '<option value="">Chọn Xã/Phường</option>';

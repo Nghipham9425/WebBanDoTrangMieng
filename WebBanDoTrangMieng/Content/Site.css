@@ -1,5 +1,5 @@
-﻿/* ==========================================
-   OPTIMIZED SITE.CSS - BROWN THEME
+/* ==========================================
+   OPTIMIZED SITE.CSS - MATCHA GREEN THEME
    ========================================== */
 
 /* Reset and base styles */
@@ -9,16 +9,16 @@
   box-sizing: border-box;
 }
 
-/* CSS Variables - Brown Theme */
+/* CSS Variables - Matcha Green Theme */
 :root {
-  --primary-brown: #8b4513;
-  --secondary-brown: #a0522d;
-  --dark-brown: #2c1810;
-  --light-brown: #d2b48c;
-  --cream-light: #faf8f5;
+  --primary-matcha: #7d9e5f;
+  --secondary-matcha: #9bb377;
+  --dark-matcha: #4a5d37;
+  --light-matcha: #c8d4b8;
+  --cream-light: #f8faf5;
   --cream-white: #ffffff;
-  --shadow-light: rgba(139, 69, 19, 0.1);
-  --shadow-medium: rgba(139, 69, 19, 0.2);
+  --shadow-light: rgba(125, 158, 95, 0.1);
+  --shadow-medium: rgba(125, 158, 95, 0.2);
   --transition: all 0.3s ease;
 }
 
@@ -41,8 +41,8 @@
 .btn-brown {
   background: linear-gradient(
     135deg,
-    var(--primary-brown),
-    var(--secondary-brown)
+    var(--primary-matcha),
+    var(--secondary-matcha)
   );
   color: var(--cream-white);
   border: none;
@@ -79,13 +79,13 @@
 /* Button variants */
 .btn-brown.btn-outline {
   background: transparent;
-  color: var(--primary-brown);
-  border: 2px solid var(--primary-brown);
+  color: var(--primary-matcha);
+  border: 2px solid var(--primary-matcha);
   box-shadow: none;
 }
 
 .btn-brown.btn-outline:hover {
-  background: var(--primary-brown);
+  background: var(--primary-matcha);
   color: var(--cream-white);
 }
 
@@ -112,7 +112,7 @@
 }
 
 .form-control:focus {
-  border-color: var(--primary-brown);
+  border-color: var(--primary-matcha);
   box-shadow: 0 0 0 3px var(--shadow-light);
   outline: none;
 }
@@ -145,8 +145,8 @@
 .card-header-modern {
   background: linear-gradient(
     135deg,
-    var(--primary-brown),
-    var(--secondary-brown)
+    var(--primary-matcha),
+    var(--secondary-matcha)
   );
   color: var(--cream-white);
   padding: 20px;
@@ -157,7 +157,7 @@
    BADGES & LABELS
    ========================================== */
 .badge-brown {
-  background: var(--primary-brown);
+  background: var(--primary-matcha);
   color: var(--cream-white);
   padding: 6px 12px;
   border-radius: 20px;
@@ -167,8 +167,8 @@
 
 .badge-outline-brown {
   background: transparent;
-  color: var(--primary-brown);
-  border: 2px solid var(--primary-brown);
+  color: var(--primary-matcha);
+  border: 2px solid var(--primary-matcha);
   padding: 4px 10px;
   border-radius: 20px;
   font-size: 12px;
@@ -179,23 +179,23 @@
    UTILITY CLASSES
    ========================================== */
 .text-brown {
-  color: var(--primary-brown) !important;
+  color: var(--primary-matcha) !important;
 }
 
 .text-brown-dark {
-  color: var(--dark-brown) !important;
+  color: var(--dark-matcha) !important;
 }
 
 .bg-brown {
-  background-color: var(--primary-brown) !important;
+  background-color: var(--primary-matcha) !important;
 }
 
 .bg-brown-light {
-  background-color: var(--light-brown) !important;
+  background-color: var(--light-matcha) !important;
 }
 
 .border-brown {
-  border-color: var(--primary-brown) !important;
+  border-color: var(--primary-matcha) !important;
 }
 
 .shadow-brown {
@@ -212,7 +212,7 @@
 .section-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--dark-brown);
+  color: var(--dark-matcha);
   margin-bottom: 20px;
   position: relative;
   padding-bottom: 15px;
@@ -225,8 +225,8 @@
   height: 4px;
   background: linear-gradient(
     135deg,
-    var(--primary-brown),
-    var(--secondary-brown)
+    var(--primary-matcha),
+    var(--secondary-matcha)
   );
   bottom: 0;
   left: 0;
@@ -234,7 +234,7 @@
 }
 
 .section-subtitle {
-  color: var(--secondary-brown);
+  color: var(--secondary-matcha);
   font-size: 18px;
   margin-bottom: 40px;
   line-height: 1.6;
@@ -244,13 +244,13 @@
    LINKS
    ========================================== */
 a {
-  color: var(--primary-brown);
+  color: var(--primary-matcha);
   text-decoration: none;
   transition: var(--transition);
 }
 
 a:hover {
-  color: var(--dark-brown);
+  color: var(--dark-matcha);
   text-decoration: underline;
 }
 
@@ -263,20 +263,20 @@ a:hover {
   background: var(--cream-white);
   margin-bottom: 5px;
   border-radius: 8px;
-  border-left: 4px solid var(--light-brown);
+  border-left: 4px solid var(--light-matcha);
   transition: var(--transition);
 }
 
 .list-group-item:hover {
   background: var(--cream-light);
-  border-left-color: var(--primary-brown);
+  border-left-color: var(--primary-matcha);
   transform: translateX(5px);
 }
 
 .list-group-item.active {
-  background: var(--primary-brown);
+  background: var(--primary-matcha);
   color: var(--cream-white);
-  border-left-color: var(--dark-brown);
+  border-left-color: var(--dark-matcha);
 }
 
 /* ==========================================

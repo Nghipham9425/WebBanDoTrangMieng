@@ -3,267 +3,150 @@
 }
 
 <div class="container">
-    <div class="product-banner">
-        <div class="product-overlay">
-            <h1 class="product-banner-title">Sản phẩm</h1>
+    <!-- Banner -->
+    <div class="position-relative mb-4 rounded overflow-hidden" style="height:200px; background:url('https://images.unsplash.com/photo-1528712306091-ed0763094c98?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;">
+        <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style="background:rgba(125,158,95,0.7);">
+            <h1 class="text-white fw-bold display-5">Sản phẩm</h1>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-lg-3">
-            <div class="filter-sidebar">
-                <h3 class="filter-header">Bộ lọc sản phẩm</h3>
-
-                <div class="filter-tags">
-                    <span class="filter-tag">Bánh ngọt <i class="fas fa-times"></i></span>
-                    <span class="filter-tag">Dưới 100.000đ <i class="fas fa-times"></i></span>
-                </div>
-
-                <div class="filter-section">
-                    <div class="filter-section-title">
-                        <span>Danh mục</span>
-                        <i class="fas fa-chevron-down"></i>
+        <!-- Sidebar Filter -->
+        <div class="col-lg-3 mb-4 mb-lg-0">
+            <div class="card">
+                <div class="card-header bg-white fw-bold fs-5">Bộ lọc sản phẩm</div>
+                <div class="card-body">
+                    <div class="mb-3 d-flex flex-wrap gap-2">
+                        <span class="badge bg-light text-dark d-flex align-items-center">Bánh ngọt <i class="fas fa-times ms-2" style="cursor:pointer;"></i></span>
+                        <span class="badge bg-light text-dark d-flex align-items-center">Dưới 100.000đ <i class="fas fa-times ms-2" style="cursor:pointer;"></i></span>
                     </div>
-                    <div class="filter-section-content">
-                        <div class="filter-checkbox">
-                            <input type="checkbox" id="category1" checked>
-                            <label for="category1">Bánh ngọt</label>
+                    <div class="mb-4">
+                        <div class="fw-semibold mb-2">Danh mục</div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="category1" checked>
+                            <label class="form-check-label" for="category1">Bánh ngọt</label>
                         </div>
-                        <div class="filter-checkbox">
-                            <input type="checkbox" id="category2">
-                            <label for="category2">Bánh kem</label>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="category2">
+                            <label class="form-check-label" for="category2">Bánh kem</label>
                         </div>
-                        <div class="filter-checkbox">
-                            <input type="checkbox" id="category3">
-                            <label for="category3">Kem các loại</label>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="category3">
+                            <label class="form-check-label" for="category3">Kem các loại</label>
                         </div>
-                        <div class="filter-checkbox">
-                            <input type="checkbox" id="category4">
-                            <label for="category4">Trà sữa</label>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="category4">
+                            <label class="form-check-label" for="category4">Trà sữa</label>
                         </div>
-                        <div class="filter-checkbox">
-                            <input type="checkbox" id="category5">
-                            <label for="category5">Đồ uống matcha</label>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="category5">
+                            <label class="form-check-label" for="category5">Đồ uống matcha</label>
                         </div>
-                        <div class="filter-checkbox">
-                            <input type="checkbox" id="category6">
-                            <label for="category6">Đồ ăn vặt</label>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="category6">
+                            <label class="form-check-label" for="category6">Đồ ăn vặt</label>
                         </div>
                     </div>
-                </div>
-
-                <div class="filter-section">
-                    <div class="filter-section-title">
-                        <span>Giá</span>
-                        <i class="fas fa-chevron-down"></i>
+                    <div class="mb-4">
+                        <div class="fw-semibold mb-2">Giá</div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="price1" checked>
+                            <label class="form-check-label" for="price1">Dưới 100.000đ</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="price2">
+                            <label class="form-check-label" for="price2">100.000đ - 200.000đ</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="price3">
+                            <label class="form-check-label" for="price3">200.000đ - 300.000đ</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="price4">
+                            <label class="form-check-label" for="price4">Trên 300.000đ</label>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 mt-2">
+                            <input type="text" class="form-control form-control-sm w-50" placeholder="Từ">
+                            <span>-</span>
+                            <input type="text" class="form-control form-control-sm w-50" placeholder="Đến">
+                        </div>
+                        <button class="btn btn-success btn-sm mt-3 w-100">Áp dụng</button>
                     </div>
-                    <div class="filter-section-content">
-                        <div class="filter-checkbox">
-                            <input type="checkbox" id="price1" checked>
-                            <label for="price1">Dưới 100.000đ</label>
+                    <div>
+                        <div class="fw-semibold mb-2">Đặc điểm</div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="feature1">
+                            <label class="form-check-label" for="feature1">Sản phẩm mới</label>
                         </div>
-                        <div class="filter-checkbox">
-                            <input type="checkbox" id="price2">
-                            <label for="price2">100.000đ - 200.000đ</label>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="feature2">
+                            <label class="form-check-label" for="feature2">Bán chạy nhất</label>
                         </div>
-                        <div class="filter-checkbox">
-                            <input type="checkbox" id="price3">
-                            <label for="price3">200.000đ - 300.000đ</label>
-                        </div>
-                        <div class="filter-checkbox">
-                            <input type="checkbox" id="price4">
-                            <label for="price4">Trên 300.000đ</label>
-                        </div>
-
-                        <div class="price-range">
-                            <input type="text" class="price-input" placeholder="Từ">
-                            <span class="price-separator">-</span>
-                            <input type="text" class="price-input" placeholder="Đến">
-                        </div>
-
-                        <button class="filter-apply-btn">Áp dụng</button>
-                    </div>
-                </div>
-
-                <div class="filter-section">
-                    <div class="filter-section-title">
-                        <span>Đặc điểm</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="filter-section-content">
-                        <div class="filter-checkbox">
-                            <input type="checkbox" id="feature1">
-                            <label for="feature1">Sản phẩm mới</label>
-                        </div>
-                        <div class="filter-checkbox">
-                            <input type="checkbox" id="feature2">
-                            <label for="feature2">Bán chạy nhất</label>
-                        </div>
-                        <div class="filter-checkbox">
-                            <input type="checkbox" id="feature3">
-                            <label for="feature3">Giảm giá</label>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="feature3">
+                            <label class="form-check-label" for="feature3">Giảm giá</label>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Main Product List -->
         <div class="col-lg-9">
-            <div class="product-sort">
-                <div class="product-count">Hiển thị 1-12 trên 36 sản phẩm</div>
-                <div class="d-flex align-items-center">
-                    <div class="sort-dropdown me-3">
-                        <select id="sortOption">
-                            <option value="newest">Mới nhất</option>
-                            <option value="price-asc">Giá: Thấp đến Cao</option>
-                            <option value="price-desc">Giá: Cao đến Thấp</option>
-                            <option value="name-asc">Tên: A-Z</option>
-                            <option value="name-desc">Tên: Z-A</option>
-                        </select>
-                    </div>
-                    <div class="view-buttons">
-                        <button class="view-btn active" id="gridViewBtn"><i class="fas fa-th"></i></button>
-                        <button class="view-btn" id="listViewBtn"><i class="fas fa-list"></i></button>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="text-muted">Hiển thị 1-12 trên 36 sản phẩm</div>
+                <div class="d-flex align-items-center gap-2">
+                    <select id="sortOption" class="form-select form-select-sm w-auto">
+                        <option value="newest">Mới nhất</option>
+                        <option value="price-asc">Giá: Thấp đến Cao</option>
+                        <option value="price-desc">Giá: Cao đến Thấp</option>
+                        <option value="name-asc">Tên: A-Z</option>
+                        <option value="name-desc">Tên: Z-A</option>
+                    </select>
+                    <div class="btn-group ms-2" role="group">
+                        <button class="btn btn-outline-secondary btn-sm active" id="gridViewBtn"><i class="fas fa-th"></i></button>
+                        <button class="btn btn-outline-secondary btn-sm" id="listViewBtn"><i class="fas fa-list"></i></button>
                     </div>
                 </div>
             </div>
 
+            <!-- Grid View -->
             <div class="product-grid-view">
-                <div class="row">
-                    <!-- Product 1 -->
+                <div class="row g-4">
+                    <!-- Product Card Example -->
                     <div class="col-md-4">
-                        <div class="product-card">
-                            <span class="product-badge badge-new">Mới</span>
-                            <img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Bánh Mousse Matcha" class="product-img">
-                            <div class="product-body">
-                                <h5 class="product-title">Bánh Mousse Matcha</h5>
-                                <div class="product-price">75.000đ</div>
-                                <div class="product-action">
-                                    <a href="@Url.Action("Detail", "Product", new { id = 1 })" class="add-to-cart-btn">Xem chi tiết</a>
-                                    <button class="wishlist-btn"><i class="far fa-heart"></i></button>
+                        <div class="card h-100 position-relative">
+                            <span class="badge bg-success position-absolute top-0 end-0 m-2">Mới</span>
+                            <img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" class="card-img-top" alt="Bánh Mousse Matcha">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Bánh Mousse Matcha</h5>
+                                <div class="fw-bold text-danger mb-2">75.000đ</div>
+                                <div class="d-flex justify-content-center gap-2">
+                                    <a href="@Url.Action("Detail", "Product", new { id = 1 })" class="btn btn-outline-primary btn-sm">Xem chi tiết</a>
+                                    <button class="btn btn-outline-danger btn-sm"><i class="far fa-heart"></i></button>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <!-- ... Lặp lại cho các sản phẩm khác ... -->
+                </div>
+            </div>
 
-                    <!-- Product 2 -->
-                    <div class="col-md-4">
-                        <div class="product-card">
-                            <span class="product-badge badge-bestseller">Bán chạy</span>
-                            <img src="https://images.unsplash.com/photo-1602351447937-745c6bb00ad8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Cupcake Matcha" class="product-img">
-                            <div class="product-body">
-                                <h5 class="product-title">Cupcake Matcha</h5>
-                                <div class="product-price">40.000đ</div>
-                                <div class="product-action">
-                                    <a href="@Url.Action("Detail", "Product", new { id = 2 })" class="add-to-cart-btn">Xem chi tiết</a>
-                                    <button class="wishlist-btn"><i class="far fa-heart"></i></button>
-                                </div>
-                            </div>
+            <!-- List View -->
+            <div class="product-list-view" style="display:none;">
+                <div class="card mb-3">
+                    <div class="row g-0 align-items-center">
+                        <div class="col-md-4">
+                            <img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" class="img-fluid rounded-start" alt="Bánh Mousse Matcha">
                         </div>
-                    </div>
-
-                    <!-- Product 3 -->
-                    <div class="col-md-4">
-                        <div class="product-card">
-                            <img src="https://images.unsplash.com/photo-1591638246754-77e0a960a8ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Tiramisu Matcha" class="product-img">
-                            <div class="product-body">
-                                <h5 class="product-title">Tiramisu Matcha</h5>
-                                <div class="product-price">65.000đ</div>
-                                <div class="product-action">
-                                    <a href="@Url.Action("Detail", "Product", new { id = 3 })" class="add-to-cart-btn">Xem chi tiết</a>
-                                    <button class="wishlist-btn"><i class="far fa-heart"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Product 4 -->
-                    <div class="col-md-4">
-                        <div class="product-card">
-                            <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Bánh Crepe Matcha" class="product-img">
-                            <div class="product-body">
-                                <h5 class="product-title">Bánh Crepe Matcha</h5>
-                                <div class="product-price">55.000đ</div>
-                                <div class="product-action">
-                                    <a href="@Url.Action("Detail", "Product", new { id = 4 })" class="add-to-cart-btn">Xem chi tiết</a>
-                                    <button class="wishlist-btn"><i class="far fa-heart"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Product 5 -->
-                    <div class="col-md-4">
-                        <div class="product-card">
-                            <span class="product-badge badge-bestseller">Bán chạy</span>
-                            <img src="https://images.unsplash.com/photo-1558326567-98166ebaa59a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Kem Matcha" class="product-img">
-                            <div class="product-body">
-                                <h5 class="product-title">Kem Matcha</h5>
-                                <div class="product-price">35.000đ</div>
-                                <div class="product-action">
-                                    <a href="@Url.Action("Detail", "Product", new { id = 5 })" class="add-to-cart-btn">Xem chi tiết</a>
-                                    <button class="wishlist-btn"><i class="far fa-heart"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Product 6 -->
-                    <div class="col-md-4">
-                        <div class="product-card">
-                            <img src="https://images.unsplash.com/photo-1631708783486-be221df6134e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Trà Sữa Matcha" class="product-img">
-                            <div class="product-body">
-                                <h5 class="product-title">Trà Sữa Matcha</h5>
-                                <div class="product-price">50.000đ</div>
-                                <div class="product-action">
-                                    <a href="@Url.Action("Detail", "Product", new { id = 6 })" class="add-to-cart-btn">Xem chi tiết</a>
-                                    <button class="wishlist-btn"><i class="far fa-heart"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Product 7 -->
-                    <div class="col-md-4">
-                        <div class="product-card">
-                            <img src="https://images.unsplash.com/photo-1556745753-b2904692b3cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Bánh Tart Matcha" class="product-img">
-                            <div class="product-body">
-                                <h5 class="product-title">Bánh Tart Matcha</h5>
-                                <div class="product-price">45.000đ</div>
-                                <div class="product-action">
-                                    <a href="@Url.Action("Detail", "Product", new { id = 7 })" class="add-to-cart-btn">Xem chi tiết</a>
-                                    <button class="wishlist-btn"><i class="far fa-heart"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Product 8 -->
-                    <div class="col-md-4">
-                        <div class="product-card">
-                            <img src="https://images.unsplash.com/photo-1556312349-ebec00717c2c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Cookies Matcha" class="product-img">
-                            <div class="product-body">
-                                <h5 class="product-title">Cookies Matcha</h5>
-                                <div class="product-price">30.000đ</div>
-                                <div class="product-action">
-                                    <a href="@Url.Action("Detail", "Product", new { id = 8 })" class="add-to-cart-btn">Xem chi tiết</a>
-                                    <button class="wishlist-btn"><i class="far fa-heart"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Product 9 -->
-                    <div class="col-md-4">
-                        <div class="product-card">
-                            <span class="product-badge badge-new">Mới</span>
-                            <img src="https://images.unsplash.com/photo-1634487359881-e85815746b96?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Bánh Mochi Matcha" class="product-img">
-                            <div class="product-body">
-                                <h5 class="product-title">Bánh Mochi Matcha</h5>
-                                <div class="product-price">25.000đ</div>
-                                <div class="product-action">
-                                    <a href="@Url.Action("Detail", "Product", new { id = 9 })" class="add-to-cart-btn">Xem chi tiết</a>
-                                    <button class="wishlist-btn"><i class="far fa-heart"></i></button>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Bánh Mousse Matcha</h5>
+                                <div class="fw-bold text-danger mb-2">75.000đ</div>
+                                <p class="card-text">Bánh mousse matcha với lớp kem mịn và hương vị trà xanh đặc trưng...</p>
+                                <div class="d-flex gap-2">
+                                    <a href="@Url.Action("Detail", "Product", new { id = 1 })" class="btn btn-outline-primary btn-sm">Xem chi tiết</a>
+                                    <button class="btn btn-outline-danger btn-sm"><i class="far fa-heart"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -271,85 +154,28 @@
                 </div>
             </div>
 
-            <div class="product-list-view">
-                <!-- Product 1 -->
-                <div class="product-card mb-4">
-                    <span class="product-badge badge-new">Mới</span>
-                    <img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Bánh Mousse Matcha" class="product-img">
-                    <div class="product-body">
-                        <h5 class="product-title">Bánh Mousse Matcha</h5>
-                        <div class="product-price">75.000đ</div>
-                        <div class="product-description">
-                            <p>Bánh mousse matcha với lớp kem mịn và hương vị trà xanh đặc trưng. Được làm từ bột matcha nguyên chất nhập khẩu từ Nhật Bản, mang đến hương vị độc đáo và tinh tế.</p>
-                        </div>
-                        <div class="product-action">
-                            <a href="@Url.Action("Detail", "Product", new { id = 1 })" class="add-to-cart-btn">Xem chi tiết</a>
-                            <button class="wishlist-btn"><i class="far fa-heart"></i></button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product 2 -->
-                <div class="product-card mb-4">
-                    <span class="product-badge badge-bestseller">Bán chạy</span>
-                    <img src="https://images.unsplash.com/photo-1602351447937-745c6bb00ad8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Cupcake Matcha" class="product-img">
-                    <div class="product-body">
-                        <h5 class="product-title">Cupcake Matcha</h5>
-                        <div class="product-price">40.000đ</div>
-                        <div class="product-description">
-                            <p>Cupcake matcha với lớp kem tươi mềm mịn phủ bên trên. Bánh mềm, xốp và thơm mùi trà xanh. Lựa chọn hoàn hảo cho những buổi tiệc nhỏ hoặc làm quà tặng.</p>
-                        </div>
-                        <div class="product-action">
-                            <a href="@Url.Action("Detail", "Product", new { id = 2 })" class="add-to-cart-btn">Xem chi tiết</a>
-                            <button class="wishlist-btn"><i class="far fa-heart"></i></button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product 3 -->
-                <div class="product-card mb-4">
-                    <img src="https://images.unsplash.com/photo-1591638246754-77e0a960a8ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Tiramisu Matcha" class="product-img">
-                    <div class="product-body">
-                        <h5 class="product-title">Tiramisu Matcha</h5>
-                        <div class="product-price">65.000đ</div>
-                        <div class="product-description">
-                            <p>Tiramisu phiên bản matcha với lớp bánh mềm thấm espresso, lớp kem mascarpone mịn màng và bột matcha rắc đều trên bề mặt. Hương vị phong phú và cân bằng.</p>
-                        </div>
-                        <div class="product-action">
-                            <a href="@Url.Action("Detail", "Product", new { id = 3 })" class="add-to-cart-btn">Xem chi tiết</a>
-                            <button class="wishlist-btn"><i class="far fa-heart"></i></button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Thêm các sản phẩm khác trong chế độ list view tương tự -->
-            </div>
-
-            <div class="pagination-container">
-                <ul class="pagination">
-                    <li><a href="#"><i class="fas fa-angle-left"></i></a></li>
-                    <li class="active"><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#"><i class="fas fa-angle-right"></i></a></li>
+            <!-- Pagination -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mt-4">
+                    <li class="page-item disabled"><a class="page-link" href="#"><i class="fas fa-angle-left"></i></a></li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                    <li class="page-item"><a class="page-link" href="#"><i class="fas fa-angle-right"></i></a></li>
                 </ul>
-            </div>
+            </nav>
         </div>
     </div>
 </div>
 
 <!-- Toast notifications container -->
-<div class="toast-container"></div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1055;"></div>
 
 @section scripts {
     <script>$(document).ready(function() {
-            // Toggle filter sections
-            $('.filter-section-title').click(function() {
-                $(this).toggleClass('collapsed');
-                $(this).next('.filter-section-content').slideToggle(300);
-            });
-
+            // Toggle filter sections (nếu cần)
+            // ...
             // Switch between grid and list view
             $('#gridViewBtn').click(function() {
                 $(this).addClass('active');
@@ -357,84 +183,28 @@
                 $('.product-grid-view').show();
                 $('.product-list-view').hide();
             });
-
             $('#listViewBtn').click(function() {
                 $(this).addClass('active');
                 $('#gridViewBtn').removeClass('active');
                 $('.product-grid-view').hide();
                 $('.product-list-view').show();
             });
-
             // Handle sort dropdown change
             $('#sortOption').change(function() {
                 const sortValue = $(this).val();
-                console.log('Sorting by: ' + sortValue);
-                // In a real application, you would call an AJAX function to get sorted products
-                // For now, just show a toast notification
-                showToast('Đã sắp xếp sản phẩm theo ' + getSortText(sortValue));
+                // ...
             });
-
             // Handle filter tag removal
-            $('.filter-tag i').click(function() {
+            $('.badge .fa-times').click(function() {
                 $(this).parent().fadeOut(300, function() {
                     $(this).remove();
                 });
-                // In a real application, you would update the filter and refresh products
             });
-
             // Add to wishlist button
-            $('.wishlist-btn').click(function() {
-                const productCard = $(this).closest('.product-card');
-                const productName = productCard.find('.product-title').text();
-
-                // Toggle heart icon
+            $('.btn-outline-danger').click(function() {
                 const heartIcon = $(this).find('i');
-                if (heartIcon.hasClass('far')) {
-                    heartIcon.removeClass('far').addClass('fas');
-                    showToast('Đã thêm ' + productName + ' vào danh sách yêu thích');
-                } else {
-                    heartIcon.removeClass('fas').addClass('far');
-                    showToast('Đã xóa ' + productName + ' khỏi danh sách yêu thích');
-                }
+                heartIcon.toggleClass('far fas');
             });
-
-            // Apply price filter
-            $('.filter-apply-btn').click(function() {
-                const minPrice = $('.price-input').first().val() || '0';
-                const maxPrice = $('.price-input').last().val() || 'không giới hạn';
-
-                showToast('Đã lọc sản phẩm theo giá từ ' + minPrice + 'đ đến ' + maxPrice + 'đ');
-                // In a real application, you would call an AJAX function to get filtered products
-            });
-
-            // Helper function to get sort text
-            function getSortText(value) {
-                switch(value) {
-                    case 'newest': return 'mới nhất';
-                    case 'price-asc': return 'giá từ thấp đến cao';
-                    case 'price-desc': return 'giá từ cao đến thấp';
-                    case 'name-asc': return 'tên A-Z';
-                    case 'name-desc': return 'tên Z-A';
-                    default: return value;
-                }
-            }
-
-            // Show toast notification
-            function showToast(message) {
-                var toast = $('<div class="toast"><i class="fas fa-check-circle"></i>' + message + '</div>');
-                $('.toast-container').append(toast);
-
-                setTimeout(function() {
-                    toast.addClass('show');
-                }, 100);
-
-                setTimeout(function() {
-                    toast.removeClass('show');
-                    setTimeout(function() {
-                        toast.remove();
-                    }, 300);
-                }, 3000);
-            }
         });</script>
 }
 

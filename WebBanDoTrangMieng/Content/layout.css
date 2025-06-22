@@ -2,13 +2,14 @@
    OPTIMIZED LAYOUT.CSS - TOUS LES JOURS
    ========================================== */
 
-/* CSS Variables - Brown Theme */
+/* CSS Variables - Matcha Green Theme */
 :root {
-  --primary-brown: #8b4513;
-  --secondary-brown: #a0522d;
-  --dark-brown: #2c1810;
-  --light-bg: #faf8f5;
-  --white: #ffffff;
+  --primary-matcha: #7d9e5f;
+  --secondary-matcha: #9bb377;
+  --dark-matcha: #4a5d37;
+  --light-matcha: #c8d4b8;
+  --cream-light: #f8faf5;
+  --cream-white: #ffffff;
   --shadow: rgba(0, 0, 0, 0.1);
   --transition: all 0.3s ease;
 }
@@ -18,7 +19,7 @@ body {
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial,
     sans-serif;
   background: var(--light-bg);
-  color: var(--dark-brown);
+  color: var(--dark-matcha);
   line-height: 1.6;
   margin: 0;
   padding: 0;
@@ -28,7 +29,7 @@ body {
    TOP HEADER
    ========================================== */
 .top-header {
-  background: var(--dark-brown);
+  background: var(--dark-matcha);
   color: var(--white);
   padding: 10px 0;
   font-size: 14px;
@@ -46,7 +47,7 @@ body {
 
 .contact-info i {
   margin-right: 5px;
-  color: var(--secondary-brown);
+  color: var(--secondary-matcha);
 }
 
 .social-icons a {
@@ -57,7 +58,7 @@ body {
 }
 
 .social-icons a:hover {
-  color: var(--secondary-brown);
+  color: var(--secondary-matcha);
   transform: translateY(-2px);
 }
 
@@ -74,18 +75,18 @@ body {
 }
 
 .navbar-brand {
-  color: var(--primary-brown) !important;
+  color: var(--primary-matcha) !important;
   font-size: 24px;
   font-weight: 700;
   text-decoration: none;
 }
 
 .navbar-brand:hover {
-  color: var(--secondary-brown) !important;
+  color: var(--secondary-matcha) !important;
 }
 
 .nav-link {
-  color: var(--dark-brown) !important;
+  color: var(--dark-matcha) !important;
   font-weight: 500;
   padding: 10px 15px !important;
   transition: var(--transition);
@@ -95,7 +96,7 @@ body {
 
 .nav-link:hover {
   background: var(--light-bg);
-  color: var(--primary-brown) !important;
+  color: var(--primary-matcha) !important;
 }
 
 /* ==========================================
@@ -140,7 +141,7 @@ body {
 
 .dropdown-item {
   padding: 12px 20px;
-  color: var(--dark-brown) !important;
+  color: var(--dark-matcha) !important;
   font-weight: 500;
   transition: var(--transition);
   display: block;
@@ -150,7 +151,7 @@ body {
 
 .dropdown-item:hover {
   background: var(--light-bg);
-  color: var(--primary-brown) !important;
+  color: var(--primary-matcha) !important;
   text-decoration: none;
 }
 
@@ -161,7 +162,7 @@ body {
   left: 0;
   width: 0;
   height: 2px;
-  background: var(--primary-brown);
+  background: var(--primary-matcha);
   transition: width 0.3s ease;
 }
 
@@ -192,13 +193,13 @@ body {
 }
 
 .body-content a {
-  color: var(--primary-brown);
+  color: var(--primary-matcha);
   text-decoration: none;
   transition: var(--transition);
 }
 
 .body-content a:hover {
-  color: var(--secondary-brown);
+  color: var(--secondary-matcha);
   text-decoration: underline;
 }
 
@@ -207,8 +208,8 @@ body {
 .btn-matcha {
   background: linear-gradient(
     135deg,
-    var(--primary-brown),
-    var(--secondary-brown)
+    var(--primary-matcha),
+    var(--secondary-matcha)
   );
   color: var(--white);
   border: none;
@@ -227,11 +228,11 @@ body {
 .btn-matcha:hover {
   background: linear-gradient(
     135deg,
-    var(--secondary-brown),
-    var(--primary-brown)
+    var(--secondary-matcha),
+    var(--primary-matcha)
   );
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(139, 69, 19, 0.3);
+  box-shadow: 0 8px 25px rgba(125, 158, 95, 0.3);
   color: var(--white);
   text-decoration: none;
 }
@@ -240,7 +241,7 @@ body {
    FOOTER
    ========================================== */
 footer {
-  background: var(--dark-brown);
+  background: var(--dark-matcha);
   color: var(--white);
   padding: 40px 0 20px;
   margin-top: 50px;
@@ -270,7 +271,7 @@ footer {
 }
 
 .footer-widget ul li a:hover {
-  color: var(--secondary-brown);
+  color: var(--secondary-matcha);
   text-decoration: none;
 }
 
@@ -287,7 +288,7 @@ footer {
    ========================================== */
 .cart-toggle {
   position: relative;
-  color: var(--dark-brown) !important;
+  color: var(--dark-matcha) !important;
   font-size: 18px;
   text-decoration: none;
 }
@@ -296,7 +297,7 @@ footer {
   position: absolute;
   top: -8px;
   right: -8px;
-  background: var(--primary-brown);
+  background: var(--primary-matcha);
   color: var(--white);
   border-radius: 50%;
   width: 18px;
@@ -378,29 +379,29 @@ footer {
   gap: 15px;
   padding-bottom: 15px;
   margin-bottom: 15px;
-  border-bottom: 1px solid rgba(139, 69, 19, 0.1);
+  border-bottom: 1px solid rgba(125, 158, 95, 0.1);
 }
 
 .user-avatar i {
   font-size: 2.5rem;
-  color: var(--primary-brown);
+  color: var(--primary-matcha);
 }
 
 .user-details strong {
   display: block;
-  color: var(--dark-brown);
+  color: var(--dark-matcha);
   font-weight: 700;
   margin-bottom: 2px;
 }
 
 .user-details small {
-  color: rgba(44, 24, 16, 0.7);
+  color: rgba(74, 93, 55, 0.7);
   font-size: 0.85rem;
 }
 
 .user-dropdown-menu .dropdown-item {
   padding: 12px 0;
-  color: var(--dark-brown) !important;
+  color: var(--dark-matcha) !important;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -410,18 +411,18 @@ footer {
 
 .user-dropdown-menu .dropdown-item:hover {
   background: var(--light-bg);
-  color: var(--primary-brown) !important;
+  color: var(--primary-matcha) !important;
   padding-left: 10px;
 }
 
 .user-dropdown-menu .dropdown-item i {
   width: 20px;
-  color: var(--primary-brown);
+  color: var(--primary-matcha);
 }
 
 .user-dropdown-menu .dropdown-item.logout {
   color: #dc3545 !important;
-  border-top: 1px solid rgba(139, 69, 19, 0.1);
+  border-top: 1px solid rgba(125, 158, 95, 0.1);
   margin-top: 10px;
   padding-top: 15px;
 }
@@ -436,7 +437,7 @@ footer {
 
 .dropdown-divider {
   height: 1px;
-  background: rgba(139, 69, 19, 0.1);
+  background: rgba(125, 158, 95, 0.1);
   margin: 10px 0;
   border: none;
 }
@@ -445,19 +446,19 @@ footer {
    UTILITY CLASSES
    ========================================== */
 .text-primary {
-  color: var(--primary-brown);
+  color: var(--primary-matcha);
 }
 .text-dark {
-  color: var(--dark-brown);
+  color: var(--dark-matcha);
 }
 .bg-primary {
-  background: var(--primary-brown);
+  background: var(--primary-matcha);
 }
 .bg-light {
   background: var(--light-bg);
 }
 .shadow-brown {
-  box-shadow: 0 4px 15px rgba(139, 69, 19, 0.2);
+  box-shadow: 0 4px 15px rgba(125, 158, 95, 0.2);
 }
 
 .fade-in {

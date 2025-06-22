@@ -1,575 +1,73 @@
 /* ==========================================
-   OPTIMIZED AUTH MODAL - BROWN THEME
+   AUTH MODAL - BOOTSTRAP OPTIMIZED
    ========================================== */
 
-/* Brown theme variables - Override any existing */
+/* CSS Variables - Only essential ones */
 :root {
-  --primary-brown: #8b4513 !important;
-  --secondary-brown: #a0522d !important;
-  --dark-brown: #2c1810 !important;
-  --white: #ffffff !important;
-  --light-brown: #f5e6d3 !important;
-
-  /* Override matcha variables if they exist */
-  --matcha-dark: #8b4513 !important;
-  --matcha-medium: #a0522d !important;
-  --matcha-light: #f5e6d3 !important;
+  --matcha-green: #198754; /* Use Bootstrap success color */
+  --matcha-light: #25a15a;
+  --matcha-dark: #146c43;
 }
 
 /* ==========================================
-   MODAL CONTAINER
+   MODAL ENHANCEMENTS - MINIMAL
    ========================================== */
-.auth-modal {
-  display: none !important;
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  background: rgba(0, 0, 0, 0.6) !important;
-  z-index: 9999 !important;
-  justify-content: center !important;
-  align-items: center !important;
-  backdrop-filter: blur(5px);
+.modal-content {
+  border: none;
 }
 
-.auth-modal.show {
-  display: flex !important;
-  animation: fadeIn 0.3s ease-out;
-  visibility: visible !important;
-  opacity: 1 !important;
+.modal-header.bg-success {
+  background: linear-gradient(
+    135deg,
+    var(--matcha-green),
+    var(--matcha-light)
+  ) !important;
 }
 
-.auth-modal[style*="display: block"],
-.auth-modal[style*="display: flex"] {
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-}
-
-body.modal-open {
-  overflow: hidden !important;
-}
-
-/* ==========================================
-   MODAL CONTENT
-   ========================================== */
-.auth-container {
-  background: var(--white) !important;
-  border-radius: 15px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-  width: 90%;
-  max-width: 400px;
-  min-width: 300px;
-  position: relative;
-  padding: 0;
-  overflow: hidden;
-  animation: slideUp 0.4s ease-out;
-  z-index: 10000 !important;
-  margin: 20px;
-}
-
-.auth-close {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  color: #999;
-  cursor: pointer;
-  z-index: 1051;
-  border-radius: 50%;
-  background: #f1f1f1;
-  transition: all 0.3s ease;
-}
-
-.auth-close:hover {
-  background: #e0e0e0;
-  transform: rotate(90deg);
-}
-
-/* ==========================================
-   TABS & FORMS
-   ========================================== */
-.auth-tabs {
-  display: flex;
-  background: #f8f9fa;
-  border-bottom: 1px solid #eee;
-}
-
-.auth-tab {
-  flex: 1;
-  padding: 18px 0;
-  text-align: center;
+.modal-title {
   font-weight: 600;
-  color: #6c757d;
-  cursor: pointer;
-  position: relative;
+}
+
+/* ==========================================
+   CUSTOM CLOSE BUTTON
+   ========================================== */
+.btn-close {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2) !important;
   transition: all 0.3s ease;
 }
 
-.auth-tab.active {
-  color: var(--primary-brown) !important;
-  background: var(--white) !important;
+.btn-close:hover {
+  transform: rotate(90deg);
+  background: rgba(255, 255, 255, 0.3) !important;
 }
 
-.auth-tab.active::after {
+/* ==========================================
+   TAB STYLING - MINIMAL
+   ========================================== */
+.nav-tabs .nav-link::after {
   content: "";
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 100%;
+  width: 0;
   height: 3px;
-  background: var(--primary-brown) !important;
+  background: var(--matcha-green);
+  transition: width 0.3s ease;
 }
 
-.auth-tab i {
-  margin-right: 8px;
-}
-
-.auth-content {
-  padding: 30px 25px;
-}
-
-.auth-form {
-  display: none;
-}
-
-.auth-form.active {
-  display: block;
-  animation: fadeIn 0.4s ease;
-}
-
-.form-heading {
-  font-size: 24px;
-  color: var(--dark-brown) !important;
-  margin-bottom: 25px;
-  font-weight: 700;
-  text-align: center;
-}
-
-/* ==========================================
-   FORM ELEMENTS
-   ========================================== */
-.form-group {
-  margin-bottom: 20px;
-  position: relative;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  color: var(--dark-brown) !important;
-  font-weight: 600;
-  font-size: 14px;
-}
-
-.form-group .input-icon {
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--primary-brown) !important;
-  font-size: 16px;
-  z-index: 2;
-}
-
-.auth-form .form-control {
+.nav-tabs .nav-link.active::after,
+.nav-tabs .nav-link:hover::after {
   width: 100%;
-  padding: 12px 40px 12px 45px;
-  border: 2px solid #e9ecef;
-  border-radius: 8px;
-  font-size: 14px;
-  transition: all 0.3s ease;
-  background: var(--white);
-  box-sizing: border-box;
-}
-
-.auth-form .form-control:focus {
-  border-color: var(--primary-brown) !important;
-  box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1) !important;
-  outline: none;
-}
-
-.toggle-password {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #6c757d;
-  cursor: pointer;
-  font-size: 16px;
-  transition: color 0.3s ease;
-}
-
-.toggle-password:hover {
-  color: var(--primary-brown) !important;
-}
-
-.form-check {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.form-check .form-check-input {
-  margin-right: 8px;
-  accent-color: var(--primary-brown) !important;
-}
-
-.form-check .form-check-label {
-  font-size: 14px;
-  color: #6c757d;
-  cursor: pointer;
 }
 
 /* ==========================================
-   BUTTONS & ALERTS
-   ========================================== */
-.auth-btn {
-  width: 100%;
-  padding: 15px;
-  background: linear-gradient(
-    135deg,
-    var(--primary-brown),
-    var(--secondary-brown)
-  );
-  color: var(--white);
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 20px;
-}
-
-.auth-btn:hover {
-  background: linear-gradient(
-    135deg,
-    var(--secondary-brown),
-    var(--primary-brown)
-  );
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(139, 69, 19, 0.3);
-}
-
-.auth-btn:active {
-  transform: translateY(0);
-}
-
-.auth-btn i {
-  margin-right: 8px;
-}
-
-/* ==========================================
-   ALERTS
-   ========================================== */
-.auth-alert {
-  border-radius: 8px;
-  padding: 12px 15px;
-  margin-bottom: 20px;
-  border: none;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  animation: slideDown 0.3s ease;
-}
-
-.auth-alert i {
-  margin-right: 10px;
-  font-size: 16px;
-}
-
-.alert-success,
-.auth-alert.success {
-  background: #d4edda;
-  color: #155724;
-  border-left: 4px solid #28a745;
-}
-
-.alert-danger,
-.auth-alert.error {
-  background: #f8d7da;
-  color: #721c24;
-  border-left: 4px solid #dc3545;
-}
-
-.alert-info {
-  background: #d1ecf1;
-  color: #0c5460;
-  border-left: 4px solid #17a2b8;
-}
-
-/* ==========================================
-   SOCIAL LOGIN & FOOTER
-   ========================================== */
-.form-divider {
-  position: relative;
-  text-align: center;
-  margin: 25px 0;
-  color: #6c757d;
-  font-size: 14px;
-}
-
-.form-divider::before,
-.form-divider::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  width: 45%;
-  height: 1px;
-  background: #e9ecef;
-}
-
-.form-divider::before {
-  left: 0;
-}
-
-.form-divider::after {
-  right: 0;
-}
-
-.form-divider span {
-  background: var(--white);
-  padding: 0 15px;
-}
-
-.social-login {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.social-login .social-btn {
-  flex: 1;
-  padding: 12px;
-  border: 2px solid #e9ecef;
-  border-radius: 8px;
-  background: var(--white);
-  color: #6c757d;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.social-login .social-btn:hover {
-  border-color: var(--primary-brown);
-  background: rgba(139, 69, 19, 0.05);
-  color: var(--primary-brown);
-  text-decoration: none;
-}
-
-.social-login .social-btn i {
-  margin-right: 8px;
-  font-size: 16px;
-}
-
-.social-login .social-btn.facebook i {
-  color: #4267b2;
-}
-
-.social-login .social-btn.google i {
-  color: #db4437;
-}
-
-.form-footer {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.form-footer a {
-  color: var(--primary-brown);
-  text-decoration: none;
-  font-weight: 600;
-  transition: color 0.3s ease;
-}
-
-.form-footer a:hover {
-  color: var(--secondary-brown);
-  text-decoration: underline;
-}
-
-/* ==========================================
-   RESET PASSWORD FORM
-   ========================================== */
-#resetPasswordForm .form-icon {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-#resetPasswordForm .form-icon i {
-  font-size: 48px;
-  color: var(--primary-brown);
-}
-
-#resetPasswordForm p {
-  text-align: center;
-  color: #6c757d;
-  margin-bottom: 25px;
-  line-height: 1.5;
-}
-
-#resetPasswordForm .back-link {
-  display: inline-flex;
-  align-items: center;
-  color: var(--primary-brown);
-  text-decoration: none;
-  font-weight: 600;
-  transition: color 0.3s ease;
-}
-
-#resetPasswordForm .back-link:hover {
-  color: var(--secondary-brown);
-  text-decoration: none;
-}
-
-#resetPasswordForm .back-link i {
-  margin-right: 5px;
-}
-
-/* ==========================================
-   ANIMATIONS
-   ========================================== */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ==========================================
-   RESPONSIVE DESIGN
+   RESPONSIVE ONLY
    ========================================== */
 @media (max-width: 576px) {
-  .auth-content {
-    padding: 20px;
+  .modal-dialog {
+    margin: 1rem 0.5rem;
   }
-
-  .auth-container {
-    margin: 10px;
-    min-width: 280px;
-  }
-
-  .form-heading {
-    font-size: 20px;
-  }
-
-  .auth-form .form-control {
-    padding: 10px 35px 10px 12px;
-  }
-
-  .toggle-password {
-    right: 10px;
-  }
-
-  .auth-tab {
-    padding: 15px 0;
-    font-size: 14px;
-  }
-
-  .social-login {
-    flex-direction: column;
-  }
-}
-
-/* ==========================================
-   FORCE BROWN THEME - OVERRIDE ALL
-   ========================================== */
-.auth-modal .auth-tab.active,
-.auth-modal .auth-tab.active:hover,
-.auth-modal .auth-tab.active:focus {
-  color: #8b4513 !important;
-  background: #ffffff !important;
-}
-
-.auth-modal .auth-tab.active::after {
-  background: #8b4513 !important;
-}
-
-.auth-modal .form-heading {
-  color: #2c1810 !important;
-}
-
-.auth-modal .form-group label {
-  color: #2c1810 !important;
-}
-
-.auth-modal .form-group .input-icon {
-  color: #8b4513 !important;
-}
-
-.auth-modal .auth-form .form-control:focus {
-  border-color: #8b4513 !important;
-  box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1) !important;
-}
-
-.auth-modal .toggle-password:hover {
-  color: #8b4513 !important;
-}
-
-.auth-modal .form-check .form-check-input {
-  accent-color: #8b4513 !important;
-}
-
-.auth-modal .auth-btn {
-  background: linear-gradient(135deg, #8b4513, #a0522d) !important;
-  color: #ffffff !important;
-}
-
-.auth-modal .auth-btn:hover {
-  background: linear-gradient(135deg, #a0522d, #8b4513) !important;
-}
-
-.auth-modal .form-footer a {
-  color: #8b4513 !important;
-}
-
-.auth-modal .form-footer a:hover {
-  color: #a0522d !important;
-}
-
-.auth-modal #resetPasswordForm .form-icon i {
-  color: #8b4513 !important;
-}
-
-.auth-modal #resetPasswordForm .back-link {
-  color: #8b4513 !important;
-}
-
-.auth-modal #resetPasswordForm .back-link:hover {
-  color: #a0522d !important;
 }

@@ -1,0 +1,247 @@
+﻿@model WebBanDoTrangMieng.Product
+
+@{
+    ViewBag.Title = "Thêm sản phẩm mới";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/Areas/Admin/Content/product-admin.css" />
+}
+
+<div class="product-form-container">
+    <div class="product-form-header">
+        <div class="d-flex align-items-center">
+            <a href="@Url.Action("Index")" class="btn-back">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="ml-3">
+                <h5><i class="fas fa-plus-circle"></i>Thêm sản phẩm mới</h5>
+                <p class="form-subtitle">Điền thông tin chi tiết để tạo sản phẩm mới</p>
+            </div>
+        </div>
+    </div>
+
+    @using (Html.BeginForm("Create", "Product", FormMethod.Post, new { enctype = "multipart/form-data", @class = "product-form", id = "productForm" }))
+    {
+        @Html.AntiForgeryToken()
+        
+        if (ViewBag.Error != null)
+        {
+            <div class="admin-alert alert-error">
+                <i class="fas fa-exclamation-circle"></i>
+                @ViewBag.Error
+            </div>
+        }
+
+        <div class="form-row">
+            <!-- Left Column -->
+            <div class="form-col-left">
+                <div class="form-card">
+                    <h6 class="form-card-title">
+                        <i class="fas fa-info-circle"></i>
+                        Thông tin cơ bản
+                    </h6>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name, "Tên sản phẩm", new { @class = "form-label required" })
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", placeholder = "Nhập tên sản phẩm...", required = "required" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "field-validation-error" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CategoryId, "Danh mục", new { @class = "form-label required" })
+                        @Html.DropDownList("CategoryId", (SelectList)ViewBag.CategoryId, "-- Chọn danh mục --", new { @class = "form-control", required = "required" })
+                        @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "field-validation-error" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Description, "Mô tả", new { @class = "form-label" })
+                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = "4", placeholder = "Mô tả chi tiết về sản phẩm..." })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "field-validation-error" })
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(model => model.Price, "Giá (VNĐ)", new { @class = "form-label required" })
+                            @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control", placeholder = "0", min = "0", step = "1000", required = "required", type = "number" } })
+                            @Html.ValidationMessageFor(model => model.Price, "", new { @class = "field-validation-error" })
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(model => model.StockQuantity, "Số lượng tồn kho", new { @class = "form-label" })
+                            @Html.EditorFor(model => model.StockQuantity, new { htmlAttributes = new { @class = "form-control", placeholder = "0", min = "0", type = "number" } })
+                            @Html.ValidationMessageFor(model => model.StockQuantity, "", new { @class = "field-validation-error" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="form-col-right">
+                <div class="form-card">
+                    <h6 class="form-card-title">
+                        <i class="fas fa-image"></i>
+                        Hình ảnh sản phẩm
+                    </h6>
+
+                    <div class="form-group">
+                        <label class="form-label">Upload hình ảnh</label>
+                        <div class="image-upload-area" id="imageUploadArea">
+                            <div class="upload-content" id="uploadContent">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Kéo thả hình ảnh vào đây hoặc <span class="upload-link">chọn file</span></p>
+                                <small>Định dạng: JPG, PNG, GIF (tối đa 5MB)</small>
+                            </div>
+                            <input type="file" id="imageFile" name="imageFile" accept="image/*" style="display: none;">
+                        </div>
+                        
+                        <div class="image-preview" id="imagePreview" style="display: none;">
+                            <img id="previewImg" src="" alt="Preview">
+                            <div class="image-actions">
+                                <button type="button" class="btn-remove-image" id="removeImage">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ImageUrl, "Hoặc nhập URL hình ảnh", new { @class = "form-label" })
+                        @Html.EditorFor(model => model.ImageUrl, new { htmlAttributes = new { @class = "form-control", placeholder = "https://example.com/image.jpg" } })
+                        @Html.ValidationMessageFor(model => model.ImageUrl, "", new { @class = "field-validation-error" })
+                        <small class="form-text">Nếu upload file, URL sẽ được tự động tạo</small>
+                    </div>
+                </div>
+
+                <div class="form-card">
+                    <h6 class="form-card-title">
+                        <i class="fas fa-info-circle"></i>
+                        Thông tin bổ sung
+                    </h6>
+
+                    <div class="form-group">
+                        <label class="form-label">Ghi chú</label>
+                        <div class="info-text">
+                            <i class="fas fa-lightbulb"></i>
+                            <p>Sản phẩm sẽ được tự động kích hoạt sau khi tạo thành công</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-admin btn-primary" id="submitBtn">
+                <i class="fas fa-save"></i>
+                <span class="btn-text">Lưu sản phẩm</span>
+                <span class="btn-loading" style="display: none;">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    Đang lưu...
+                </span>
+            </button>
+            <a href="@Url.Action("Index")" class="btn-admin btn-secondary">
+                <i class="fas fa-times"></i>
+                Hủy bỏ
+            </a>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageUploadArea = document.getElementById('imageUploadArea');
+            const imageFile = document.getElementById('imageFile');
+            const uploadContent = document.getElementById('uploadContent');
+            const imagePreview = document.getElementById('imagePreview');
+            const previewImg = document.getElementById('previewImg');
+            const removeImage = document.getElementById('removeImage');
+            const imageUrlInput = document.querySelector('input[name="ImageUrl"]');
+            const form = document.getElementById('productForm');
+            const submitBtn = document.getElementById('submitBtn');
+
+            // Drag and drop functionality
+            imageUploadArea.addEventListener('click', () => imageFile.click());
+            
+            imageUploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                imageUploadArea.classList.add('drag-over');
+            });
+
+            imageUploadArea.addEventListener('dragleave', () => {
+                imageUploadArea.classList.remove('drag-over');
+            });
+
+            imageUploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                imageUploadArea.classList.remove('drag-over');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFileSelect(files[0]);
+                }
+            });
+
+            imageFile.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleFileSelect(e.target.files[0]);
+                }
+            });
+
+            function handleFileSelect(file) {
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        previewImg.src = e.target.result;
+                        uploadContent.style.display = 'none';
+                        imagePreview.style.display = 'block';
+                        imageUrlInput.value = ''; // Clear URL input when file is selected
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            removeImage.addEventListener('click', () => {
+                imageFile.value = '';
+                previewImg.src = '';
+                uploadContent.style.display = 'block';
+                imagePreview.style.display = 'none';
+            });
+
+            // Form submission with loading state
+            form.addEventListener('submit', function() {
+                submitBtn.disabled = true;
+                submitBtn.querySelector('.btn-text').style.display = 'none';
+                submitBtn.querySelector('.btn-loading').style.display = 'inline-flex';
+            });
+
+            // Auto dismiss alerts
+            setTimeout(function() {
+                const alerts = document.querySelectorAll('.admin-alert');
+                alerts.forEach(alert => {
+                    alert.style.opacity = '0';
+                    alert.style.transform = 'translateY(-10px)';
+                    setTimeout(() => alert.remove(), 300);
+                });
+            }, 5000);
+
+            // Format price input
+            const priceInput = document.querySelector('input[name="Price"]');
+            if (priceInput) {
+                priceInput.addEventListener('input', function() {
+                    let value = this.value.replace(/[^\d]/g, '');
+                    if (value) {
+                        this.value = parseInt(value).toLocaleString('vi-VN');
+                    }
+                });
+
+                priceInput.addEventListener('blur', function() {
+                    let value = this.value.replace(/[^\d]/g, '');
+                    this.value = value;
+                });
+            }
+        });
+    </script>
+}
+

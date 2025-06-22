@@ -2,155 +2,209 @@
     ViewBag.Title = "Giới thiệu";
 }
 
-<div class="about-banner">
-    <div class="about-overlay">
-        <h1 class="about-title">Về Chúng Tôi</h1>
+<!-- Hero Banner -->
+<div class="bg-success text-white text-center py-5 mb-5" style="background: linear-gradient(135deg, rgba(125, 158, 95, 0.9), rgba(155, 179, 119, 0.8)), url('https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaea7_AdobeStock_293739586.webp'); background-size: cover; background-position: center; border-radius: 15px;">
+    <div class="container">
+        <h1 class="display-4 fw-bold text-shadow">Về Chúng Tôi</h1>
     </div>
 </div>
 
 <div class="container">
-    <div class="about-section">
+    <!-- Story Section -->
+    <section class="mb-5">
         <div class="row align-items-center">
             <div class="col-lg-6">
-                <h3>Câu chuyện của chúng tôi</h3>
-                <p>Chào mừng bạn đến với <strong>Đồ Tráng Miệng</strong> - nơi mang đến những trải nghiệm ẩm thực ngọt ngào và tinh tế nhất. Chúng tôi bắt đầu hành trình của mình từ năm 2015 với một cửa hàng nhỏ và niềm đam mê lớn dành cho ẩm thực.</p>
+                <h3 class="text-success mb-4 fw-bold">Câu chuyện của chúng tôi</h3>
+                <p class="lead">Chào mừng bạn đến với <strong>Đồ Tráng Miệng</strong> - nơi mang đến những trải nghiệm ẩm thực ngọt ngào và tinh tế nhất. Chúng tôi bắt đầu hành trình của mình từ năm 2015 với một cửa hàng nhỏ và niềm đam mê lớn dành cho ẩm thực.</p>
                 <p>Từ những ngày đầu tiên, chúng tôi đã luôn giữ vững triết lý "Chất lượng là trên hết". Mỗi món tráng miệng được chúng tôi chế biến đều sử dụng nguyên liệu tươi ngon nhất, không chất bảo quản, mang đến hương vị thuần khiết và tự nhiên.</p>
                 <p>Với đội ngũ đầu bếp giàu kinh nghiệm và sáng tạo, chúng tôi liên tục nghiên cứu và phát triển những công thức mới, kết hợp giữa ẩm thực truyền thống và hiện đại, đặc biệt là dòng sản phẩm matcha cao cấp được nhập khẩu trực tiếp từ Nhật Bản.</p>
             </div>
             <div class="col-lg-6">
-                <div class="about-image">
-                    <img src="https://images.unsplash.com/photo-1556910103-1c02745aaf4d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Câu chuyện của chúng tôi">
+                <div class="text-center">
+                    <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaea7_AdobeStock_293739586.webp" 
+                         alt="Câu chuyện của chúng tôi" 
+                         class="img-fluid rounded shadow-lg" 
+                         style="max-height: 400px; object-fit: cover;">
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div class="about-section">
-        <h3>Hành trình phát triển</h3>
-        <div class="timeline">
-            <div class="timeline-item">
-                <div class="timeline-year">2015</div>
-                <div class="timeline-content">
-                    <h4>Thành lập</h4>
-                    <p>Cửa hàng đầu tiên được mở tại quận 1, TP.HCM với diện tích nhỏ chỉ 30m² và 5 nhân viên.</p>
+    <!-- Timeline Section -->
+    <section class="mb-5">
+        <h3 class="text-success text-center mb-5 fw-bold">Hành trình phát triển</h3>
+        <div class="row">
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 border-success">
+                    <div class="card-header bg-success text-white text-center">
+                        <h4 class="mb-0">2015</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-success">Thành lập</h5>
+                        <p class="card-text">Cửa hàng đầu tiên được mở tại quận 1, TP.HCM với diện tích nhỏ chỉ 30m² và 5 nhân viên.</p>
+                    </div>
                 </div>
             </div>
-            <div class="timeline-item">
-                <div class="timeline-year">2017</div>
-                <div class="timeline-content">
-                    <h4>Mở rộng</h4>
-                    <p>Mở thêm 2 chi nhánh mới tại quận 3 và quận 7, phát triển dòng sản phẩm matcha cao cấp.</p>
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 border-success">
+                    <div class="card-header bg-success text-white text-center">
+                        <h4 class="mb-0">2017</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-success">Mở rộng</h5>
+                        <p class="card-text">Mở thêm 2 chi nhánh mới tại quận 3 và quận 7, phát triển dòng sản phẩm matcha cao cấp.</p>
+                    </div>
                 </div>
             </div>
-            <div class="timeline-item">
-                <div class="timeline-year">2019</div>
-                <div class="timeline-content">
-                    <h4>Đổi mới</h4>
-                    <p>Ra mắt dịch vụ đặt hàng online và giao hàng tận nơi, phục vụ hơn 1000 khách hàng mỗi ngày.</p>
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 border-success">
+                    <div class="card-header bg-success text-white text-center">
+                        <h4 class="mb-0">2019</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-success">Đổi mới</h5>
+                        <p class="card-text">Ra mắt dịch vụ đặt hàng online và giao hàng tận nơi, phục vụ hơn 1000 khách hàng mỗi ngày.</p>
+                    </div>
                 </div>
             </div>
-            <div class="timeline-item">
-                <div class="timeline-year">2021</div>
-                <div class="timeline-content">
-                    <h4>Phát triển</h4>
-                    <p>Mở rộng thêm 5 chi nhánh mới và phát triển hệ thống bán hàng online, xuất hiện trên các sàn thương mại điện tử lớn.</p>
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 border-success">
+                    <div class="card-header bg-success text-white text-center">
+                        <h4 class="mb-0">2021</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-success">Phát triển</h5>
+                        <p class="card-text">Mở rộng thêm 5 chi nhánh mới và phát triển hệ thống bán hàng online, xuất hiện trên các sàn thương mại điện tử lớn.</p>
+                    </div>
                 </div>
             </div>
-            <div class="timeline-item">
-                <div class="timeline-year">2023</div>
-                <div class="timeline-content">
-                    <h4>Hiện tại</h4>
-                    <p>Trở thành thương hiệu đồ tráng miệng uy tín với 10+ chi nhánh trên toàn quốc và dịch vụ giao hàng 24/7.</p>
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 border-success">
+                    <div class="card-header bg-success text-white text-center">
+                        <h4 class="mb-0">2023</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-success">Hiện tại</h5>
+                        <p class="card-text">Trở thành thương hiệu đồ tráng miệng uy tín với 10+ chi nhánh trên toàn quốc và dịch vụ giao hàng 24/7.</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div class="about-section">
-        <h3>Sứ mệnh & Tầm nhìn</h3>
+    <!-- Mission & Vision Section -->
+    <section class="mb-5">
+        <h3 class="text-success text-center mb-5 fw-bold">Sứ mệnh & Tầm nhìn</h3>
         <div class="row">
             <div class="col-md-6">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h4 class="card-title text-center mb-4"><i class="fas fa-rocket text-success me-2"></i> Sứ mệnh</h4>
+                <div class="card h-100 border-success shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-rocket text-success" style="font-size: 3rem;"></i>
+                        </div>
+                        <h4 class="card-title text-success mb-4">Sứ mệnh</h4>
                         <p class="card-text">Mang đến những trải nghiệm ẩm thực ngọt ngào và tinh tế cho khách hàng, thông qua những sản phẩm chất lượng cao, được làm từ nguyên liệu tự nhiên và quy trình sản xuất đảm bảo an toàn vệ sinh thực phẩm.</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h4 class="card-title text-center mb-4"><i class="fas fa-eye text-success me-2"></i> Tầm nhìn</h4>
+                <div class="card h-100 border-success shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-eye text-success" style="font-size: 3rem;"></i>
+                        </div>
+                        <h4 class="card-title text-success mb-4">Tầm nhìn</h4>
                         <p class="card-text">Trở thành thương hiệu đồ tráng miệng hàng đầu Việt Nam, được yêu thích bởi sự sáng tạo không ngừng và chất lượng vượt trội, đồng thời mở rộng thị trường ra khu vực Đông Nam Á.</p>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div class="about-section">
-        <h3>Đội ngũ của chúng tôi</h3>
+    <!-- Team Section -->
+    <section class="mb-5">
+        <h3 class="text-success text-center mb-5 fw-bold">Đội ngũ của chúng tôi</h3>
         <div class="row">
-            <div class="col-lg-3 col-md-6">
-                <div class="team-member">
-                    <div class="team-img">
-                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Nguyễn Văn An">
-                    </div>
-                    <h4 class="team-name">Nguyễn Văn An</h4>
-                    <p class="team-position">Giám đốc điều hành</p>
-                    <p>Với hơn 15 năm kinh nghiệm trong ngành ẩm thực và quản lý.</p>
-                    <div class="team-social">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="team-member">
-                    <div class="team-img">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Trần Thị Bình">
-                    </div>
-                    <h4 class="team-name">Trần Thị Bình</h4>
-                    <p class="team-position">Bếp trưởng</p>
-                    <p>Tốt nghiệp từ Le Cordon Bleu Paris với chuyên môn về bánh ngọt.</p>
-                    <div class="team-social">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100 text-center border-0 shadow">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaea8_team-member-1.webp" 
+                                 alt="Nguyễn Văn An" 
+                                 class="rounded-circle img-fluid" 
+                                 style="width: 120px; height: 120px; object-fit: cover;">
+                        </div>
+                        <h5 class="card-title text-success">Nguyễn Văn An</h5>
+                        <p class="text-muted fw-bold">Giám đốc điều hành</p>
+                        <p class="card-text small">Với hơn 15 năm kinh nghiệm trong ngành ẩm thực và quản lý.</p>
+                        <div class="mt-3">
+                            <a href="#" class="btn btn-outline-success btn-sm me-2"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="btn btn-outline-success btn-sm me-2"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="btn btn-outline-success btn-sm"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="team-member">
-                    <div class="team-img">
-                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Lê Đức Cường">
-                    </div>
-                    <h4 class="team-name">Lê Đức Cường</h4>
-                    <p class="team-position">Giám đốc Marketing</p>
-                    <p>Chuyên gia marketing với hơn 10 năm kinh nghiệm trong F&B.</p>
-                    <div class="team-social">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100 text-center border-0 shadow">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaea9_team-member-2.webp" 
+                                 alt="Trần Thị Bình" 
+                                 class="rounded-circle img-fluid" 
+                                 style="width: 120px; height: 120px; object-fit: cover;">
+                        </div>
+                        <h5 class="card-title text-success">Trần Thị Bình</h5>
+                        <p class="text-muted fw-bold">Bếp trưởng</p>
+                        <p class="card-text small">Tốt nghiệp từ Le Cordon Bleu Paris với chuyên môn về bánh ngọt.</p>
+                        <div class="mt-3">
+                            <a href="#" class="btn btn-outline-success btn-sm me-2"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="btn btn-outline-success btn-sm me-2"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="btn btn-outline-success btn-sm"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="team-member">
-                    <div class="team-img">
-                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Phạm Thị Dung">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100 text-center border-0 shadow">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaeaa_team-member-3.webp" 
+                                 alt="Lê Đức Cường" 
+                                 class="rounded-circle img-fluid" 
+                                 style="width: 120px; height: 120px; object-fit: cover;">
+                        </div>
+                        <h5 class="card-title text-success">Lê Đức Cường</h5>
+                        <p class="text-muted fw-bold">Giám đốc Marketing</p>
+                        <p class="card-text small">Chuyên gia marketing với hơn 10 năm kinh nghiệm trong F&B.</p>
+                        <div class="mt-3">
+                            <a href="#" class="btn btn-outline-success btn-sm me-2"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="btn btn-outline-success btn-sm me-2"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="btn btn-outline-success btn-sm"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
                     </div>
-                    <h4 class="team-name">Phạm Thị Dung</h4>
-                    <p class="team-position">Quản lý chuỗi cung ứng</p>
-                    <p>Chuyên gia về chuỗi cung ứng và đảm bảo chất lượng sản phẩm.</p>
-                    <div class="team-social">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100 text-center border-0 shadow">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaeab_team-member-4.webp" 
+                                 alt="Phạm Thị Dung" 
+                                 class="rounded-circle img-fluid" 
+                                 style="width: 120px; height: 120px; object-fit: cover;">
+                        </div>
+                        <h5 class="card-title text-success">Phạm Thị Dung</h5>
+                        <p class="text-muted fw-bold">Quản lý chuỗi cung ứng</p>
+                        <p class="card-text small">Chuyên gia về chuỗi cung ứng và đảm bảo chất lượng sản phẩm.</p>
+                        <div class="mt-3">
+                            <a href="#" class="btn btn-outline-success btn-sm me-2"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="btn btn-outline-success btn-sm me-2"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="btn btn-outline-success btn-sm"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </div>

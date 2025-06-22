@@ -2,417 +2,322 @@
     ViewBag.Title = "Trang chủ";
 }
 
-
-
-<!-- Modern Video Hero Banner -->
-<section class="video-hero">
-    <div class="video-container">
-        <video autoplay muted loop id="heroVideo" playsinline>
-            <source src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaeb9_tlj-home-video-2-transcode.webm" type="video/webm">
-            <source src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaeb9_tlj-home-video-2-transcode.mp4" type="video/mp4">
-            <!-- Fallback image if video doesn't load -->
-            <img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Đồ Tráng Miệng">
-        </video>
+<!-- Hero Section with Video -->
+<section class="position-relative">
+  <div class="ratio ratio-16x9">
+    <video autoplay muted loop playsinline class="w-100 h-100 object-fit-cover">
+      <source src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaeb9_tlj-home-video-2-transcode.webm" type="video/webm">
+      <source src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaeb9_tlj-home-video-2-transcode.mp4" type="video/mp4">
+      <img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Đồ Tráng Miệng">
+    </video>
+  </div>
+  <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style="background:rgba(0,0,0,0.4)">
+    <div class="text-center text-white">
+      <span class="fs-4">Chào mừng đến với</span>
+      <h1 class="display-3 fw-bold">Đồ Tráng Miệng</h1>
+      <p class="lead">Trải nghiệm hương vị tuyệt vời từ những món tráng miệng được làm từ nguyên liệu tự nhiên, không chất bảo quản</p>
+      <div class="d-flex justify-content-center gap-3 mt-3">
+        <a href="@Url.Action("Index", "Product")" class="btn btn-primary btn-lg">
+          <i class="fas fa-shopping-bag"></i> Khám phá sản phẩm
+        </a>
+        <a href="@Url.Action("About", "Home")" class="btn btn-outline-light btn-lg">
+          <i class="fas fa-info-circle"></i> Về chúng tôi
+        </a>
+      </div>
     </div>
-    
-    <div class="video-overlay">
-        <div class="hero-content">
-            <div class="hero-text">
-                <span class="hero-subtitle">Chào mừng đến với</span>
-                <h1 class="hero-title">Đồ Tráng Miệng</h1>
-                <p class="hero-description">
-                    Trải nghiệm hương vị tuyệt vời từ những món tráng miệng được làm từ 
-                    nguyên liệu tự nhiên, không chất bảo quản
-                </p>
-                <div class="hero-buttons">
-                    <a href="@Url.Action("Index", "Product")" class="btn btn-hero-primary">
-                        <i class="fas fa-shopping-bag"></i>
-                        Khám phá sản phẩm
-                    </a>
-                    <a href="@Url.Action("About", "Home")" class="btn btn-hero-secondary">
-                        <i class="fas fa-info-circle"></i>
-                        Về chúng tôi
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Scroll indicator -->
-    <div class="scroll-indicator">
-        <span>Cuộn xuống</span>
-        <div class="scroll-arrow">
-            <i class="fas fa-chevron-down"></i>
-        </div>
-    </div>
+  </div>
+  <div class="position-absolute bottom-0 start-50 translate-middle-x text-white text-center mb-3">
+    <span>Cuộn xuống</span>
+    <div><i class="fas fa-chevron-down fa-2x"></i></div>
+  </div>
 </section>
 
-<!-- About Our Story Section -->
-<section class="story-section">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6 order-lg-1 order-2">
-                <div class="story-content">
-                    <span class="story-subtitle">CÂU CHUYỆN CỦA CHÚNG TÔI</span>
-                    <h2 class="story-title">Đồ Tráng Miệng: Tinh Hoa Ẩm Thực Việt</h2>
-                    <p class="story-subtitle-secondary">Được làm tươi mỗi ngày</p>
-                    <p class="story-description">
-                        Với cam kết chỉ sử dụng những nguyên liệu tốt nhất, sản phẩm của chúng tôi 
-                        nổi tiếng với hương vị độc đáo và chất lượng tuyệt vời. Đội ngũ thợ làm bánh 
-                        tài năng của chúng tôi tạo ra nhiều loại bánh ngọt thơm ngon được làm tươi 
-                        mỗi ngày và sẵn sàng để khách hàng thưởng thức với hương vị đặc biệt và 
-                        chất lượng cao.
-                    </p>
-                    <a href="@Url.Action("About", "Home")" class="btn btn-story">
-                        ĐỌC CÂU CHUYỆN CỦA CHÚNG TÔI
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-6 order-lg-2 order-1">
-                <div class="story-images">
-                    <div class="story-image-main">
-                        <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaea7_AdobeStock_293739586.webp" alt="Làm bánh thủ công">
-                    </div>
-                    <div class="story-image-grid">
-                        <div class="story-image-small">
-                            <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaea6_AdobeStock_158358263.webp" alt="Bỏ vào lò">
-                        </div>
-                        <div class="story-image-small">
-                            <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaea5_AdobeStock_62684026.webp" alt="Đang nướng bánh">
-                        </div>
-                    </div>
-                </div>
-            </div>
+<!-- About/Story Section -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 order-lg-1 order-2">
+        <div>
+          <span class="text-uppercase text-primary fw-bold">Câu chuyện của chúng tôi</span>
+          <h2 class="fw-bold mt-2">Đồ Tráng Miệng: Tinh Hoa Ẩm Thực Việt</h2>
+          <p class="text-muted">Được làm tươi mỗi ngày</p>
+          <p>Với cam kết chỉ sử dụng những nguyên liệu tốt nhất, sản phẩm của chúng tôi nổi tiếng với hương vị độc đáo và chất lượng tuyệt vời. Đội ngũ thợ làm bánh tài năng của chúng tôi tạo ra nhiều loại bánh ngọt thơm ngon được làm tươi mỗi ngày và sẵn sàng để khách hàng thưởng thức với hương vị đặc biệt và chất lượng cao.</p>
+          <a href="@Url.Action("About", "Home")" class="btn btn-outline-primary mt-3">Đọc câu chuyện của chúng tôi</a>
         </div>
+      </div>
+      <div class="col-lg-6 order-lg-2 order-1 mb-4 mb-lg-0">
+        <div class="row g-2">
+          <div class="col-12">
+            <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaea7_AdobeStock_293739586.webp" class="img-fluid rounded shadow" alt="Làm bánh thủ công">
+          </div>
+          <div class="col-6">
+            <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaea6_AdobeStock_158358263.webp" class="img-fluid rounded" alt="Bỏ vào lò">
+          </div>
+          <div class="col-6">
+            <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaea5_AdobeStock_62684026.webp" class="img-fluid rounded" alt="Đang nướng bánh">
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
 
 <!-- Bakery Section -->
-<section class="bakery-section">
-    <div class="container">
-        <h2 class="section-title-center">Tráng Miệng</h2>
-        <p class="section-description">
-            Tại Đồ Tráng Miệng, chúng tôi cung cấp đa dạng các loại bánh ngọt hoàn hảo cho mọi dịp. 
-            Từ những chiếc bánh flan tươi ngon đến những món tiramisu và cheesecake hảo hạng, 
-            mỗi sản phẩm đều được làm với nguyên liệu tốt nhất và sự chăm sóc tối đa.
-        </p>
-        
-        <div class="row bakery-categories">
-            <div class="col-lg-4 col-md-6">
-                <div class="bakery-item">
-                    <div class="bakery-image">
-                        <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaeaa_Whole%20Milk%20Loaf.webp" alt="Bánh Mì">
-                    </div>
-                    <h3 class="bakery-title">Bánh Mì</h3>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="bakery-item">
-                    <div class="bakery-image">
-                        <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaea9_Cloud-Cake-2.webp" alt="Bánh Ngọt">
-                    </div>
-                    <h3 class="bakery-title">Bánh Ngọt</h3>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="bakery-item">
-                    <div class="bakery-image">
-                        <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/668ddf055c2c837b4b6ce41a_Straberry%20Croissant-2.webp" alt="Bánh Ngọt Pastry">
-                    </div>
-                    <h3 class="bakery-title">Bánh Pastry</h3>
-                </div>
-            </div>
+<section class="py-5">
+  <div class="container">
+    <h2 class="text-center fw-bold mb-4">Tráng Miệng</h2>
+    <p class="text-center text-muted mb-5">Tại Đồ Tráng Miệng, chúng tôi cung cấp đa dạng các loại bánh ngọt hoàn hảo cho mọi dịp. Từ những chiếc bánh flan tươi ngon đến những món tiramisu và cheesecake hảo hạng, mỗi sản phẩm đều được làm với nguyên liệu tốt nhất và sự chăm sóc tối đa.</p>
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 text-center">
+          <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaeaa_Whole%20Milk%20Loaf.webp" class="card-img-top" alt="Bánh Mì">
+          <div class="card-body">
+            <h5 class="card-title">Bánh Mì</h5>
+          </div>
         </div>
-        
-        <div class="text-center mt-4">
-            <a href="@Url.Action("Index", "Product")" class="btn btn-order">XEM THỰC ĐƠN</a>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 text-center">
+          <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaea9_Cloud-Cake-2.webp" class="card-img-top" alt="Bánh Ngọt">
+          <div class="card-body">
+            <h5 class="card-title">Bánh Ngọt</h5>
+          </div>
         </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 text-center">
+          <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/668ddf055c2c837b4b6ce41a_Straberry%20Croissant-2.webp" class="card-img-top" alt="Bánh Ngọt Pastry">
+          <div class="card-body">
+            <h5 class="card-title">Bánh Pastry</h5>
+          </div>
+        </div>
+      </div>
     </div>
+    <div class="text-center mt-4">
+      <a href="@Url.Action("Index", "Product")" class="btn btn-primary">Xem thực đơn</a>
+    </div>
+  </div>
 </section>
 
 <!-- Beverage Section -->
-<section class="beverage-section">
-    <div class="container">
-        <h2 class="section-title-center">Đồ Uống</h2>
-        <p class="section-description">
-            Từ cà phê đậm đà đến sinh tố tươi mát, đồ uống của chúng tôi là sự bổ sung hoàn hảo 
-            cho các món bánh ngọt thủ công của chúng tôi.
-        </p>
-        
-        <div class="row beverage-categories">
-            <div class="col-lg-4 col-md-6">
-                <div class="beverage-item">
-                    <div class="beverage-image">
-                        <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaeab_Copy%20of%20Iced%20Cafe%20Latte-2.webp" alt="Cà Phê">
-                    </div>
-                    <h3 class="beverage-title">Cà Phê</h3>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="beverage-item">
-                    <div class="beverage-image">
-                        <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaea4_Iced%20Black%20Tea.webp" alt="Trà Sữa">
-                    </div>
-                    <h3 class="beverage-title">Trà & Đồ Uống</h3>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="beverage-item">
-                    <div class="beverage-image">
-                        <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaead_Copy%20of%20Mango%20Smoothie.webp" alt="Sinh Tố">
-                    </div>
-                    <h3 class="beverage-title">Sinh Tố Pha Chế</h3>
-                </div>
-            </div>
+<section class="py-5 bg-light">
+  <div class="container">
+    <h2 class="text-center fw-bold mb-4">Đồ Uống</h2>
+    <p class="text-center text-muted mb-5">Từ cà phê đậm đà đến sinh tố tươi mát, đồ uống của chúng tôi là sự bổ sung hoàn hảo cho các món bánh ngọt thủ công của chúng tôi.</p>
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 text-center">
+          <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaeab_Copy%20of%20Iced%20Cafe%20Latte-2.webp" class="card-img-top" alt="Cà Phê">
+          <div class="card-body">
+            <h5 class="card-title">Cà Phê</h5>
+          </div>
         </div>
-        
-        <div class="text-center mt-4">
-            <a href="@Url.Action("Index", "Product")" class="btn btn-order">XEM THỰC ĐƠN</a>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 text-center">
+          <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3dea4_Iced%20Black%20Tea.webp" class="card-img-top" alt="Trà Sữa">
+          <div class="card-body">
+            <h5 class="card-title">Trà & Đồ Uống</h5>
+          </div>
         </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 text-center">
+          <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaead_Copy%20of%20Mango%20Smoothie.webp" class="card-img-top" alt="Sinh Tố">
+          <div class="card-body">
+            <h5 class="card-title">Sinh Tố Pha Chế</h5>
+          </div>
+        </div>
+      </div>
     </div>
+    <div class="text-center mt-4">
+      <a href="@Url.Action("Index", "Product")" class="btn btn-outline-success">Xem thực đơn</a>
+    </div>
+  </div>
 </section>
 
 <!-- Featured Products Section -->
-<section class="featured-section">
-    <div class="container">
-        <h2 class="section-title-center">Sản Phẩm Nổi Bật</h2>
-        <p class="section-description">
-            Khám phá những món ăn được yêu thích nhất tại cửa hàng của chúng tôi
-        </p>
-        
-        <div class="row featured-products">
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="featured-product-card">
-                    <div class="product-badge">Bán chạy</div>
-                    <div class="product-image">
-                        <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaeaa_Whole%20Milk%20Loaf.webp" alt="Bánh Mì Sữa Tươi">
-                    </div>
-                    <div class="product-content">
-                        <div class="product-info">
-                            <h4 class="product-name">Bánh Mì Sữa Tươi</h4>
-                            <p class="product-description">Bánh mì mềm mịn được làm từ sữa tươi nguyên chất</p>
-                            <div class="product-price">45.000đ</div>
-                        </div>
-                        <div class="product-action">
-                            <a href="@Url.Action("Index", "Product")" class="btn btn-featured">Đặt ngay</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="featured-product-card">
-                    <div class="product-badge">Mới</div>
-                    <div class="product-image">
-                        <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaea9_Cloud-Cake-2.webp" alt="Cloud Cake">
-                    </div>
-                    <div class="product-content">
-                        <div class="product-info">
-                            <h4 class="product-name">Cloud Cake</h4>
-                            <p class="product-description">Bánh mây mềm như bông với lớp kem tươi</p>
-                            <div class="product-price">65.000đ</div>
-                        </div>
-                        <div class="product-action">
-                            <a href="@Url.Action("Index", "Product")" class="btn btn-featured">Đặt ngay</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="featured-product-card">
-                    <div class="product-badge">Khuyến mãi</div>
-                    <div class="product-image">
-                        <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaeab_Copy%20of%20Iced%20Cafe%20Latte-2.webp" alt="Iced Cafe Latte">
-                    </div>
-                    <div class="product-content">
-                        <div class="product-info">
-                            <h4 class="product-name">Iced Cafe Latte</h4>
-                            <p class="product-description">Cà phê latte đá với sữa tươi thơm ngon</p>
-                            <div class="product-price">35.000đ</div>
-                        </div>
-                        <div class="product-action">
-                            <a href="@Url.Action("Index", "Product")" class="btn btn-featured">Đặt ngay</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="featured-product-card">
-                    <div class="product-badge">Yêu thích</div>
-                    <div class="product-image">
-                        <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/668ddf055c2c837b4b6ce41a_Straberry%20Croissant-2.webp" alt="Strawberry Croissant">
-                    </div>
-                    <div class="product-content">
-                        <div class="product-info">
-                            <h4 class="product-name">Strawberry Croissant</h4>
-                            <p class="product-description">Bánh croissant giòn rụm với nhân dâu tây tươi</p>
-                            <div class="product-price">55.000đ</div>
-                        </div>
-                        <div class="product-action">
-                            <a href="@Url.Action("Index", "Product")" class="btn btn-featured">Đặt ngay</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<section class="py-5">
+  <div class="container">
+    <h2 class="text-center fw-bold mb-4">Sản Phẩm Nổi Bật</h2>
+    <p class="text-center text-muted mb-5">Khám phá những món ăn được yêu thích nhất tại cửa hàng của chúng tôi</p>
+    <div class="row g-4">
+      <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card h-100 text-center position-relative">
+          <span class="badge bg-success position-absolute top-0 end-0 m-2">Bán chạy</span>
+          <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaeaa_Whole%20Milk%20Loaf.webp" class="card-img-top" alt="Bánh Mì Sữa Tươi">
+          <div class="card-body">
+            <h5 class="card-title">Bánh Mì Sữa Tươi</h5>
+            <p class="card-text">Bánh mì mềm mịn được làm từ sữa tươi nguyên chất</p>
+            <div class="fw-bold text-danger mb-2">45.000đ</div>
+            <a href="@Url.Action("Index", "Product")" class="btn btn-outline-success">Đặt ngay</a>
+          </div>
         </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card h-100 text-center position-relative">
+          <span class="badge bg-info position-absolute top-0 end-0 m-2">Mới</span>
+          <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaea9_Cloud-Cake-2.webp" class="card-img-top" alt="Cloud Cake">
+          <div class="card-body">
+            <h5 class="card-title">Cloud Cake</h5>
+            <p class="card-text">Bánh mây mềm như bông với lớp kem tươi</p>
+            <div class="fw-bold text-danger mb-2">65.000đ</div>
+            <a href="@Url.Action("Index", "Product")" class="btn btn-outline-success">Đặt ngay</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card h-100 text-center position-relative">
+          <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2">Khuyến mãi</span>
+          <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaeab_Copy%20of%20Iced%20Cafe%20Latte-2.webp" class="card-img-top" alt="Iced Cafe Latte">
+          <div class="card-body">
+            <h5 class="card-title">Iced Cafe Latte</h5>
+            <p class="card-text">Cà phê latte đá với sữa tươi thơm ngon</p>
+            <div class="fw-bold text-danger mb-2">35.000đ</div>
+            <a href="@Url.Action("Index", "Product")" class="btn btn-outline-success">Đặt ngay</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card h-100 text-center position-relative">
+          <span class="badge bg-danger position-absolute top-0 end-0 m-2">Yêu thích</span>
+          <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/668ddf055c2c837b4b6ce41a_Straberry%20Croissant-2.webp" class="card-img-top" alt="Strawberry Croissant">
+          <div class="card-body">
+            <h5 class="card-title">Strawberry Croissant</h5>
+            <p class="card-text">Bánh croissant giòn rụm với nhân dâu tây tươi</p>
+            <div class="fw-bold text-danger mb-2">55.000đ</div>
+            <a href="@Url.Action("Index", "Product")" class="btn btn-outline-success">Đặt ngay</a>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
 
 <!-- Features Section -->
-<section class="features-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-4 col-md-6">
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <i class="fas fa-shipping-fast"></i>
-                    </div>
-                    <h4 class="feature-title">Giao Hàng Nhanh</h4>
-                    <p class="feature-description">
-                        Đặt hàng trong nội thành và nhận sản phẩm trong vòng 2 giờ. 
-                        Dịch vụ giao hàng tận nơi tiện lợi.
-                    </p>
-                </div>
-            </div>
-            
-            <div class="col-lg-4 col-md-6">
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <i class="fas fa-leaf"></i>
-                    </div>
-                    <h4 class="feature-title">Nguyên Liệu Tự Nhiên</h4>
-                    <p class="feature-description">
-                        Tất cả sản phẩm được làm từ nguyên liệu tự nhiên, 
-                        tươi ngon và không chất bảo quản.
-                    </p>
-                </div>
-            </div>
-            
-            <div class="col-lg-4 col-md-6">
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <i class="fas fa-award"></i>
-                    </div>
-                    <h4 class="feature-title">Chất Lượng Đảm Bảo</h4>
-                    <p class="feature-description">
-                        Cam kết chất lượng cao với quy trình sản xuất 
-                        nghiêm ngặt và kiểm soát vệ sinh an toàn.
-                    </p>
-                </div>
-            </div>
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <div class="text-center p-4 border rounded h-100">
+          <div class="mb-3">
+            <i class="fas fa-shipping-fast fa-2x text-primary"></i>
+          </div>
+          <h4 class="fw-bold">Giao Hàng Nhanh</h4>
+          <p class="text-muted">Đặt hàng trong nội thành và nhận sản phẩm trong vòng 2 giờ. Dịch vụ giao hàng tận nơi tiện lợi.</p>
         </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="text-center p-4 border rounded h-100">
+          <div class="mb-3">
+            <i class="fas fa-leaf fa-2x text-success"></i>
+          </div>
+          <h4 class="fw-bold">Nguyên Liệu Tự Nhiên</h4>
+          <p class="text-muted">Tất cả sản phẩm được làm từ nguyên liệu tự nhiên, tươi ngon và không chất bảo quản.</p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="text-center p-4 border rounded h-100">
+          <div class="mb-3">
+            <i class="fas fa-award fa-2x text-warning"></i>
+          </div>
+          <h4 class="fw-bold">Chất Lượng Đảm Bảo</h4>
+          <p class="text-muted">Cam kết chất lượng cao với quy trình sản xuất nghiêm ngặt và kiểm soát vệ sinh an toàn.</p>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
 
 <!-- Testimonials Section -->
-<section class="testimonials-section">
-    <div class="container">
-        <h2 class="section-title-center">Khách Hàng Nói Gì</h2>
-        <p class="section-description">
-            Cảm nhận thật từ những khách hàng đã trải nghiệm dịch vụ của chúng tôi
-        </p>
-        
-        <div class="row testimonials">
-            <div class="col-lg-4 col-md-6">
-                <div class="testimonial-card">
-                    <div class="testimonial-content">
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <p class="testimonial-text">
-                            "Bánh flan ở đây ngon tuyệt vời! Vị caramel đậm đà và bánh mềm mịn. 
-                            Tôi sẽ quay lại thường xuyên."
-                        </p>
-                        <div class="customer-info">
-                            <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Nguyễn Thị Lan">
-                            <div class="customer-details">
-                                <h5 class="customer-name">Nguyễn Thị Lan</h5>
-                                <p class="customer-location">Quận 1, TP.HCM</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<section class="py-5">
+  <div class="container">
+    <h2 class="text-center fw-bold mb-4">Khách Hàng Nói Gì</h2>
+    <p class="text-center text-muted mb-5">Cảm nhận thật từ những khách hàng đã trải nghiệm dịch vụ của chúng tôi</p>
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <div class="mb-2 text-warning">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
             </div>
-            
-            <div class="col-lg-4 col-md-6">
-                <div class="testimonial-card">
-                    <div class="testimonial-content">
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <p class="testimonial-text">
-                            "Dịch vụ giao hàng rất nhanh và tiramisu ngon không thể tả. 
-                            Đóng gói cẩn thận, bánh vẫn giữ nguyên hình dạng."
-                        </p>
-                        <div class="customer-info">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Trần Minh Hoàng">
-                            <div class="customer-details">
-                                <h5 class="customer-name">Trần Minh Hoàng</h5>
-                                <p class="customer-location">Quận 3, TP.HCM</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <p class="card-text">"Bánh flan ở đây ngon tuyệt vời! Vị caramel đậm đà và bánh mềm mịn. Tôi sẽ quay lại thường xuyên."</p>
+            <div class="d-flex align-items-center mt-3">
+              <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaeac_customer-1.webp" alt="Nguyễn Thị Lan" class="rounded-circle me-3" width="48" height="48">
+              <div>
+                <h6 class="mb-0">Nguyễn Thị Lan</h6>
+                <small class="text-muted">Quận 1, TP.HCM</small>
+              </div>
             </div>
-            
-            <div class="col-lg-4 col-md-6">
-                <div class="testimonial-card">
-                    <div class="testimonial-content">
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <p class="testimonial-text">
-                            "Trà sữa ở đây có hương vị rất đặc biệt, không quá ngọt và rất thơm. 
-                            Giá cả hợp lý, chất lượng tuyệt vời."
-                        </p>
-                        <div class="customer-info">
-                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Lê Thị Hương">
-                            <div class="customer-details">
-                                <h5 class="customer-name">Lê Thị Hương</h5>
-                                <p class="customer-location">Quận 7, TP.HCM</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <div class="mb-2 text-warning">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <p class="card-text">"Dịch vụ giao hàng rất nhanh và tiramisu ngon không thể tả. Đóng gói cẩn thận, bánh vẫn giữ nguyên hình dạng."</p>
+            <div class="d-flex align-items-center mt-3">
+              <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaead_customer-2.webp" alt="Trần Minh Hoàng" class="rounded-circle me-3" width="48" height="48">
+              <div>
+                <h6 class="mb-0">Trần Minh Hoàng</h6>
+                <small class="text-muted">Quận 3, TP.HCM</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <div class="mb-2 text-warning">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <p class="card-text">"Trà sữa ở đây có hương vị rất đặc biệt, không quá ngọt và rất thơm. Giá cả hợp lý, chất lượng tuyệt vời."</p>
+            <div class="d-flex align-items-center mt-3">
+              <img src="https://cdn.prod.website-files.com/649249d29a20bd6bc3deac45/649249d29a20bd6bc3deaeae_customer-3.webp" alt="Lê Thị Hương" class="rounded-circle me-3" width="48" height="48">
+              <div>
+                <h6 class="mb-0">Lê Thị Hương</h6>
+                <small class="text-muted">Quận 7, TP.HCM</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
 
 <!-- Contact CTA Section -->
-<section class="contact-cta-section">
-    <div class="container">
-        <div class="cta-content">
-            <h2 class="cta-title">Sẵn Sàng Thưởng Thức?</h2>
-            <p class="cta-description">
-                Đặt hàng ngay hôm nay để trải nghiệm những món tráng miệng tuyệt vời nhất
-            </p>
-            <div class="cta-buttons">
-                <a href="@Url.Action("Index", "Product")" class="btn btn-cta-primary">
-                    <i class="fas fa-shopping-cart"></i>
-                    Đặt Hàng Ngay
-                </a>
-                <a href="@Url.Action("Contact", "Home")" class="btn btn-cta-secondary">
-                    <i class="fas fa-phone"></i>
-                    Liên Hệ
-                </a>
-            </div>
-        </div>
+<section class="py-5 bg-secondary text-white">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="fw-bold mb-3">Sẵn Sàng Thưởng Thức?</h2>
+      <p class="lead mb-4">Đặt hàng ngay hôm nay để trải nghiệm những món tráng miệng tuyệt vời nhất</p>
+      <div class="d-flex justify-content-center gap-3">
+        <a href="@Url.Action("Index", "Product")" class="btn btn-light btn-lg">
+          <i class="fas fa-shopping-cart"></i> Đặt Hàng Ngay
+        </a>
+        <a href="@Url.Action("Contact", "Home")" class="btn btn-outline-light btn-lg">
+          <i class="fas fa-phone"></i> Liên Hệ
+        </a>
+      </div>
     </div>
+  </div>
 </section>
 
 @section scripts {
