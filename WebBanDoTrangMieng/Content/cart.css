@@ -1,95 +1,33 @@
-/* ===========================================
-   CART PAGE - MINIMAL CSS (TOAST & ANIMATIONS ONLY)
-   =========================================== */
+/* ==========================================
+   CART.CSS - OPTIMIZED WITH BOOTSTRAP
+   ========================================== */
 
-/* CSS Variables for consistent theming */
+/* CSS Variables Override Bootstrap */
 :root {
-  --primary-matcha: #7d9e5f;
-  --secondary-matcha: #9bb377;
-  --dark-matcha: #4a5d37;
-  --light-matcha: #c8d4b8;
-  --cream-light: #f8faf5;
-  --cream-white: #ffffff;
-  --shadow: rgba(0, 0, 0, 0.1);
-  --shadow-matcha: rgba(125, 158, 95, 0.15);
-  --transition: all 0.3s ease;
+  --bs-success: #7d9e5f;
+  --bs-success-rgb: 125, 158, 95;
 }
 
-/* ===========================================
-   TOAST NOTIFICATIONS (Essential)
-   =========================================== */
-.toast-container {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 9999;
-}
-
-.toast {
-  background-color: var(--cream-white);
-  border-left: 4px solid var(--primary-matcha);
-  border-radius: 8px;
-  box-shadow: 0 4px 12px var(--shadow);
-  padding: 15px 20px;
-  margin-bottom: 10px;
-  opacity: 0;
-  transform: translateX(100%);
-  transition: all 0.3s ease;
-  min-width: 300px;
-}
-
-.toast.show {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.toast i {
-  color: var(--primary-matcha);
-  margin-right: 10px;
-}
-
-/* ===========================================
-   SPECIAL ANIMATIONS (Keep for UX)
-   =========================================== */
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes bounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-/* ===========================================
-   CART SPECIFIC ANIMATIONS
-   =========================================== */
+/* ==========================================
+   CART ITEM ANIMATIONS (Special UX)
+   ========================================== */
 .cart-item-enter {
   animation: fadeInUp 0.5s ease-out;
 }
 
 .cart-item-remove {
   animation: fadeOut 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeOut {
@@ -103,18 +41,12 @@
   }
 }
 
-/* ===========================================
-   RESPONSIVE HELPERS (Minimal)
-   =========================================== */
+/* ==========================================
+   MOBILE RESPONSIVE
+   ========================================== */
 @media (max-width: 768px) {
-  .toast-container {
-    top: 10px;
-    right: 10px;
-    left: 10px;
-  }
-
-  .toast {
-    min-width: auto;
-    width: 100%;
+  .cart-item-enter,
+  .cart-item-remove {
+    animation-duration: 0.3s;
   }
 }

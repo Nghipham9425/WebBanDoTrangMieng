@@ -5,342 +5,316 @@
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-@section Styles {
-    <link rel="stylesheet" href="~/Areas/Admin/Content/product-admin.css" />
-}
-
-<div class="product-form-container">
-    <div class="product-form-header">
-        <div class="d-flex align-items-center">
-            <a href="@Url.Action("Index")" class="btn-back">
-                <i class="fas fa-arrow-left"></i>
-            </a>
-            <div class="ml-3">
-                <h5><i class="fas fa-edit"></i>Chỉnh sửa sản phẩm</h5>
-                <p class="form-subtitle">Cập nhật thông tin sản phẩm: <strong>@Model.Name</strong></p>
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <a href="@Url.Action("Index")" class="btn btn-outline-secondary me-3">
+                            <i class="fas fa-arrow-left"></i>
+                        </a>
+                        <div>
+                            <h4 class="mb-1">
+                                <i class="fas fa-edit me-2 text-warning"></i>
+                                Chỉnh sửa sản phẩm
+                            </h4>
+                            <p class="text-muted mb-0">Cập nhật thông tin cho sản phẩm #@Model.ProductId</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    @using (Html.BeginForm("Edit", "Product", FormMethod.Post, new { enctype = "multipart/form-data", @class = "product-form", id = "productForm" }))
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            @ViewBag.Error
+        </div>
+    }
+
+    @using (Html.BeginForm("Edit", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(model => model.ProductId)
         @Html.HiddenFor(model => model.CreatedDate)
-        
-        if (ViewBag.Error != null)
-        {
-            <div class="admin-alert alert-error">
-                <i class="fas fa-exclamation-circle"></i>
-                @ViewBag.Error
-            </div>
-        }
 
-        <div class="form-row">
+        <div class="row">
             <!-- Left Column -->
-            <div class="form-col-left">
-                <div class="form-card">
-                    <h6 class="form-card-title">
-                        <i class="fas fa-info-circle"></i>
-                        Thông tin cơ bản
-                    </h6>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Name, "Tên sản phẩm", new { @class = "form-label required" })
-                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", placeholder = "Nhập tên sản phẩm...", required = "required" } })
-                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "field-validation-error" })
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Thông tin cơ bản
+                        </h5>
                     </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.CategoryId, "Danh mục", new { @class = "form-label required" })
-                        @Html.DropDownList("CategoryId", (SelectList)ViewBag.CategoryId, "-- Chọn danh mục --", new { @class = "form-control", required = "required" })
-                        @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "field-validation-error" })
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Description, "Mô tả", new { @class = "form-label" })
-                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = "4", placeholder = "Mô tả chi tiết về sản phẩm..." })
-                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "field-validation-error" })
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            @Html.LabelFor(model => model.Price, "Giá (VNĐ)", new { @class = "form-label required" })
-                            @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control", placeholder = "0", min = "0", step = "1000", required = "required", type = "number" } })
-                            @Html.ValidationMessageFor(model => model.Price, "", new { @class = "field-validation-error" })
+                    <div class="card-body">
+                        <!-- Product Name -->
+                        <div class="mb-3">
+                            @Html.LabelFor(model => model.Name, "Tên sản phẩm", new { @class = "form-label" })
+                            <span class="text-danger">*</span>
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", placeholder = "Nhập tên sản phẩm", required = "required" } })
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
                         </div>
 
-                        <div class="form-group col-md-6">
-                            @Html.LabelFor(model => model.StockQuantity, "Số lượng tồn kho", new { @class = "form-label" })
-                            @Html.EditorFor(model => model.StockQuantity, new { htmlAttributes = new { @class = "form-control", placeholder = "0", min = "0", type = "number" } })
-                            @Html.ValidationMessageFor(model => model.StockQuantity, "", new { @class = "field-validation-error" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Thông tin khác</label>
-                        <div class="product-info-display">
-                            <div class="info-item">
-                                <span class="info-label">Mã sản phẩm:</span>
-                                <span class="info-value">#@Model.ProductId</span>
-                            </div>
-                            @if (Model.CreatedDate.HasValue)
-                            {
-                                <div class="info-item">
-                                    <span class="info-label">Ngày tạo:</span>
-                                    <span class="info-value">@Model.CreatedDate.Value.ToString("dd/MM/yyyy HH:mm")</span>
+                        <div class="row">
+                            <!-- Category -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    @Html.LabelFor(model => model.CategoryId, "Danh mục", new { @class = "form-label" })
+                                    <span class="text-danger">*</span>
+                                    @Html.DropDownList("CategoryId", (SelectList)ViewBag.CategoryId, "-- Chọn danh mục --", new { @class = "form-select", required = "required" })
+                                    @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
                                 </div>
-                            }
+                            </div>
+
+                            <!-- Stock -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    @Html.LabelFor(model => model.StockQuantity, "Số lượng tồn kho", new { @class = "form-label" })
+                                    @Html.EditorFor(model => model.StockQuantity, new { htmlAttributes = new { @class = "form-control", placeholder = "0", min = "0", type = "number" } })
+                                    @Html.ValidationMessageFor(model => model.StockQuantity, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Price -->
+                        <div class="mb-3">
+                            @Html.LabelFor(model => model.Price, "Giá (VNĐ)", new { @class = "form-label" })
+                            <span class="text-danger">*</span>
+                            <div class="input-group">
+                                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control", placeholder = "0", min = "0", step = "1000", required = "required", type = "number" } })
+                                <span class="input-group-text">₫</span>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            @Html.LabelFor(model => model.Description, "Mô tả", new { @class = "form-label" })
+                            @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = "4", placeholder = "Mô tả chi tiết về sản phẩm..." })
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Right Column -->
-            <div class="form-col-right">
-                <div class="form-card">
-                    <h6 class="form-card-title">
-                        <i class="fas fa-image"></i>
-                        Hình ảnh sản phẩm
-                    </h6>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-image me-2"></i>
+                            Hình ảnh sản phẩm
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Current Image -->
+                        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                        {
+                            <div class="mb-3">
+                                <label class="form-label">Hình ảnh hiện tại</label>
+                                <div class="text-center">
+                                    @{
+                                        var images = Model.ImageUrl.Split(',').Select(url => url.Trim()).ToArray();
+                                        var firstImage = images.FirstOrDefault();
+                                    }
+                                    <img src="@firstImage" alt="@Model.Name" class="img-fluid rounded border" style="max-height: 200px;">
+                                    @if (images.Length > 1)
+                                    {
+                                        <div class="mt-2">
+                                            <span class="badge bg-info">
+                                                <i class="fas fa-images me-1"></i>@images.Length hình ảnh
+                                            </span>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
 
-                    <!-- Current Image Display -->
-                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
-                    {
-                        <div class="current-image-container">
-                            <label class="form-label">Hình ảnh hiện tại</label>
-                            <div class="current-image">
-                                <img src="@Model.ImageUrl" alt="@Model.Name" id="currentImage">
-                                <div class="image-overlay">
-                                    <button type="button" class="btn-change-image" id="changeImageBtn">
-                                        <i class="fas fa-camera"></i>
-                                        Thay đổi
+                        <!-- Upload New Image -->
+                        <div class="mb-3">
+                            <label class="form-label">Cập nhật hình ảnh mới (nếu có)</label>
+                            <input type="file" id="imageFile" name="imageFile" accept="image/*" class="form-control">
+                            <div class="form-text">Chọn file JPG, PNG hoặc GIF (tối đa 5MB)</div>
+                        </div>
+
+                        <!-- Image Preview -->
+                        <div class="mb-3" id="imagePreview" style="display: none;">
+                            <label class="form-label">Xem trước hình ảnh mới</label>
+                            <div class="text-center">
+                                <img id="previewImg" src="" alt="Preview" class="img-fluid rounded border" style="max-height: 200px;">
+                                <div class="mt-2">
+                                    <button type="button" class="btn btn-outline-danger btn-sm" id="removeImage">
+                                        <i class="fas fa-times me-1"></i>Xóa ảnh
                                     </button>
                                 </div>
                             </div>
                         </div>
-                    }
 
-                    <div class="form-group">
-                        <label class="form-label">@(string.IsNullOrEmpty(Model.ImageUrl) ? "Upload hình ảnh" : "Upload hình ảnh mới")</label>
-                        <div class="image-upload-area @(string.IsNullOrEmpty(Model.ImageUrl) ? "" : "collapsed")" id="imageUploadArea">
-                            <div class="upload-content" id="uploadContent">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                                <p>Kéo thả hình ảnh vào đây hoặc <span class="upload-link">chọn file</span></p>
-                                <small>Định dạng: JPG, PNG, GIF (tối đa 5MB)</small>
-                            </div>
-                            <input type="file" id="imageFile" name="imageFile" accept="image/*" style="display: none;">
-                        </div>
-                        
-                        <div class="image-preview" id="imagePreview" style="display: none;">
-                            <img id="previewImg" src="" alt="Preview">
-                            <div class="image-actions">
-                                <button type="button" class="btn-remove-image" id="removeImage">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                        <!-- Image URL -->
+                        <div class="mb-3">
+                            @Html.LabelFor(model => model.ImageUrl, "Hoặc cập nhật URL hình ảnh", new { @class = "form-label" })
+                            @Html.EditorFor(model => model.ImageUrl, new { htmlAttributes = new { @class = "form-control", placeholder = "/Content/Images/Products/image1.jpg,/Content/Images/Products/image2.jpg" } })
+                            @Html.ValidationMessageFor(model => model.ImageUrl, "", new { @class = "text-danger" })
+                            <div class="form-text">
+                                <small>Để nhiều hình ảnh, phân cách bằng dấu phẩy</small>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.ImageUrl, "Hoặc nhập URL hình ảnh", new { @class = "form-label" })
-                        @Html.EditorFor(model => model.ImageUrl, new { htmlAttributes = new { @class = "form-control", placeholder = "https://example.com/image.jpg" } })
-                        @Html.ValidationMessageFor(model => model.ImageUrl, "", new { @class = "field-validation-error" })
-                        <small class="form-text">Nếu upload file mới, URL sẽ được cập nhật</small>
+                        <!-- Info Note -->
+                        <div class="alert alert-warning">
+                            <i class="fas fa-lightbulb me-2"></i>
+                            <small>Nếu upload file mới, hình ảnh cũ sẽ bị thay thế</small>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-card">
-                    <h6 class="form-card-title">
-                        <i class="fas fa-cog"></i>
-                        Cài đặt
-                    </h6>
-
-                    <div class="form-group">
-                        <label class="form-label">Trạng thái sản phẩm</label>
-                        <div class="product-status-info">
-                            <span class="status-badge status-active">
-                                <i class="fas fa-check-circle"></i>
-                                Đang hoạt động
-                            </span>
-                            <small class="form-text">Sản phẩm hiện đang hiển thị trên website</small>
-                        </div>
+                <!-- Product Info Card -->
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h6 class="mb-0">
+                            <i class="fas fa-info me-2"></i>
+                            Thông tin sản phẩm
+                        </h6>
                     </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Trạng thái tồn kho</label>
-                        <div class="stock-status">
-                            @if (Model.StockQuantity.HasValue)
+                    <div class="card-body">
+                        <div class="small">
+                            <div class="d-flex justify-content-between py-1">
+                                <span class="text-muted">Mã sản phẩm:</span>
+                                <span class="fw-medium">#@Model.ProductId</span>
+                            </div>
+                            @if (Model.CreatedDate.HasValue)
                             {
-                                if (Model.StockQuantity.Value > 10)
-                                {
-                                    <span class="status-badge status-high">
-                                        <i class="fas fa-check-circle"></i>
-                                        Còn hàng (@Model.StockQuantity sản phẩm)
-                                    </span>
-                                }
-                                else if (Model.StockQuantity.Value > 0)
-                                {
-                                    <span class="status-badge status-medium">
-                                        <i class="fas fa-exclamation-triangle"></i>
-                                        Sắp hết (@Model.StockQuantity sản phẩm)
-                                    </span>
-                                }
-                                else
-                                {
-                                    <span class="status-badge status-low">
-                                        <i class="fas fa-times-circle"></i>
-                                        Hết hàng
-                                    </span>
-                                }
+                                <div class="d-flex justify-content-between py-1">
+                                    <span class="text-muted">Ngày tạo:</span>
+                                    <span class="fw-medium">@Model.CreatedDate.Value.ToString("dd/MM/yyyy")</span>
+                                </div>
                             }
-                            else
-                            {
-                                <span class="status-badge status-unknown">
-                                    <i class="fas fa-question-circle"></i>
-                                    Không xác định
-                                </span>
-                            }
+                            <div class="d-flex justify-content-between py-1">
+                                <span class="text-muted">Trạng thái:</span>
+                                <span class="badge bg-success">Đang hoạt động</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="form-actions">
-            <button type="submit" class="btn-admin btn-primary" id="submitBtn">
-                <i class="fas fa-save"></i>
-                <span class="btn-text">Cập nhật sản phẩm</span>
-                <span class="btn-loading" style="display: none;">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    Đang cập nhật...
-                </span>
-            </button>
-            <a href="@Url.Action("Details", new { id = Model.ProductId })" class="btn-admin btn-info">
-                <i class="fas fa-eye"></i>
-                Xem chi tiết
-            </a>
-            <a href="@Url.Action("Index")" class="btn-admin btn-secondary">
-                <i class="fas fa-arrow-left"></i>
-                Quay lại
-            </a>
+        <!-- Actions -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex gap-2 justify-content-between">
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-warning">
+                                    <i class="fas fa-save me-2"></i>
+                                    Cập nhật sản phẩm
+                                </button>
+                                <a href="@Url.Action("Details", new { id = Model.ProductId })" class="btn btn-outline-primary">
+                                    <i class="fas fa-eye me-2"></i>
+                                    Xem chi tiết
+                                </a>
+                                <a href="@Url.Action("Index")" class="btn btn-secondary">
+                                    <i class="fas fa-times me-2"></i>
+                                    Hủy bỏ
+                                </a>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                    <i class="fas fa-trash me-2"></i>
+                                    Xóa sản phẩm
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     }
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác nhận xóa sản phẩm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa sản phẩm "<strong>@Model.Name</strong>"?</p>
+                <p class="text-muted small">Hành động này không thể hoàn tác và sẽ xóa vĩnh viễn sản phẩm khỏi hệ thống.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <a href="@Url.Action("Delete", new { id = Model.ProductId })" class="btn btn-danger">
+                    <i class="fas fa-trash me-2"></i>Xóa vĩnh viễn
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const imageUploadArea = document.getElementById('imageUploadArea');
-            const imageFile = document.getElementById('imageFile');
-            const uploadContent = document.getElementById('uploadContent');
-            const imagePreview = document.getElementById('imagePreview');
-            const previewImg = document.getElementById('previewImg');
-            const removeImage = document.getElementById('removeImage');
-            const changeImageBtn = document.getElementById('changeImageBtn');
-            const currentImage = document.getElementById('currentImage');
-            const imageUrlInput = document.querySelector('input[name="ImageUrl"]');
-            const form = document.getElementById('productForm');
-            const submitBtn = document.getElementById('submitBtn');
+        $(document).ready(function() {
+            const $imageFile = $('#imageFile');
+            const $imagePreview = $('#imagePreview');
+            const $previewImg = $('#previewImg');
+            const $removeImage = $('#removeImage');
 
-            // Show upload area when change image button is clicked
-            if (changeImageBtn) {
-                changeImageBtn.addEventListener('click', () => {
-                    imageUploadArea.classList.remove('collapsed');
-                    imageUploadArea.style.display = 'block';
-                });
-            }
-
-            // Drag and drop functionality
-            imageUploadArea.addEventListener('click', () => imageFile.click());
-            
-            imageUploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                imageUploadArea.classList.add('drag-over');
-            });
-
-            imageUploadArea.addEventListener('dragleave', () => {
-                imageUploadArea.classList.remove('drag-over');
-            });
-
-            imageUploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                imageUploadArea.classList.remove('drag-over');
-                const files = e.dataTransfer.files;
-                if (files.length > 0) {
-                    handleFileSelect(files[0]);
-                }
-            });
-
-            imageFile.addEventListener('change', (e) => {
+            // File input change
+            $imageFile.on('change', function(e) {
                 if (e.target.files.length > 0) {
                     handleFileSelect(e.target.files[0]);
                 }
             });
 
+            // Handle file selection
             function handleFileSelect(file) {
                 if (file && file.type.startsWith('image/')) {
+                    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                        alert('File quá lớn. Vui lòng chọn file nhỏ hơn 5MB.');
+                        $imageFile.val('');
+                        return;
+                    }
+
                     const reader = new FileReader();
-                    reader.onload = (e) => {
-                        previewImg.src = e.target.result;
-                        uploadContent.style.display = 'none';
-                        imagePreview.style.display = 'block';
-                        
-                        // Hide current image when new image is selected
-                        if (currentImage) {
-                            currentImage.parentElement.style.opacity = '0.5';
-                        }
+                    reader.onload = function(e) {
+                        $previewImg.attr('src', e.target.result);
+                        $imagePreview.show();
                     };
                     reader.readAsDataURL(file);
+                } else {
+                    alert('Vui lòng chọn file hình ảnh hợp lệ.');
+                    $imageFile.val('');
                 }
             }
 
-            if (removeImage) {
-                removeImage.addEventListener('click', () => {
-                    imageFile.value = '';
-                    previewImg.src = '';
-                    uploadContent.style.display = 'block';
-                    imagePreview.style.display = 'none';
-                    
-                    // Show current image again
-                    if (currentImage) {
-                        currentImage.parentElement.style.opacity = '1';
-                    }
-                });
-            }
-
-            // Form submission with loading state
-            form.addEventListener('submit', function() {
-                submitBtn.disabled = true;
-                submitBtn.querySelector('.btn-text').style.display = 'none';
-                submitBtn.querySelector('.btn-loading').style.display = 'inline-flex';
+            // Remove image preview
+            $removeImage.on('click', function() {
+                $imageFile.val('');
+                $previewImg.attr('src', '');
+                $imagePreview.hide();
             });
 
-            // Auto dismiss alerts
-            setTimeout(function() {
-                const alerts = document.querySelectorAll('.admin-alert');
-                alerts.forEach(alert => {
-                    alert.style.opacity = '0';
-                    alert.style.transform = 'translateY(-10px)';
-                    setTimeout(() => alert.remove(), 300);
-                });
-            }, 5000);
-
-            // Format price input
-            const priceInput = document.querySelector('input[name="Price"]');
-            if (priceInput) {
-                priceInput.addEventListener('input', function() {
-                    let value = this.value.replace(/[^\d]/g, '');
-                    if (value) {
-                        this.value = parseInt(value).toLocaleString('vi-VN');
-                    }
-                });
-
-                priceInput.addEventListener('blur', function() {
-                    let value = this.value.replace(/[^\d]/g, '');
-                    this.value = value;
-                });
+            // Show success message if any
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <text>
+                setTimeout(function() {
+                    const toast = $('<div class="toast-container position-fixed top-0 end-0 p-3"><div class="toast show" role="alert"><div class="toast-header"><i class="fas fa-check-circle text-success me-2"></i><strong class="me-auto">Thành công</strong><button type="button" class="btn-close" data-bs-dismiss="toast"></button></div><div class="toast-body">@TempData["SuccessMessage"]</div></div></div>');
+                    $('body').append(toast);
+                    setTimeout(() => toast.remove(), 5000);
+                }, 500);
+                </text>
             }
         });
     </script>

@@ -14,82 +14,65 @@ $(document).ready(function () {
 });
 
 function setupModalEvents() {
-  // MODAL CONTROLS
+  // MODAL CONTROLS - Mở modal khi click vào icon user
   $(".user-toggle")
     .off("click.authmodal")
     .on("click.authmodal", function (e) {
       e.preventDefault();
-      if ($(this).closest(".user-dropdown").length === 0) {
+      if ($(this).closest(".dropdown").length === 0) {
         openModal();
       }
       return false;
     });
 
   function openModal() {
-    $("#authModal").css("display", "flex").addClass("show");
-    $("body").addClass("modal-open");
+    $("#authModal").modal("show");
   }
 
   function closeModal() {
-    $("#authModal").removeClass("show");
-    $("body").removeClass("modal-open");
-    setTimeout(() => $("#authModal").hide(), 300);
+    $("#authModal").modal("hide");
+    clearForms();
   }
 
-  // CLOSE HANDLERS
-  $(".auth-close").on("click", function (e) {
-    e.preventDefault();
-    closeModal();
-  });
-
-  $("#authModal").on("click", function (e) {
-    if (e.target === this) closeModal();
-  });
-
-  $(document).on("keydown", function (e) {
-    if (e.key === "Escape" && $("#authModal").hasClass("show")) {
-      closeModal();
-    }
-  });
+  function clearForms() {
+    $("#loginFormSubmit")[0].reset();
+    $("#registerFormSubmit")[0].reset();
+    $("#resetPasswordFormSubmit")[0].reset();
+    hideAlert();
+  }
 
   // TAB SWITCHING
-  $(".auth-tab").on("click", function () {
+  $(".auth-tab").on("click", function (e) {
+    e.preventDefault();
     const target = $(this).data("target");
     $(".auth-tab").removeClass("active");
     $(this).addClass("active");
-    $(".auth-form").removeClass("active");
-    $("#" + target).addClass("active");
+    $(".auth-form").removeClass("show active");
+    $("#" + target).addClass("show active");
+    hideAlert();
   });
 
   // FORGOT PASSWORD
   $("#forgotPassword").on("click", function (e) {
     e.preventDefault();
     $(".auth-tabs").hide();
-    $(".auth-form").removeClass("active");
-    $("#resetPasswordForm").addClass("active");
+    $(".auth-form").removeClass("show active");
+    $("#resetPasswordForm").addClass("show active").show();
+    hideAlert();
   });
 
   $("#backToLogin").on("click", function (e) {
     e.preventDefault();
     $(".auth-tabs").show();
-    $(".auth-form").removeClass("active");
-    $("#loginForm").addClass("active");
+    $(".auth-form").removeClass("show active");
+    $("#loginForm").addClass("show active");
     $(".auth-tab").removeClass("active");
     $('.auth-tab[data-target="loginForm"]').addClass("active");
-  });
-
-  // PASSWORD TOGGLE
-  $(".toggle-password").on("click", function () {
-    const targetId = $(this).data("target");
-    const passwordField = $("#" + targetId);
-    const type =
-      passwordField.attr("type") === "password" ? "text" : "password";
-    passwordField.attr("type", type);
-    $(this).toggleClass("fa-eye fa-eye-slash");
+    hideAlert();
   });
 
   // FORM SUBMISSIONS
-  $("#loginForm form").on("submit", function (e) {
+  $("#loginFormSubmit").on("submit", function (e) {
     e.preventDefault();
     const form = $(this);
     const submitBtn = form.find('button[type="submit"]');
@@ -98,180 +81,195 @@ function setupModalEvents() {
     const rememberMe = $("#rememberMe").is(":checked");
 
     if (!email || !password) {
-      showMessage("Vui lòng nhập đầy đủ thông tin!", "error");
+      showAlert("Vui lòng nhập đầy đủ thông tin!", "danger");
       return;
     }
 
-    submitBtn.prop("disabled", true).text("Đang đăng nhập...");
+    // Disable button and show loading
+    const originalText = submitBtn.html();
+    submitBtn
+      .prop("disabled", true)
+      .html('<i class="fas fa-spinner fa-spin me-2"></i>Đang đăng nhập...');
+
+    // Get antiforgery token
+    const token = $(
+      "#loginFormSubmit input[name='__RequestVerificationToken']"
+    ).val();
 
     $.ajax({
       url: "/User/LoginAjax",
       type: "POST",
-      data: { Email: email, Password: password, RememberMe: rememberMe },
+      data: {
+        Email: email,
+        Password: password,
+        RememberMe: rememberMe,
+        __RequestVerificationToken: token,
+      },
       success: function (response) {
         if (response.success) {
-          showMessage(response.message, "success");
+          showAlert(response.message, "success");
           setTimeout(() => {
             closeModal();
-            location.reload();
+            location.reload(); // Reload để cập nhật UI
           }, 1000);
         } else {
-          showMessage(response.message, "error");
+          showAlert(response.message, "danger");
         }
       },
-      error: function () {
-        showMessage("Có lỗi xảy ra khi đăng nhập!", "error");
+      error: function (xhr, status, error) {
+        console.error("Login error:", xhr.responseText);
+        showAlert("Có lỗi xảy ra khi đăng nhập!", "danger");
       },
       complete: function () {
-        submitBtn.prop("disabled", false).text("ĐĂNG NHẬP");
+        submitBtn.prop("disabled", false).html(originalText);
       },
     });
   });
 
-  $("#registerForm form").on("submit", function (e) {
+  $("#registerFormSubmit").on("submit", function (e) {
     e.preventDefault();
     const form = $(this);
     const submitBtn = form.find('button[type="submit"]');
-    const fullName = $("#fullName").val().trim();
+    const userName = $("#fullName").val().trim();
     const email = $("#registerEmail").val().trim();
+    const phone = $("#phone").val().trim();
     const password = $("#registerPassword").val().trim();
     const confirmPassword = $("#confirmPassword").val().trim();
 
     // Validation
-    if (!fullName || !email || !password || !confirmPassword) {
-      showMessage("Vui lòng nhập đầy đủ thông tin!", "error");
+    if (!userName || !email || !password || !confirmPassword) {
+      showAlert("Vui lòng nhập đầy đủ thông tin bắt buộc!", "danger");
       return;
     }
 
     if (password !== confirmPassword) {
-      showMessage("Mật khẩu xác nhận không khớp!", "error");
+      showAlert("Mật khẩu xác nhận không khớp!", "danger");
       return;
     }
 
     if (password.length < 6) {
-      showMessage("Mật khẩu phải có ít nhất 6 ký tự!", "error");
+      showAlert("Mật khẩu phải có ít nhất 6 ký tự!", "danger");
       return;
     }
 
-    submitBtn.prop("disabled", true).text("Đang đăng ký...");
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      showAlert("Email không hợp lệ!", "danger");
+      return;
+    }
+
+    // Disable button and show loading
+    const originalText = submitBtn.html();
+    submitBtn
+      .prop("disabled", true)
+      .html('<i class="fas fa-spinner fa-spin me-2"></i>Đang đăng ký...');
+
+    // Get antiforgery token
+    const regToken = $(
+      "#registerFormSubmit input[name='__RequestVerificationToken']"
+    ).val();
 
     $.ajax({
       url: "/User/RegisterAjax",
       type: "POST",
       data: {
-        FullName: fullName,
+        UserName: userName,
         Email: email,
+        Phone: phone,
         Password: password,
         ConfirmPassword: confirmPassword,
+        __RequestVerificationToken: regToken,
       },
       success: function (response) {
         if (response.success) {
-          showMessage(response.message, "success");
+          showAlert(response.message, "success");
           setTimeout(() => {
-            $(".auth-tab").removeClass("active");
-            $('.auth-tab[data-target="loginForm"]').addClass("active");
-            $(".auth-form").removeClass("active");
-            $("#loginForm").addClass("active");
-          }, 1500);
+            closeModal();
+            location.reload(); // Reload để cập nhật UI
+          }, 1000);
         } else {
-          showMessage(response.message, "error");
+          showAlert(response.message, "danger");
         }
       },
-      error: function () {
-        showMessage("Có lỗi xảy ra khi đăng ký!", "error");
+      error: function (xhr, status, error) {
+        console.error("Register error:", xhr.responseText);
+        showAlert("Có lỗi xảy ra khi đăng ký!", "danger");
       },
       complete: function () {
-        submitBtn.prop("disabled", false).text("ĐĂNG KÝ");
+        submitBtn.prop("disabled", false).html(originalText);
       },
     });
   });
 
-  $("#resetPasswordForm form").on("submit", function (e) {
+  $("#resetPasswordFormSubmit").on("submit", function (e) {
     e.preventDefault();
     const form = $(this);
     const submitBtn = form.find('button[type="submit"]');
     const email = $("#resetEmail").val().trim();
 
     if (!email) {
-      showMessage("Vui lòng nhập email!", "error");
+      showAlert("Vui lòng nhập email!", "danger");
       return;
     }
 
-    submitBtn.prop("disabled", true).text("Đang gửi...");
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      showAlert("Email không hợp lệ!", "danger");
+      return;
+    }
 
-    $.ajax({
-      url: "/User/ForgotPassword",
-      type: "POST",
-      data: { Email: email },
-      success: function (response) {
-        if (response.success) {
-          showMessage(
-            "Liên kết đặt lại mật khẩu đã được gửi đến email của bạn!",
-            "success"
-          );
-        } else {
-          showMessage(
-            response.message || "Email không tồn tại trong hệ thống!",
-            "error"
-          );
-        }
-      },
-      error: function () {
-        showMessage("Có lỗi xảy ra khi gửi email!", "error");
-      },
-      complete: function () {
-        submitBtn.prop("disabled", false).text("GỬI LIÊN KẾT");
-      },
-    });
+    // Disable button and show loading
+    const originalText = submitBtn.html();
+    submitBtn
+      .prop("disabled", true)
+      .html('<i class="fas fa-spinner fa-spin me-2"></i>Đang gửi...');
+
+    // Simulate API call (replace with actual implementation)
+    setTimeout(() => {
+      showAlert(
+        "Link reset mật khẩu đã được gửi đến email của bạn!",
+        "success"
+      );
+      submitBtn.prop("disabled", false).html(originalText);
+    }, 2000);
   });
 
-  // UTILITY FUNCTIONS
-  function showMessage(message, type) {
-    const alert = $(`
-      <div class="auth-alert ${
-        type === "success" ? "alert-success" : "alert-danger"
-      }">
-        <i class="fas ${
-          type === "success" ? "fa-check-circle" : "fa-exclamation-circle"
-        }"></i>
-        ${message}
-      </div>
-    `);
+  // ALERT FUNCTIONS
+  function showAlert(message, type) {
+    const alertDiv = $("#authAlerts");
+    const alertElement = alertDiv.find(".alert");
 
-    $(".auth-content .auth-alert").remove();
-    $(".auth-content").prepend(alert);
+    // Remove existing classes and add new type
+    alertElement
+      .removeClass("alert-success alert-danger alert-warning alert-info")
+      .addClass("alert-" + type);
 
-    setTimeout(() => alert.fadeOut(() => alert.remove()), 5000);
-  }
+    $("#authMessage").text(message);
+    alertDiv.show();
 
-  function positionUserDropdown() {
-    const dropdown = $(".user-dropdown-menu");
-    if (dropdown.length && dropdown.is(":visible")) {
-      const windowWidth = $(window).width();
-      const dropdownWidth = dropdown.outerWidth();
-
-      if (windowWidth <= 768) {
-        dropdown.css({
-          position: "fixed",
-          top: "70px",
-          right: "10px",
-          left: "auto",
-          width: "250px",
-        });
-      } else {
-        dropdown.css({
-          position: "fixed",
-          top: "70px",
-          right: "20px",
-          left: "auto",
-          width: "280px",
-        });
-      }
+    // Auto hide after 5 seconds for success messages
+    if (type === "success") {
+      setTimeout(() => {
+        hideAlert();
+      }, 5000);
     }
   }
 
-  $(window).on("resize scroll", positionUserDropdown);
-  positionUserDropdown();
+  function hideAlert() {
+    $("#authAlerts").hide();
+  }
+
+  // Close alert when clicking X
+  $(document).on("click", "#authAlerts .btn-close", function () {
+    hideAlert();
+  });
+
+  // Clear forms when modal is hidden
+  $("#authModal").on("hidden.bs.modal", function () {
+    clearForms();
+  });
 }
 
 /* ==========================================
@@ -569,88 +567,50 @@ $(document).ready(function () {
 
 // Function to show auth modal programmatically
 function showAuthModal(tab = "login") {
-  const authModal = new bootstrap.Modal(document.getElementById("authModal"));
-  authModal.show();
-
-  // Switch to specified tab
+  $("#authModal").modal("show");
   if (tab === "register") {
-    setTimeout(function () {
-      const registerTab = new bootstrap.Tab(
-        document.querySelector('[data-bs-target="#registerTab"]')
-      );
-      registerTab.show();
-    }, 100);
+    $(".auth-tab").removeClass("active");
+    $('.auth-tab[data-target="registerForm"]').addClass("active");
+    $(".auth-form").removeClass("show active");
+    $("#registerForm").addClass("show active");
   }
 }
 
 // Function to handle successful login (to be called from server response)
 function handleLoginSuccess(userData) {
-  const authModal = bootstrap.Modal.getInstance(
-    document.getElementById("authModal")
-  );
-  if (authModal) {
-    authModal.hide();
-  }
-
-  // Update UI with user data
-  updateUserUI(userData);
-
-  // Show success message
-  showToast("Đăng nhập thành công!", "success");
-}
-
-// Function to update user UI after login
-function updateUserUI(userData) {
-  // Update navigation
-  $(".user-toggle").replaceWith(`
-        <a class="nav-link dropdown-toggle text-success" href="#" role="button" 
-           data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fas fa-user"></i>
-            <span class="d-none d-md-inline ms-1">${userData.name}</span>
-        </a>
-    `);
-
-  // Add user dropdown menu if not exists
-  // This would be handled by the server-side template in a real application
+  // Update UI after successful login
+  location.reload();
 }
 
 // Function to show toast notifications
 function showToast(message, type = "info") {
-  // Create toast if it doesn't exist
-  if (!$("#toast-container").length) {
-    $("body").append(`
-            <div id="toast-container" class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;"></div>
-        `);
-  }
-
+  // Bootstrap toast implementation
   const toastHtml = `
         <div class="toast align-items-center text-white bg-${
-          type === "success" ? "success" : type === "error" ? "danger" : "info"
+          type === "error" ? "danger" : type
         } border-0" role="alert">
             <div class="d-flex">
-                <div class="toast-body">
-                    <i class="fas fa-${
-                      type === "success"
-                        ? "check-circle"
-                        : type === "error"
-                        ? "times-circle"
-                        : "info-circle"
-                    } me-2"></i>
-                    ${message}
-                </div>
+                <div class="toast-body">${message}</div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
             </div>
         </div>
     `;
 
-  const toastElement = $(toastHtml);
-  $("#toast-container").append(toastElement);
+  // Create toast container if not exists
+  if (!$("#toastContainer").length) {
+    $("body").append(
+      '<div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3"></div>'
+    );
+  }
 
-  const toast = new bootstrap.Toast(toastElement[0]);
+  const $toast = $(toastHtml);
+  $("#toastContainer").append($toast);
+
+  const toast = new bootstrap.Toast($toast[0]);
   toast.show();
 
-  // Remove from DOM after hidden
-  toastElement.on("hidden.bs.toast", function () {
+  // Remove toast element after it's hidden
+  $toast.on("hidden.bs.toast", function () {
     $(this).remove();
   });
 }

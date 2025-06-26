@@ -1,8 +1,11 @@
-create database QLStoreTrangMieng
-use QLStoreTrangMieng
+IF EXISTS (SELECT name FROM sys.databases WHERE name = 'QLStoreTrangMieng')
+    DROP DATABASE QLStoreTrangMieng;
+
+CREATE DATABASE QLStoreTrangMieng;
+USE QLStoreTrangMieng;
 
 -- ==========================================
--- DATABASE SCRIPT - TRANG MIENG & NUOC UONG (NO SIZE)
+-- DATABASE SCRIPT - ĐÚNG THEO ERD
 -- ==========================================
 
 CREATE TABLE [User]
@@ -10,12 +13,12 @@ CREATE TABLE [User]
   UserId INT IDENTITY(1,1) NOT NULL,
   UserName NVARCHAR(100) NOT NULL,
   Email NVARCHAR(255) NOT NULL,
-  Phone NVARCHAR(20) NULL,
-  Role NVARCHAR(20) NOT NULL DEFAULT 'Customer',
   Password NVARCHAR(255) NOT NULL,
+  Role NVARCHAR(20) NOT NULL DEFAULT 'Customer',
+  Phone NVARCHAR(20) NULL,
   Address NVARCHAR(500) NULL,
-  CreatedDate DATETIME2 DEFAULT GETDATE(),
   IsActive BIT DEFAULT 1,
+  CreatedDate DATETIME2 DEFAULT GETDATE(),
   PRIMARY KEY (UserId)
 );
 
@@ -32,26 +35,13 @@ CREATE TABLE Product
   ProductId INT IDENTITY(1,1) NOT NULL,
   Name NVARCHAR(200) NOT NULL,
   Price DECIMAL(10,2) NOT NULL,
-  ImageUrl NVARCHAR(500) NULL,
   Description NVARCHAR(1000) NULL,
+  ImageUrl NVARCHAR(500) NULL,
   StockQuantity INT DEFAULT 0,
   CategoryId INT NOT NULL,
   CreatedDate DATETIME2 DEFAULT GETDATE(),
   PRIMARY KEY (ProductId),
   FOREIGN KEY (CategoryId) REFERENCES Category(CategoryId)
-);
-
-CREATE TABLE [Order]
-(
-  OrderId INT IDENTITY(1,1) NOT NULL,
-  OrderDate DATETIME2 DEFAULT GETDATE(),
-  TotalAmount DECIMAL(10,2) NOT NULL,
-  ShippingAddress NVARCHAR(500) NOT NULL,
-  PaymentMethod NVARCHAR(50) NOT NULL,
-  Status NVARCHAR(20) DEFAULT 'Pending',
-  UserId INT NOT NULL,
-  PRIMARY KEY (OrderId),
-  FOREIGN KEY (UserId) REFERENCES [User](UserId)
 );
 
 CREATE TABLE Promotion
@@ -66,32 +56,6 @@ CREATE TABLE Promotion
   PRIMARY KEY (PromotionId)
 );
 
-CREATE TABLE Review
-(
-  ReviewId INT IDENTITY(1,1) NOT NULL,
-  Rating INT NOT NULL,
-  Comment NVARCHAR(1000) NULL,
-  CreatedDate DATETIME2 DEFAULT GETDATE(),
-  ProductId INT NOT NULL,
-  UserId INT NOT NULL,
-  OrderId INT NOT NULL,
-  PRIMARY KEY (ReviewId),
-  FOREIGN KEY (ProductId) REFERENCES Product(ProductId),
-  FOREIGN KEY (UserId) REFERENCES [User](UserId),
-  FOREIGN KEY (OrderId) REFERENCES [Order](OrderId)
-);
-
-CREATE TABLE Order_Product
-(
-  Quantity INT NOT NULL,
-  UnitPrice DECIMAL(10,2) NOT NULL,
-  OrderId INT NOT NULL,
-  ProductId INT NOT NULL,
-  PRIMARY KEY (OrderId, ProductId),
-  FOREIGN KEY (OrderId) REFERENCES [Order](OrderId),
-  FOREIGN KEY (ProductId) REFERENCES Product(ProductId)
-);
-
 CREATE TABLE Product_Promotion
 (
   ProductId INT NOT NULL,
@@ -101,64 +65,136 @@ CREATE TABLE Product_Promotion
   FOREIGN KEY (PromotionId) REFERENCES Promotion(PromotionId)
 );
 
+CREATE TABLE PaymentMethod
+(
+  PaymentMethodId INT IDENTITY(1,1) NOT NULL,
+  MethodName NVARCHAR(50) NOT NULL,
+  Description NVARCHAR(200) NULL,
+  PRIMARY KEY (PaymentMethodId)
+);
+
+CREATE TABLE [Order]
+(
+  OrderId INT IDENTITY(1,1) NOT NULL,
+  OrderDate DATETIME2 DEFAULT GETDATE(),
+  ShippingAddress NVARCHAR(500) NOT NULL,
+  PaymentMethod NVARCHAR(50) NOT NULL,
+  Status NVARCHAR(20) DEFAULT 'Pending',
+  UserId INT NOT NULL,
+  PRIMARY KEY (OrderId),
+  FOREIGN KEY (UserId) REFERENCES [User](UserId)
+);
+
+CREATE TABLE Payment
+(
+  PaymentId INT IDENTITY(1,1) NOT NULL,
+  OrderId INT NOT NULL,
+  PaymentMethodId INT NOT NULL,
+  Amount DECIMAL(10,2) NOT NULL,
+  PaymentDate DATETIME2 DEFAULT GETDATE(),
+  Status NVARCHAR(20) DEFAULT 'Pending',
+  PRIMARY KEY (PaymentId),
+  FOREIGN KEY (OrderId) REFERENCES [Order](OrderId),
+  FOREIGN KEY (PaymentMethodId) REFERENCES PaymentMethod(PaymentMethodId)
+);
+
+CREATE TABLE Order_Product
+(
+  OrderId INT NOT NULL,
+  ProductId INT NOT NULL,
+  Quantity INT NOT NULL,
+  Price DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY (OrderId, ProductId),
+  FOREIGN KEY (OrderId) REFERENCES [Order](OrderId),
+  FOREIGN KEY (ProductId) REFERENCES Product(ProductId)
+);
+
+CREATE TABLE Review
+(
+  ReviewId INT IDENTITY(1,1) NOT NULL,
+  OrderId INT NOT NULL,
+  Comment NVARCHAR(1000) NULL,
+  Rating INT NOT NULL,
+  CreatedDate DATETIME2 DEFAULT GETDATE(),
+  PRIMARY KEY (ReviewId),
+  FOREIGN KEY (OrderId) REFERENCES [Order](OrderId)
+);
+
 -- ==========================================
 -- SAMPLE DATA
 -- ==========================================
 
 -- Insert Categories
 INSERT INTO Category (Name, Description) VALUES 
-('Bánh Flan', 'Các loại bánh flan truyền thống'),
-('Tiramisu', 'Tiramisu Ý nguyên chất'), 
-('Cheesecake', 'Bánh phô mai các loại'),
-('Pudding', 'Pudding trái cây'),
-('Bánh Tart', 'Bánh tart mini'),
-('Trà Sữa', 'Trà sữa các loại'),
-('Cà Phê', 'Cà phê và espresso'),
-('Sinh Tố', 'Sinh tố trái cây tươi'),
-('Nước Ép', 'Nước ép trái cây nguyên chất'),
-('Soda', 'Nước có gas và mocktail');
+(N'Bánh Flan', N'Các loại bánh flan truyền thống'),
+(N'Tiramisu', N'Tiramisu Ý nguyên chất'), 
+(N'Cheesecake', N'Bánh phô mai các loại'),
+(N'Pudding', N'Pudding trái cây'),
+(N'Bánh Tart', N'Bánh tart mini'),
+(N'Trà Sữa', N'Trà sữa các loại'),
+(N'Cà Phê', N'Cà phê và espresso'),
+(N'Sinh Tố', N'Sinh tố trái cây tươi'),
+(N'Nước Ép', N'Nước ép trái cây nguyên chất'),
+(N'Soda', N'Nước có gas và mocktail');
+
+-- Insert Payment Methods
+INSERT INTO PaymentMethod (MethodName, Description) VALUES 
+(N'COD', N'Thanh toán khi nhận hàng'),
+(N'Bank Transfer', N'Chuyển khoản ngân hàng'),
+(N'MoMo', N'Ví điện tử MoMo'),
+(N'Credit Card', N'Thẻ tín dụng'),
+(N'Debit Card', N'Thẻ ghi nợ');
 
 -- Insert Users
 INSERT INTO [User] (UserName, Email, Role, Password, Address) VALUES 
-('Admin', 'admin@trangmieng.com', 'Admin', 'admin123', 'Hà Nội');
+(N'Admin', N'admin@trangmieng.com', N'Admin', N'admin123', N'Hà Nội');
 
 INSERT INTO [User] (UserName, Email, Phone, Password, Address) VALUES 
-('Nguyễn Văn A', 'customer@gmail.com', '0123456789', '123456', 'TP.HCM');
+(N'Nguyễn Văn A', N'customer@gmail.com', N'0123456789', N'123456', N'TP.HCM');
 
 -- Insert Products - TRÁNG MIỆNG
 INSERT INTO Product (Name, Description, Price, CategoryId, StockQuantity, ImageUrl) VALUES 
-('Bánh Flan Caramen', 'Bánh flan truyền thống với caramen', 25000, 1, 50, '/images/flan-caramen.jpg'),
-('Bánh Flan Dâu', 'Bánh flan với topping dâu tây', 28000, 1, 40, '/images/flan-dau.jpg'),
-('Tiramisu Cà Phê', 'Tiramisu với hương vị cà phê đậm đà', 45000, 2, 30, '/images/tiramisu-cafe.jpg'),
-('Tiramisu Matcha', 'Tiramisu vị trà xanh Nhật Bản', 48000, 2, 25, '/images/tiramisu-matcha.jpg'),
-('Cheesecake Dâu', 'Bánh phô mai với topping dâu tây tươi', 55000, 3, 25, '/images/cheesecake-dau.jpg'),
-('Cheesecake Chocolate', 'Bánh phô mai vị chocolate đậm đà', 58000, 3, 20, '/images/cheesecake-choco.jpg'),
-('Pudding Xoài', 'Pudding xoài thơm ngon mát lạnh', 30000, 4, 40, '/images/pudding-xoai.jpg'),
-('Pudding Dâu', 'Pudding dâu tây ngọt thanh', 32000, 4, 35, '/images/pudding-dau.jpg'),
-('Tart Trái Cây', 'Tart mini với nhiều loại trái cây tươi', 35000, 5, 35, '/images/tart-traicay.jpg'),
-('Tart Chocolate', 'Tart chocolate đắng ngọt', 38000, 5, 30, '/images/tart-choco.jpg'),
+(N'Bánh Flan Caramen', N'Bánh flan truyền thống với caramen', 25000.00, 1, 50, N'/Content/Images/Products/flan-caramen.jpg'),
+(N'Bánh Flan Dâu', N'Bánh flan với topping dâu tây', 28000.00, 1, 40, N'/Content/Images/Products/flan-dau.jpg'),
+(N'Tiramisu Cà Phê', N'Tiramisu với hương vị cà phê đậm đà', 45000.00, 2, 30, N'/Content/Images/Products/tiramisu-cafe.jpg'),
+(N'Tiramisu Matcha', N'Tiramisu vị trà xanh Nhật Bản', 48000.00, 2, 25, N'/Content/Images/Products/tiramisu-matcha.jpg'),
+(N'Cheesecake Dâu', N'Bánh phô mai với topping dâu tây tươi', 55000.00, 3, 25, N'/Content/Images/Products/cheesecake-dau.jpg'),
+(N'Cheesecake Chocolate', N'Bánh phô mai vị chocolate đậm đà', 58000.00, 3, 20, N'/Content/Images/Products/cheesecake-choco.jpg'),
+(N'Pudding Xoài', N'Pudding xoài thơm ngon mát lạnh', 30000.00, 4, 40, N'/Content/Images/Products/pudding-xoai.jpg'),
+(N'Pudding Dâu', N'Pudding dâu tây ngọt thanh', 32000.00, 4, 35, N'/Content/Images/Products/pudding-dau.jpg'),
+(N'Tart Trái Cây', N'Tart mini với nhiều loại trái cây tươi', 35000.00, 5, 35, N'/Content/Images/Products/tart-traicay.jpg'),
+(N'Tart Chocolate', N'Tart chocolate đắng ngọt', 38000.00, 5, 30, N'/Content/Images/Products/tart-choco.jpg'),
 
 -- Insert Products - NƯỚC UỐNG
-('Trà Sữa Trân Châu', 'Trà sữa trân châu đen classic', 35000, 6, 60, '/images/trasua-tranchau.jpg'),
-('Trà Sữa Matcha', 'Trà sữa matcha Nhật Bản', 42000, 6, 45, '/images/trasua-matcha.jpg'),
-('Trà Sữa Taro', 'Trà sữa khoai môn tím', 38000, 6, 50, '/images/trasua-taro.jpg'),
-('Cà Phê Sữa Đá', 'Cà phê sữa đá truyền thống Việt Nam', 25000, 7, 70, '/images/cafe-suada.jpg'),
-('Cappuccino', 'Cappuccino Ý đậm đà', 38000, 7, 40, '/images/cappuccino.jpg'),
-('Latte', 'Café Latte mềm mại', 42000, 7, 35, '/images/latte.jpg'),
-('Sinh Tố Bơ', 'Sinh tố bơ tươi mát lạnh', 40000, 8, 30, '/images/sinhto-bo.jpg'),
-('Sinh Tố Xoài', 'Sinh tố xoài cát Hòa Lộc', 42000, 8, 25, '/images/sinhto-xoai.jpg'),
-('Nước Ép Cam', 'Nước ép cam tươi 100% nguyên chất', 30000, 9, 50, '/images/nuocep-cam.jpg'),
-('Nước Ép Dưa Hấu', 'Nước ép dưa hấu tươi mát', 28000, 9, 45, '/images/nuocep-duahau.jpg'),
-('Soda Chanh', 'Soda chanh tươi mát lạnh', 28000, 10, 60, '/images/soda-chanh.jpg'),
-('Soda Dâu', 'Soda dâu tây ngọt thanh', 32000, 10, 40, '/images/soda-dau.jpg');
+(N'Trà Sữa Trân Châu', N'Trà sữa trân châu đen classic', 35000.00, 6, 60, N'/Content/Images/Products/trasua-tranchau.jpg'),
+(N'Trà Sữa Matcha', N'Trà sữa matcha Nhật Bản', 42000.00, 6, 45, N'/Content/Images/Products/trasua-matcha.jpg'),
+(N'Trà Sữa Taro', N'Trà sữa khoai môn tím', 38000.00, 6, 50, N'/Content/Images/Products/trasua-taro.jpg'),
+(N'Cà Phê Sữa Đá', N'Cà phê sữa đá truyền thống Việt Nam', 25000.00, 7, 70, N'/Content/Images/Products/cafe-suada.jpg'),
+(N'Cappuccino', N'Cappuccino Ý đậm đà', 38000.00, 7, 40, N'/Content/Images/Products/cappuccino.jpg'),
+(N'Latte', N'Café Latte mềm mại', 42000.00, 7, 35, N'/Content/Images/Products/latte.jpg'),
+(N'Sinh Tố Bơ', N'Sinh tố bơ tươi mát lạnh', 40000.00, 8, 30, N'/Content/Images/Products/sinhto-bo.jpg'),
+(N'Sinh Tố Xoài', N'Sinh tố xoài cát Hòa Lộc', 42000.00, 8, 25, N'/Content/Images/Products/sinhto-xoai.jpg'),
+(N'Nước Ép Cam', N'Nước ép cam tươi 100% nguyên chất', 30000.00, 9, 50, N'/Content/Images/Products/nuocep-cam.jpg'),
+(N'Nước Ép Dưa Hấu', N'Nước ép dưa hấu tươi mát', 28000.00, 9, 45, N'/Content/Images/Products/nuocep-duahau.jpg'),
+(N'Soda Chanh', N'Soda chanh tươi mát lạnh', 28000.00, 10, 60, N'/Content/Images/Products/soda-chanh.jpg'),
+(N'Soda Dâu', N'Soda dâu tây ngọt thanh', 32000.00, 10, 40, N'/Content/Images/Products/soda-dau.jpg');
 
 -- Insert Promotions
 INSERT INTO Promotion (Code, Description, DiscountPercent, StartDate, EndDate) VALUES 
-('WELCOME10', 'Giảm 10% cho khách hàng mới', 10.00, GETDATE(), DATEADD(MONTH, 1, GETDATE())),
-('COMBO15', 'Giảm 15% khi mua combo tráng miệng + nước uống', 15.00, GETDATE(), DATEADD(DAY, 15, GETDATE()));
+(N'WELCOME10', N'Giảm 10% cho khách hàng mới', 10.00, GETDATE(), DATEADD(MONTH, 1, GETDATE())),
+(N'COMBO15', N'Giảm 15% khi mua combo tráng miệng + nước uống', 15.00, GETDATE(), DATEADD(DAY, 15, GETDATE()));
 
-PRINT 'Database created successfully!';
-PRINT 'Categories: 10 (5 tráng miệng + 5 nước uống)';
-PRINT 'Products: 22 (10 tráng miệng + 12 nước uống)';
-PRINT 'Admin: admin@trangmieng.com / admin123';
-PRINT 'Customer: customer@gmail.com / 123456';
+-- Insert Sample Product-Promotion relationships
+INSERT INTO Product_Promotion (ProductId, PromotionId) VALUES 
+(1, 1), -- Bánh Flan Caramen có khuyến mãi WELCOME10
+(3, 1), -- Tiramisu Cà Phê có khuyến mãi WELCOME10  
+(5, 2), -- Cheesecake Dâu có khuyến mãi COMBO15
+(11, 2); -- Trà Sữa Trân Châu có khuyến mãi COMBO15
+
+PRINT N'Database updated successfully!';
+PRINT N'Đúng theo ERD - Không có Cart, ProductImage, Wishlist';
+PRINT N'Categories: 10 (5 tráng miệng + 5 nước uống)';
+PRINT N'Products: 22 (10 tráng miệng + 12 nước uống)';
+PRINT N'Payment Methods: 5 (COD, Bank Transfer, MoMo, Credit Card, Debit Card)';
+PRINT N'Admin: admin@trangmieng.com / admin123';
+PRINT N'Customer: customer@gmail.com / 123456';

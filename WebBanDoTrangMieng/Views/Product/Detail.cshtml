@@ -1,278 +1,473 @@
-﻿@{
-    ViewBag.Title = "Chi tiết sản phẩm";
+﻿@model WebBanDoTrangMieng.Product
+
+@{
+    ViewBag.Title = Model.Name + " - Chi tiết sản phẩm";
+    var images = Model.ImageUrl?.Split(',').Select(url => url.Trim()).ToArray() ?? new string[0];
+    var firstImage = images.FirstOrDefault() ?? "/Content/Images/Products/no-image.jpg";
 }
 
+@section styles {
+    <link href="@Url.Content("~/Content/product-detail.css")" rel="stylesheet" type="text/css" />
+}
 
-<div class="container">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Trang chủ</a></li>
-            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Product")">Sản phẩm</a></li>
-            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Product", new { categoryId = 1 })">Bánh ngọt</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Bánh Mousse Matcha</li>
-        </ol>
+<div class="container-fluid py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <div class="container">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Home")" class="text-decoration-none">
+                        <i class="fas fa-home me-1"></i>Trang chủ
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Product")" class="text-decoration-none">Sản phẩm</a>
+                </li>
+                @if (Model.Category != null)
+                {
+                    <li class="breadcrumb-item">
+                        <a href="@Url.Action("Index", "Product", new { categoryId = Model.CategoryId })" class="text-decoration-none">@Model.Category.Name</a>
+                    </li>
+                }
+                <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+            </ol>
+        </div>
     </nav>
 
-    <div class="product-detail-container">
-        <div class="row">
+    <div class="container">
+        <!-- Product Detail -->
+        <div class="row g-5">
+            <!-- Product Images -->
             <div class="col-lg-6">
-                <img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Bánh Mousse Matcha" class="product-main-image" id="mainImage">
-                <div class="product-thumbnails">
-                    <img src="https://images.unsplash.com/photo-1587314168485-3236d6710814?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Thumbnail 1" class="product-thumbnail active" onclick="changeImage(this)">
-                    <img src="https://images.unsplash.com/photo-1552066379-e7bfd22155c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Thumbnail 2" class="product-thumbnail" onclick="changeImage(this)">
-                    <img src="https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Thumbnail 3" class="product-thumbnail" onclick="changeImage(this)">
-                    <img src="https://images.unsplash.com/photo-1550617931-e17a7b70dce2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Thumbnail 4" class="product-thumbnail" onclick="changeImage(this)">
+                <div class="product-gallery">
+                    <!-- Main Image -->
+                    <div class="position-relative mb-3">
+                        <div class="ratio ratio-1x1">
+                            <img src="@firstImage" alt="@Model.Name" class="main-product-image rounded-4 shadow-lg object-fit-cover" id="mainImage">
+                        </div>
+                        
+                        <!-- Image Badges -->
+                        <div class="image-badges">
+                            @if (Model.CreatedDate.HasValue && Model.CreatedDate.Value > DateTime.Now.AddDays(-7))
+                            {
+                                <span class="badge bg-success shadow-sm">
+                                    <i class="fas fa-star me-1"></i>Mới
+                                </span>
+                            }
+                            @if (Model.StockQuantity.HasValue && Model.StockQuantity.Value < 10)
+                            {
+                                <span class="badge bg-warning text-dark shadow-sm">
+                                    <i class="fas fa-fire me-1"></i>Sắp hết
+                                </span>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Thumbnails -->
+                    @if (images.Length > 1)
+                    {
+                        <div class="row g-2">
+                            @for (int i = 0; i < Math.Min(images.Length, 6); i++)
+                            {
+                                <div class="col-2">
+                                    <div class="ratio ratio-1x1">
+                                        <img src="@images[i]" alt="@Model.Name @(i+1)" 
+                                             class="thumbnail-image rounded-3 shadow-sm object-fit-cover @(i == 0 ? "active" : "")" 
+                                             onclick="changeImage(this, @i)">
+                                    </div>
+                                </div>
+                            }
+                            @if (images.Length > 6)
+                            {
+                                <div class="col-2">
+                                    <div class="ratio ratio-1x1">
+                                        <div class="more-images-overlay rounded-3 shadow-sm d-flex align-items-center justify-content-center text-white fw-bold">
+                                            +@(images.Length - 5)
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
                 </div>
             </div>
+
+            <!-- Product Info -->
             <div class="col-lg-6">
-                <div class="d-flex align-items-center mb-2 flex-wrap gap-2">
-                    <h1 class="product-title mb-0">Bánh Mousse Matcha</h1>
-                    <span class="badge bg-success align-middle">Mới</span>
-                    <span class="badge bg-warning text-dark align-middle">Bán chạy</span>
-                </div>
-                <div class="product-price">75.000đ</div>
-                <div class="product-description">
-                    <p>Bánh mousse matcha với lớp kem mịn và hương vị trà xanh đặc trưng. Được làm từ bột matcha nguyên chất nhập khẩu từ Nhật Bản, mang đến hương vị độc đáo và tinh tế.</p>
-                    <p>Sản phẩm được chế biến mỗi ngày, đảm bảo độ tươi ngon và không sử dụng chất bảo quản.</p>
-                </div>
-                <div class="product-divider"></div>
-                <div class="product-quantity">
-                    <span class="quantity-label">Số lượng:</span>
-                    <div class="quantity-controls">
-                        <button class="quantity-btn" onclick="decreaseQuantity()">-</button>
-                        <input type="text" class="quantity-input" id="quantityInput" value="1" readonly>
-                        <button class="quantity-btn" onclick="increaseQuantity()">+</button>
-                    </div>
-                </div>
-                <div class="product-actions">
-                    <button class="add-to-cart-btn" onclick="addToCart()">
-                        <i class="fas fa-shopping-cart"></i> Thêm vào giỏ hàng
-                    </button>
-                    <button class="wishlist-btn">
-                        <i class="far fa-heart"></i>
-                    </button>
-                </div>
-                <div class="product-divider"></div>
-                <div class="product-info">
-                    <div class="product-info-item">
-                        <div class="info-label">SKU:</div>
-                        <div class="info-value">CAKE-001</div>
-                    </div>
-                    <div class="product-info-item">
-                        <div class="info-label">Danh mục:</div>
-                        <div class="info-value">Bánh ngọt</div>
-                    </div>
-                    <div class="product-info-item">
-                        <div class="info-label">Khối lượng:</div>
-                        <div class="info-value">250g</div>
-                    </div>
-                    <div class="product-info-item">
-                        <div class="info-label">Tình trạng:</div>
-                        <div class="info-value">Còn hàng</div>
-                    </div>
-                </div>
-                <div class="product-share">
-                    <span class="share-label">Chia sẻ:</span>
-                    <div class="share-links d-inline-block">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-pinterest-p"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                <div class="h-100">
+                    <!-- Product Title -->
+                    <h1 class="product-title mb-3">@Model.Name</h1>
 
-    <div class="product-tabs">
-        <ul class="nav nav-tabs" id="productTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab" aria-controls="description" aria-selected="true">Mô tả</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="ingredients-tab" data-bs-toggle="tab" data-bs-target="#ingredients" type="button" role="tab" aria-controls="ingredients" aria-selected="false">Thành phần</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false">Đánh giá (3)</button>
-            </li>
-        </ul>
-        <div class="tab-content" id="productTabContent">
-            <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
-                <h4>Giới thiệu về Bánh Mousse Matcha</h4>
-                <p>Bánh mousse matcha là sự kết hợp hoàn hảo giữa kem mousse mềm mịn và hương vị trà xanh đặc trưng của Nhật Bản. Lớp bánh gato mềm mịn phía dưới, kết hợp với lớp mousse matcha béo ngậy tạo nên hương vị hài hòa, không quá ngọt và rất thích hợp cho những người yêu thích hương vị thanh nhẹ.</p>
-                <p>Điểm đặc biệt của bánh mousse matcha tại Đồ Tráng Miệng là chúng tôi sử dụng 100% bột matcha nguyên chất được nhập khẩu trực tiếp từ Uji, Kyoto - nơi nổi tiếng với những vườn trà xanh lâu đời và chất lượng cao nhất Nhật Bản.</p>
-                <p>Bánh được chế biến mỗi ngày và nên được sử dụng trong vòng 24-48 giờ để đảm bảo độ tươi ngon nhất. Sản phẩm không sử dụng chất bảo quản, màu thực phẩm hay hương liệu nhân tạo.</p>
-                <h4>Hướng dẫn bảo quản</h4>
-                <p>Bánh nên được bảo quản trong tủ lạnh ở nhiệt độ từ 2-5°C. Nên lấy bánh ra khỏi tủ lạnh khoảng 15-20 phút trước khi thưởng thức để có hương vị tốt nhất.</p>
-            </div>
-            <div class="tab-pane fade" id="ingredients" role="tabpanel" aria-labelledby="ingredients-tab">
-                <h4>Thành phần</h4>
-                <ul>
-                    <li>Bột matcha nguyên chất (Nhật Bản)</li>
-                    <li>Kem tươi</li>
-                    <li>Trứng gà tươi</li>
-                    <li>Bột mì</li>
-                    <li>Đường</li>
-                    <li>Gelatin</li>
-                    <li>Sữa tươi</li>
-                    <li>Bơ</li>
-                </ul>
-                <h4>Thông tin dinh dưỡng</h4>
-                <p>Phần ăn: 100g</p>
-                <table class="table table-striped">
-                    <tbody>
-                        <tr>
-                            <td>Năng lượng</td>
-                            <td>250 kcal</td>
-                        </tr>
-                        <tr>
-                            <td>Protein</td>
-                            <td>5g</td>
-                        </tr>
-                        <tr>
-                            <td>Carbohydrate</td>
-                            <td>30g</td>
-                        </tr>
-                        <tr>
-                            <td>Chất béo</td>
-                            <td>12g</td>
-                        </tr>
-                        <tr>
-                            <td>Đường</td>
-                            <td>20g</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <p><strong>Lưu ý:</strong> Sản phẩm có chứa gluten, trứng, sữa. Không phù hợp cho người bị dị ứng với các thành phần trên.</p>
-            </div>
-            <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
-                <h4>Đánh giá từ khách hàng</h4>
-                <div class="review-item">
-                    <div class="review-header">
-                        <span class="review-author">Nguyễn Văn A</span>
-                        <span class="review-date">20/04/2023</span>
+                    <!-- Rating -->
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="text-warning me-2 fs-5">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="text-muted">4.5 (23 đánh giá)</span>
                     </div>
-                    <div class="review-stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <div class="review-content">
-                        <p>Bánh rất ngon, hương vị matcha đậm đà nhưng không gắt. Kem mềm mịn, bánh mềm và rất vừa miệng. Sẽ mua lại!</p>
-                    </div>
-                </div>
-                <div class="review-item">
-                    <div class="review-header">
-                        <span class="review-author">Trần Thị B</span>
-                        <span class="review-date">15/04/2023</span>
-                    </div>
-                    <div class="review-stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                    </div>
-                    <div class="review-content">
-                        <p>Bánh khá ngon, nhưng phần kem hơi ít. Mẫu mã đẹp, đóng gói cẩn thận.</p>
-                    </div>
-                </div>
-                <div class="review-item">
-                    <div class="review-header">
-                        <span class="review-author">Lê Văn C</span>
-                        <span class="review-date">10/04/2023</span>
-                    </div>
-                    <div class="review-stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                    </div>
-                    <div class="review-content">
-                        <p>Tôi rất thích hương vị matcha ở đây, đúng chuẩn vị Nhật, không quá ngọt. Giao hàng nhanh, bánh vẫn giữ được form đẹp.</p>
-                    </div>
-                </div>
 
-                <div class="review-form">
-                    <h4>Viết đánh giá</h4>
-                    <form id="reviewForm">
-                        <div class="mb-3">
-                            <label for="reviewName" class="form-label">Tên của bạn</label>
-                            <input type="text" class="form-control" id="reviewName" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="reviewEmail" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="reviewEmail" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Đánh giá</label>
-                            <div class="star-rating">
-                                <input type="radio" id="star5" name="rating" value="5">
-                                <label for="star5"><i class="fas fa-star"></i></label>
-                                <input type="radio" id="star4" name="rating" value="4">
-                                <label for="star4"><i class="fas fa-star"></i></label>
-                                <input type="radio" id="star3" name="rating" value="3">
-                                <label for="star3"><i class="fas fa-star"></i></label>
-                                <input type="radio" id="star2" name="rating" value="2">
-                                <label for="star2"><i class="fas fa-star"></i></label>
-                                <input type="radio" id="star1" name="rating" value="1">
-                                <label for="star1"><i class="fas fa-star"></i></label>
+                    <!-- Price -->
+                    <div class="mb-4">
+                        <div class="current-price">@Model.Price.ToString("N0")đ</div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-4">
+                        @if (!string.IsNullOrEmpty(Model.Description))
+                        {
+                            <p class="fs-6 lh-lg text-muted">@Model.Description</p>
+                        }
+                        else
+                        {
+                            <p class="fs-6 lh-lg text-muted">Sản phẩm được chế biến tươi mỗi ngày với nguyên liệu cao cấp, đảm bảo chất lượng và hương vị tuyệt vời nhất.</p>
+                        }
+                    </div>
+
+                    <!-- Product Info -->
+                    <div class="row g-3 mb-4">
+                        @if (Model.Category != null)
+                        {
+                            <div class="col-6">
+                                <div class="info-item">
+                                    <i class="fas fa-tag text-primary me-2"></i>
+                                    <span class="info-label">Danh mục:</span>
+                                    <span class="info-value">@Model.Category.Name</span>
+                                </div>
+                            </div>
+                        }
+                        <div class="col-6">
+                            <div class="info-item">
+                                <i class="fas fa-weight-hanging text-success me-2"></i>
+                                <span class="info-label">Khối lượng:</span>
+                                <span class="info-value">250g</span>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="reviewContent" class="form-label">Nội dung đánh giá</label>
-                            <textarea class="form-control" id="reviewContent" rows="5" required></textarea>
+                        <div class="col-6">
+                            <div class="info-item">
+                                <i class="fas fa-clock text-warning me-2"></i>
+                                <span class="info-label">Thời gian:</span>
+                                <span class="info-value">Tươi mỗi ngày</span>
+                            </div>
                         </div>
-                        <button type="submit" class="btn btn-success">Gửi đánh giá</button>
-                    </form>
+                        <div class="col-6">
+                            <div class="info-item">
+                                @if (Model.StockQuantity.HasValue && Model.StockQuantity.Value > 0)
+                                {
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <span class="info-label">Tình trạng:</span>
+                                    <span class="info-value text-success">Còn hàng</span>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-times-circle text-danger me-2"></i>
+                                    <span class="info-label">Tình trạng:</span>
+                                    <span class="info-value text-danger">Hết hàng</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quantity Selector -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold fs-5 text-dark mb-2">Số lượng:</label>
+                        <div class="quantity-selector">
+                            <button class="quantity-btn" onclick="decreaseQuantity()">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <input type="number" class="quantity-input" id="quantityInput" value="1" min="1" max="10">
+                            <button class="quantity-btn" onclick="increaseQuantity()">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex gap-3 align-items-center mb-4">
+                        <button class="btn-add-to-cart" onclick="addToCart()">
+                            <i class="fas fa-shopping-cart me-2"></i>
+                            <span>Thêm vào giỏ hàng</span>
+                        </button>
+                        <button class="btn-wishlist" onclick="toggleWishlist()" title="Yêu thích">
+                            <i class="far fa-heart"></i>
+                        </button>
+                        <button class="btn-share" onclick="shareProduct()" title="Chia sẻ">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                    </div>
+
+                    <!-- Social Share -->
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="fw-semibold text-dark">Chia sẻ:</span>
+                        <div class="d-flex gap-2">
+                            <a href="#" class="social-btn facebook" title="Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="social-btn twitter" title="Twitter">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="social-btn pinterest" title="Pinterest">
+                                <i class="fab fa-pinterest-p"></i>
+                            </a>
+                            <a href="#" class="social-btn instagram" title="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="related-products">
-        <h3>Sản phẩm liên quan</h3>
-        <div class="row">
-            <div class="col-lg-3 col-md-6">
-                <div class="related-product-card">
-                    <img src="https://images.unsplash.com/photo-1602351447937-745c6bb00ad8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Cupcake Matcha" class="related-product-img">
-                    <div class="related-product-body">
-                        <h5 class="related-product-title">Cupcake Matcha</h5>
-                        <div class="related-product-price">40.000đ</div>
-                        <button class="related-product-btn" onclick="addRelatedToCart(2, 'Cupcake Matcha', 40000)">Thêm vào giỏ</button>
-                    </div>
+        <!-- Product Tabs -->
+        <div class="mt-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent border-0 p-0">
+                    <ul class="nav nav-pills nav-fill product-tabs" id="productTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="description-tab" data-bs-toggle="pill" 
+                                    data-bs-target="#description" type="button" role="tab">
+                                <i class="fas fa-info-circle me-2"></i>Mô tả chi tiết
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="ingredients-tab" data-bs-toggle="pill" 
+                                    data-bs-target="#ingredients" type="button" role="tab">
+                                <i class="fas fa-list me-2"></i>Thành phần
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="reviews-tab" data-bs-toggle="pill" 
+                                    data-bs-target="#reviews" type="button" role="tab">
+                                <i class="fas fa-star me-2"></i>Đánh giá (23)
+                            </button>
+                        </li>
+                    </ul>
                 </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="related-product-card">
-                    <img src="https://images.unsplash.com/photo-1591638246754-77e0a960a8ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Tiramisu Matcha" class="related-product-img">
-                    <div class="related-product-body">
-                        <h5 class="related-product-title">Tiramisu Matcha</h5>
-                        <div class="related-product-price">65.000đ</div>
-                        <button class="related-product-btn" onclick="addRelatedToCart(3, 'Tiramisu Matcha', 65000)">Thêm vào giỏ</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="related-product-card">
-                    <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Bánh Crepe Matcha" class="related-product-img">
-                    <div class="related-product-body">
-                        <h5 class="related-product-title">Bánh Crepe Matcha</h5>
-                        <div class="related-product-price">55.000đ</div>
-                        <button class="related-product-btn" onclick="addRelatedToCart(4, 'Bánh Crepe Matcha', 55000)">Thêm vào giỏ</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="related-product-card">
-                    <img src="https://images.unsplash.com/photo-1558326567-98166ebaa59a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Kem Matcha" class="related-product-img">
-                    <div class="related-product-body">
-                        <h5 class="related-product-title">Kem Matcha</h5>
-                        <div class="related-product-price">35.000đ</div>
-                        <button class="related-product-btn" onclick="addRelatedToCart(5, 'Kem Matcha', 35000)">Thêm vào giỏ</button>
+                <div class="card-body p-4">
+                    <div class="tab-content" id="productTabContent">
+                        <!-- Description Tab -->
+                        <div class="tab-pane fade show active" id="description" role="tabpanel">
+                            <h4 class="mb-3">Giới thiệu sản phẩm</h4>
+                            <p class="lh-lg">@Model.Name là một trong những sản phẩm đặc biệt tại cửa hàng của chúng tôi. Được chế biến từ những nguyên liệu tươi ngon nhất, sản phẩm mang đến hương vị độc đáo và khó quên.</p>
+                            <p class="lh-lg">Mỗi món bánh đều được làm thủ công bởi các đầu bếp giàu kinh nghiệm, đảm bảo chất lượng cao nhất cho khách hàng. Sản phẩm không sử dụng chất bảo quản, hoàn toàn tự nhiên và an toàn cho sức khỏe.</p>
+                            
+                            <div class="alert alert-info mt-4">
+                                <h6 class="alert-heading">
+                                    <i class="fas fa-info-circle me-2"></i>Hướng dẫn bảo quản
+                                </h6>
+                                <ul class="mb-0">
+                                    <li>Bảo quản trong tủ lạnh ở nhiệt độ 2-8°C</li>
+                                    <li>Sử dụng trong vòng 2-3 ngày sau khi mua</li>
+                                    <li>Lấy ra khỏi tủ lạnh 10-15 phút trước khi thưởng thức</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Ingredients Tab -->
+                        <div class="tab-pane fade" id="ingredients" role="tabpanel">
+                            <h4 class="mb-3">Thành phần nguyên liệu</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6 class="fw-semibold">Nguyên liệu chính:</h6>
+                                    <ul class="ingredient-list">
+                                        <li>Bột mì cao cấp</li>
+                                        <li>Kem tươi Anchor</li>
+                                        <li>Trứng gà tươi</li>
+                                        <li>Đường tinh luyện</li>
+                                        <li>Bơ lạt New Zealand</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6 class="fw-semibold">Nguyên liệu đặc biệt:</h6>
+                                    <ul class="ingredient-list">
+                                        <li>Vanilla Madagascar</li>
+                                        <li>Chocolate Valrhona</li>
+                                        <li>Matcha Uji Nhật Bản</li>
+                                        <li>Muối biển Pháp</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-warning mt-4">
+                                <h6 class="alert-heading">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>Lưu ý dị ứng
+                                </h6>
+                                <p class="mb-0">Sản phẩm có chứa gluten, trứng, sữa. Người có dị ứng với các thành phần này vui lòng cân nhắc trước khi sử dụng.</p>
+                            </div>
+                        </div>
+
+                        <!-- Reviews Tab -->
+                        <div class="tab-pane fade" id="reviews" role="tabpanel">
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    <div class="rating-overview text-center">
+                                        <div class="rating-score">4.5</div>
+                                        <div class="text-warning mb-2 fs-5">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star-half-alt"></i>
+                                        </div>
+                                        <div class="text-muted small">23 đánh giá</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="rating-breakdown">
+                                        <div class="rating-row">
+                                            <span>5 sao</span>
+                                            <div class="progress">
+                                                <div class="progress-bar bg-success" style="width: 70%"></div>
+                                            </div>
+                                            <span>16</span>
+                                        </div>
+                                        <div class="rating-row">
+                                            <span>4 sao</span>
+                                            <div class="progress">
+                                                <div class="progress-bar bg-info" style="width: 20%"></div>
+                                            </div>
+                                            <span>5</span>
+                                        </div>
+                                        <div class="rating-row">
+                                            <span>3 sao</span>
+                                            <div class="progress">
+                                                <div class="progress-bar bg-warning" style="width: 10%"></div>
+                                            </div>
+                                            <span>2</span>
+                                        </div>
+                                        <div class="rating-row">
+                                            <span>2 sao</span>
+                                            <div class="progress">
+                                                <div class="progress-bar bg-orange" style="width: 0%"></div>
+                                            </div>
+                                            <span>0</span>
+                                        </div>
+                                        <div class="rating-row">
+                                            <span>1 sao</span>
+                                            <div class="progress">
+                                                <div class="progress-bar bg-danger" style="width: 0%"></div>
+                                            </div>
+                                            <span>0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Review List -->
+                            <div class="mb-4">
+                                <div class="review-item">
+                                    <div class="review-header">
+                                        <div class="reviewer-info">
+                                            <div class="reviewer-avatar">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-0 fw-semibold">Nguyễn Văn A</h6>
+                                                <div class="text-muted small">20/04/2023</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-warning">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                    </div>
+                                    <p class="mb-0">Bánh rất ngon, hương vị đậm đà và rất vừa miệng. Kem mềm mịn, bánh tươi và thơm. Đóng gói cẩn thận, giao hàng nhanh. Sẽ mua lại!</p>
+                                </div>
+
+                                <div class="review-item">
+                                    <div class="review-header">
+                                        <div class="reviewer-info">
+                                            <div class="reviewer-avatar">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-0 fw-semibold">Trần Thị B</h6>
+                                                <div class="text-muted small">15/04/2023</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-warning">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                        </div>
+                                    </div>
+                                    <p class="mb-0">Bánh khá ngon, mẫu mã đẹp. Tuy nhiên hương vị hơi nhạt so với mong đợi. Nhìn chung vẫn hài lòng với sản phẩm.</p>
+                                </div>
+
+                                <div class="review-item">
+                                    <div class="review-header">
+                                        <div class="reviewer-info">
+                                            <div class="reviewer-avatar">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-0 fw-semibold">Lê Văn C</h6>
+                                                <div class="text-muted small">10/04/2023</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-warning">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star-half-alt"></i>
+                                        </div>
+                                    </div>
+                                    <p class="mb-0">Chất lượng tốt, hương vị tự nhiên. Giao hàng đúng giờ, bánh vẫn giữ được form đẹp. Giá cả hợp lý.</p>
+                                </div>
+                            </div>
+
+                            <!-- Write Review -->
+                            <div class="card bg-light">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Viết đánh giá của bạn</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form class="review-form">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Họ tên *</label>
+                                                <input type="text" class="form-control" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Email *</label>
+                                                <input type="email" class="form-control" required>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Đánh giá *</label>
+                                            <div class="rating-input">
+                                                <input type="radio" id="star5" name="rating" value="5">
+                                                <label for="star5">★</label>
+                                                <input type="radio" id="star4" name="rating" value="4">
+                                                <label for="star4">★</label>
+                                                <input type="radio" id="star3" name="rating" value="3">
+                                                <label for="star3">★</label>
+                                                <input type="radio" id="star2" name="rating" value="2">
+                                                <label for="star2">★</label>
+                                                <input type="radio" id="star1" name="rating" value="1">
+                                                <label for="star1">★</label>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Nội dung đánh giá *</label>
+                                            <textarea class="form-control" rows="4" placeholder="Chia sẻ trải nghiệm của bạn..." required></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-paper-plane me-2"></i>Gửi đánh giá
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -280,96 +475,119 @@
     </div>
 </div>
 
-<!-- Toast notifications container -->
-<div class="toast-container"></div>
+<!-- JavaScript -->
+<script>
+let currentImageIndex = 0;
+const images = @Html.Raw(Json.Encode(images));
 
-@section scripts {
-    <script>
-        // Change main image when clicking thumbnails
-        function changeImage(element) {
-            document.getElementById('mainImage').src = element.src;
+function changeImage(thumbnail, index) {
+    // Remove active class from all thumbnails
+    document.querySelectorAll('.thumbnail-image').forEach(thumb => {
+        thumb.classList.remove('active');
+    });
+    
+    // Add active class to clicked thumbnail
+    thumbnail.classList.add('active');
+    
+    // Change main image
+    document.getElementById('mainImage').src = thumbnail.src;
+    currentImageIndex = index;
+}
 
-            // Update active thumbnail
-            document.querySelectorAll('.product-thumbnail').forEach(thumb => {
-                thumb.classList.remove('active');
-            });
-            element.classList.add('active');
+function increaseQuantity() {
+    const input = document.getElementById('quantityInput');
+    const currentValue = parseInt(input.value);
+    if (currentValue < 10) {
+        input.value = currentValue + 1;
+    }
+}
+
+function decreaseQuantity() {
+    const input = document.getElementById('quantityInput');
+    const currentValue = parseInt(input.value);
+    if (currentValue > 1) {
+        input.value = currentValue - 1;
+    }
+}
+
+function addToCart() {
+    const quantity = document.getElementById('quantityInput').value;
+    
+    // Show success message
+    showToast('Đã thêm ' + quantity + ' sản phẩm vào giỏ hàng!', 'success');
+    
+    // Add cart animation
+    const button = document.querySelector('.btn-add-to-cart');
+    button.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+        button.style.transform = 'scale(1)';
+    }, 150);
+}
+
+function toggleWishlist() {
+    const button = document.querySelector('.btn-wishlist i');
+    
+    if (button.classList.contains('far')) {
+        button.classList.remove('far');
+        button.classList.add('fas');
+        showToast('Đã thêm vào danh sách yêu thích!', 'info');
+    } else {
+        button.classList.remove('fas');
+        button.classList.add('far');
+        showToast('Đã xóa khỏi danh sách yêu thích!', 'warning');
+    }
+}
+
+function shareProduct() {
+    if (navigator.share) {
+        navigator.share({
+            title: '@Model.Name',
+            text: 'Xem sản phẩm tuyệt vời này!',
+            url: window.location.href
+        });
+    } else {
+        // Fallback: copy to clipboard
+        navigator.clipboard.writeText(window.location.href);
+        showToast('Đã sao chép link sản phẩm!', 'info');
+    }
+}
+
+function showToast(message, type = 'success') {
+    // Create toast element
+    const toast = document.createElement('div');
+    toast.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+    toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    toast.innerHTML = `
+        <i class="fas fa-check-circle me-2"></i>${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    // Auto remove after 3 seconds
+    setTimeout(() => {
+        if (toast.parentNode) {
+            toast.parentNode.removeChild(toast);
         }
+    }, 3000);
+}
 
-        // Increase quantity
-        function increaseQuantity() {
-            var input = document.getElementById('quantityInput');
-            input.value = parseInt(input.value) + 1;
-        }
-
-        // Decrease quantity
-        function decreaseQuantity() {
-            var input = document.getElementById('quantityInput');
-            var value = parseInt(input.value);
-            if (value > 1) {
-                input.value = value - 1;
+// Keyboard navigation for image gallery
+document.addEventListener('keydown', function(e) {
+    if (images.length > 1) {
+        if (e.key === 'ArrowRight') {
+            const nextIndex = (currentImageIndex + 1) % images.length;
+            const nextThumbnail = document.querySelectorAll('.thumbnail-image')[nextIndex];
+            if (nextThumbnail) {
+                changeImage(nextThumbnail, nextIndex);
+            }
+        } else if (e.key === 'ArrowLeft') {
+            const prevIndex = currentImageIndex === 0 ? images.length - 1 : currentImageIndex - 1;
+            const prevThumbnail = document.querySelectorAll('.thumbnail-image')[prevIndex];
+            if (prevThumbnail) {
+                changeImage(prevThumbnail, prevIndex);
             }
         }
-
-        // Add to cart function
-        function addToCart() {
-            var quantity = document.getElementById('quantityInput').value;
-            // For now, just show a toast notification
-            showToast('Đã thêm Bánh Mousse Matcha vào giỏ hàng!');
-
-            // In a real application, you would call an AJAX function to add to cart
-            // $.ajax({
-            //     url: '@Url.Action("AddToCart", "Cart")',
-            //     type: 'POST',
-            //     data: { productId: @ViewBag.ProductId, quantity: quantity },
-            //     success: function(result) {
-            //         if (result.success) {
-            //             showToast(result.message);
-            //         }
-            //     }
-            // });
-        }
-
-        // Add related product to cart
-        function addRelatedToCart(productId, productName, price) {
-            // For now, just show a toast notification
-            showToast('Đã thêm ' + productName + ' vào giỏ hàng!');
-
-            // In a real application, you would call an AJAX function
-        }
-
-        // Show toast notification
-        function showToast(message) {
-            var toast = $('<div class="toast"><i class="fas fa-check-circle"></i>' + message + '</div>');
-            $('.toast-container').append(toast);
-
-            setTimeout(function() {
-                toast.addClass('show');
-            }, 100);
-
-            setTimeout(function() {
-                toast.removeClass('show');
-                setTimeout(function() {
-                    toast.remove();
-                }, 300);
-            }, 3000);
-        }
-
-        $(document).ready(function() {
-            // Handle review form submission
-            $('#reviewForm').submit(function(e) {
-                e.preventDefault();
-
-                // Get form data
-                var name = $('#reviewName').val();
-                var rating = $('input[name="rating"]:checked').val() || 5;
-
-                // Show confirmation
-                alert('Cảm ơn ' + name + ' đã gửi đánh giá ' + rating + ' sao!');
-
-                // Reset form
-                this.reset();
-            });
-        });
-    </script>
-}
+    }
+});
+</script>
