@@ -17,6 +17,7 @@ namespace WebBanDoTrangMieng
         public Order()
         {
             this.Order_Product = new HashSet<Order_Product>();
+            this.Payments = new HashSet<Payment>();
             this.Reviews = new HashSet<Review>();
         }
     
@@ -29,6 +30,7 @@ namespace WebBanDoTrangMieng
     
         public virtual User User { get; set; }
         public virtual ICollection<Order_Product> Order_Product { get; set; }
+        public virtual ICollection<Payment> Payments { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
     }
 }

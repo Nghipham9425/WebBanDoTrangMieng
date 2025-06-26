@@ -422,16 +422,20 @@ document.addEventListener("visibilitychange", function () {
 // Back to top button
 $(window).scroll(function () {
   if ($(this).scrollTop() > 300) {
-    $("#backToTop").fadeIn();
+    $("#backToTop").fadeIn().addClass("animate-pulse");
+    // Remove pulse after 3 seconds
+    setTimeout(() => {
+      $("#backToTop").removeClass("animate-pulse");
+    }, 3000);
   } else {
-    $("#backToTop").fadeOut();
+    $("#backToTop").fadeOut().removeClass("animate-pulse");
   }
 });
 
 // Create back to top button
 $("body").append(`
-    <button id="backToTop" class="back-to-top" title="Về đầu trang">
-        <i class="fas fa-chevron-up"></i>
+    <button id="backToTop" class="back-to-top btn" title="Về đầu trang" aria-label="Lên đầu trang">
+        <i class="fas fa-arrow-up"></i>
     </button>
 `);
 

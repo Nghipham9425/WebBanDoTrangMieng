@@ -1,309 +1,28 @@
 /* ==========================================
-   OPTIMIZED SITE.CSS - MATCHA GREEN THEME
+   SITE.CSS - OPTIMIZED WITH BOOTSTRAP
    ========================================== */
 
-/* Reset and base styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* CSS Variables - Matcha Green Theme */
+/* CSS Variables Override Bootstrap */
 :root {
-  --primary-matcha: #7d9e5f;
-  --secondary-matcha: #9bb377;
-  --dark-matcha: #4a5d37;
-  --light-matcha: #c8d4b8;
-  --cream-light: #f8faf5;
-  --cream-white: #ffffff;
-  --shadow-light: rgba(125, 158, 95, 0.1);
-  --shadow-medium: rgba(125, 158, 95, 0.2);
-  --transition: all 0.3s ease;
-}
-
-/* Body content */
-.body-content {
-  margin-top: 0;
-  padding: 0;
-  min-height: calc(100vh - 300px);
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 15px;
+  --bs-success: #7d9e5f;
+  --bs-success-rgb: 125, 158, 95;
 }
 
 /* ==========================================
-   MODERN BUTTON STYLES
+   GLOBAL OVERRIDES
    ========================================== */
-.btn-brown {
-  background: linear-gradient(
-    135deg,
-    var(--primary-matcha),
-    var(--secondary-matcha)
-  );
-  color: var(--cream-white);
-  border: none;
-  padding: 12px 25px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: var(--transition);
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 15px var(--shadow-light);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.btn-brown:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px var(--shadow-medium);
-  color: var(--cream-white);
-  text-decoration: none;
-}
-
-.btn-brown:active {
-  transform: translateY(-1px);
-}
-
-.btn-brown i {
-  margin-right: 8px;
-}
-
-/* Button variants */
-.btn-brown.btn-outline {
-  background: transparent;
-  color: var(--primary-matcha);
-  border: 2px solid var(--primary-matcha);
-  box-shadow: none;
-}
-
-.btn-brown.btn-outline:hover {
-  background: var(--primary-matcha);
-  color: var(--cream-white);
-}
-
-.btn-brown.btn-large {
-  padding: 15px 35px;
-  font-size: 16px;
-}
-
-.btn-brown.btn-small {
-  padding: 8px 16px;
-  font-size: 12px;
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial,
+    sans-serif;
 }
 
 /* ==========================================
-   ENHANCED FORM CONTROLS
+   CUSTOM ANIMATIONS
    ========================================== */
-.form-control {
-  border: 2px solid #e9ecef;
-  border-radius: 8px;
-  padding: 12px 15px;
-  font-size: 14px;
-  transition: var(--transition);
-  background: var(--cream-white);
-}
-
-.form-control:focus {
-  border-color: var(--primary-matcha);
-  box-shadow: 0 0 0 3px var(--shadow-light);
-  outline: none;
-}
-
-.form-control.is-invalid {
-  border-color: #dc3545;
-}
-
-.form-control.is-valid {
-  border-color: #28a745;
-}
-
-/* ==========================================
-   MODERN CARDS
-   ========================================== */
-.card-modern {
-  background: var(--cream-white);
-  border-radius: 15px;
-  border: none;
-  box-shadow: 0 10px 30px var(--shadow-light);
-  transition: var(--transition);
-  overflow: hidden;
-}
-
-.card-modern:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 40px var(--shadow-medium);
-}
-
-.card-header-modern {
-  background: linear-gradient(
-    135deg,
-    var(--primary-matcha),
-    var(--secondary-matcha)
-  );
-  color: var(--cream-white);
-  padding: 20px;
-  border-bottom: none;
-}
-
-/* ==========================================
-   BADGES & LABELS
-   ========================================== */
-.badge-brown {
-  background: var(--primary-matcha);
-  color: var(--cream-white);
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.badge-outline-brown {
-  background: transparent;
-  color: var(--primary-matcha);
-  border: 2px solid var(--primary-matcha);
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-/* ==========================================
-   UTILITY CLASSES
-   ========================================== */
-.text-brown {
-  color: var(--primary-matcha) !important;
-}
-
-.text-brown-dark {
-  color: var(--dark-matcha) !important;
-}
-
-.bg-brown {
-  background-color: var(--primary-matcha) !important;
-}
-
-.bg-brown-light {
-  background-color: var(--light-matcha) !important;
-}
-
-.border-brown {
-  border-color: var(--primary-matcha) !important;
-}
-
-.shadow-brown {
-  box-shadow: 0 5px 15px var(--shadow-light) !important;
-}
-
-.shadow-brown-lg {
-  box-shadow: 0 10px 30px var(--shadow-medium) !important;
-}
-
-/* ==========================================
-   SECTION STYLES
-   ========================================== */
-.section-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: var(--dark-matcha);
-  margin-bottom: 20px;
-  position: relative;
-  padding-bottom: 15px;
-}
-
-.section-title::after {
-  content: "";
-  position: absolute;
-  width: 60%;
-  height: 4px;
-  background: linear-gradient(
-    135deg,
-    var(--primary-matcha),
-    var(--secondary-matcha)
-  );
-  bottom: 0;
-  left: 0;
-  border-radius: 2px;
-}
-
-.section-subtitle {
-  color: var(--secondary-matcha);
-  font-size: 18px;
-  margin-bottom: 40px;
-  line-height: 1.6;
-}
-
-/* ==========================================
-   LINKS
-   ========================================== */
-a {
-  color: var(--primary-matcha);
-  text-decoration: none;
-  transition: var(--transition);
-}
-
-a:hover {
-  color: var(--dark-matcha);
-  text-decoration: underline;
-}
-
-/* ==========================================
-   LIST STYLES
-   ========================================== */
-.list-group-item {
-  border: none;
-  padding: 15px 20px;
-  background: var(--cream-white);
-  margin-bottom: 5px;
-  border-radius: 8px;
-  border-left: 4px solid var(--light-matcha);
-  transition: var(--transition);
-}
-
-.list-group-item:hover {
-  background: var(--cream-light);
-  border-left-color: var(--primary-matcha);
-  transform: translateX(5px);
-}
-
-.list-group-item.active {
-  background: var(--primary-matcha);
-  color: var(--cream-white);
-  border-left-color: var(--dark-matcha);
-}
-
-/* ==========================================
-   FORM RESPONSIVE
-   ========================================== */
-input:not(.form-control),
-select:not(.form-control),
-textarea:not(.form-control) {
-  max-width: 280px;
-}
-
-.form-control {
-  max-width: 100%;
-  width: 100%;
-}
-
-/* ==========================================
-   ANIMATIONS
-   ========================================== */
-.fade-in-up {
-  animation: fadeInUp 0.6s ease-out;
-}
-
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -311,69 +30,19 @@ textarea:not(.form-control) {
   }
 }
 
-.slide-in-left {
-  animation: slideInLeft 0.6s ease-out;
-}
-
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.bounce-in {
-  animation: bounceIn 0.6s ease-out;
-}
-
-@keyframes bounceIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.05);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
+.fade-in-up {
+  animation: fadeInUp 0.5s ease-out;
 }
 
 /* ==========================================
-   RESPONSIVE HELPERS
+   HOVER EFFECTS
    ========================================== */
-@media (max-width: 768px) {
-  .container {
-    padding: 0 10px;
-  }
-
-  .section-title {
-    font-size: 2rem;
-  }
-
-  .btn-brown.btn-large {
-    padding: 12px 25px;
-    font-size: 14px;
-  }
-
-  .card-modern {
-    margin-bottom: 20px;
-  }
+.hover-lift:hover {
+  transform: translateY(-3px);
+  transition: all 0.3s ease;
 }
 
-@media (max-width: 480px) {
-  .section-title {
-    font-size: 1.6rem;
-  }
-
-  .btn-brown {
-    width: 100%;
-    justify-content: center;
-  }
+.hover-shadow:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+  transition: all 0.3s ease;
 }

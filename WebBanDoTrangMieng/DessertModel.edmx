@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="QLStoreTrangMiengModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="QLStoreTrangMiengModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Category">
           <Key>
             <PropertyRef Name="CategoryId" />
@@ -29,10 +29,29 @@
             <PropertyRef Name="OrderId" />
             <PropertyRef Name="ProductId" />
           </Key>
-          <Property Name="Quantity" Type="int" Nullable="false" />
-          <Property Name="UnitPrice" Type="decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="OrderId" Type="int" Nullable="false" />
           <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="Price" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Payment">
+          <Key>
+            <PropertyRef Name="PaymentId" />
+          </Key>
+          <Property Name="PaymentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderId" Type="int" Nullable="false" />
+          <Property Name="PaymentMethodId" Type="int" Nullable="false" />
+          <Property Name="Amount" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="PaymentDate" Type="datetime2" Precision="7" />
+          <Property Name="Status" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="PaymentMethod">
+          <Key>
+            <PropertyRef Name="PaymentMethodId" />
+          </Key>
+          <Property Name="PaymentMethodId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MethodName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -41,8 +60,8 @@
           <Property Name="ProductId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="Price" Type="decimal" Precision="10" Scale="2" Nullable="false" />
-          <Property Name="ImageUrl" Type="nvarchar" MaxLength="500" />
           <Property Name="Description" Type="nvarchar" MaxLength="1000" />
+          <Property Name="ImageUrl" Type="nvarchar" MaxLength="500" />
           <Property Name="StockQuantity" Type="int" />
           <Property Name="CategoryId" Type="int" Nullable="false" />
           <Property Name="CreatedDate" Type="datetime2" Precision="7" />
@@ -72,12 +91,10 @@
             <PropertyRef Name="ReviewId" />
           </Key>
           <Property Name="ReviewId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Rating" Type="int" Nullable="false" />
-          <Property Name="Comment" Type="nvarchar" MaxLength="1000" />
-          <Property Name="CreatedDate" Type="datetime2" Precision="7" />
-          <Property Name="ProductId" Type="int" Nullable="false" />
-          <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="OrderId" Type="int" Nullable="false" />
+          <Property Name="Comment" Type="nvarchar" MaxLength="1000" />
+          <Property Name="Rating" Type="int" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime2" Precision="7" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -85,15 +102,15 @@
           </Key>
           <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserName" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="Email" Type="nvarchar" MaxLength="150" Nullable="false" />
-          <Property Name="Phone" Type="nvarchar" MaxLength="15" />
-          <Property Name="Role" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="Password" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Role" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="20" />
           <Property Name="Address" Type="nvarchar" MaxLength="500" />
-          <Property Name="CreatedDate" Type="datetime2" Precision="7" />
           <Property Name="IsActive" Type="bit" />
+          <Property Name="CreatedDate" Type="datetime2" Precision="7" />
         </EntityType>
-        <Association Name="FK__Order__UserId__571DF1D5">
+        <Association Name="FK__Order__UserId__5FB337D6">
           <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="Order" Type="Self.Order" Multiplicity="*" />
           <ReferentialConstraint>
@@ -105,7 +122,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Order_Pro__Order__628FA481">
+        <Association Name="FK__Order_Pro__Order__68487DD7">
           <End Role="Order" Type="Self.Order" Multiplicity="1" />
           <End Role="Order_Product" Type="Self.Order_Product" Multiplicity="*" />
           <ReferentialConstraint>
@@ -117,7 +134,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Order_Pro__Produ__6383C8BA">
+        <Association Name="FK__Order_Pro__Produ__693CA210">
           <End Role="Product" Type="Self.Product" Multiplicity="1" />
           <End Role="Order_Product" Type="Self.Order_Product" Multiplicity="*" />
           <ReferentialConstraint>
@@ -126,6 +143,30 @@
             </Principal>
             <Dependent Role="Order_Product">
               <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Payment__OrderId__6477ECF3">
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="Payment">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Payment__Payment__656C112C">
+          <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="1" />
+          <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentMethod">
+              <PropertyRef Name="PaymentMethodId" />
+            </Principal>
+            <Dependent Role="Payment">
+              <PropertyRef Name="PaymentMethodId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -141,7 +182,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Product_P__Produ__66603565">
+        <Association Name="FK__Product_P__Produ__5812160E">
           <End Role="Product" Type="Self.Product" Multiplicity="1" />
           <End Role="Product_Promotion" Type="Self.Product_Promotion" Multiplicity="*" />
           <ReferentialConstraint>
@@ -153,7 +194,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Product_P__Promo__6754599E">
+        <Association Name="FK__Product_P__Promo__59063A47">
           <End Role="Promotion" Type="Self.Promotion" Multiplicity="1" />
           <End Role="Product_Promotion" Type="Self.Product_Promotion" Multiplicity="*" />
           <ReferentialConstraint>
@@ -165,7 +206,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Review__OrderId__5FB337D6">
+        <Association Name="FK__Review__OrderId__6D0D32F4">
           <End Role="Order" Type="Self.Order" Multiplicity="1" />
           <End Role="Review" Type="Self.Review" Multiplicity="*" />
           <ReferentialConstraint>
@@ -177,77 +218,56 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Review__ProductI__5DCAEF64">
-          <End Role="Product" Type="Self.Product" Multiplicity="1" />
-          <End Role="Review" Type="Self.Review" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Product">
-              <PropertyRef Name="ProductId" />
-            </Principal>
-            <Dependent Role="Review">
-              <PropertyRef Name="ProductId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Review__UserId__5EBF139D">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="Review" Type="Self.Review" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="UserId" />
-            </Principal>
-            <Dependent Role="Review">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="QLStoreTrangMiengModelStoreContainer">
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Order_Product" EntityType="Self.Order_Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PaymentMethod" EntityType="Self.PaymentMethod" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product_Promotion" EntityType="Self.Product_Promotion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Promotion" EntityType="Self.Promotion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Review" EntityType="Self.Review" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Order__UserId__571DF1D5" Association="Self.FK__Order__UserId__571DF1D5">
+          <AssociationSet Name="FK__Order__UserId__5FB337D6" Association="Self.FK__Order__UserId__5FB337D6">
             <End Role="User" EntitySet="User" />
             <End Role="Order" EntitySet="Order" />
           </AssociationSet>
-          <AssociationSet Name="FK__Order_Pro__Order__628FA481" Association="Self.FK__Order_Pro__Order__628FA481">
+          <AssociationSet Name="FK__Order_Pro__Order__68487DD7" Association="Self.FK__Order_Pro__Order__68487DD7">
             <End Role="Order" EntitySet="Order" />
             <End Role="Order_Product" EntitySet="Order_Product" />
           </AssociationSet>
-          <AssociationSet Name="FK__Order_Pro__Produ__6383C8BA" Association="Self.FK__Order_Pro__Produ__6383C8BA">
+          <AssociationSet Name="FK__Order_Pro__Produ__693CA210" Association="Self.FK__Order_Pro__Produ__693CA210">
             <End Role="Product" EntitySet="Product" />
             <End Role="Order_Product" EntitySet="Order_Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Payment__OrderId__6477ECF3" Association="Self.FK__Payment__OrderId__6477ECF3">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="Payment" EntitySet="Payment" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Payment__Payment__656C112C" Association="Self.FK__Payment__Payment__656C112C">
+            <End Role="PaymentMethod" EntitySet="PaymentMethod" />
+            <End Role="Payment" EntitySet="Payment" />
           </AssociationSet>
           <AssociationSet Name="FK__Product__Categor__52593CB8" Association="Self.FK__Product__Categor__52593CB8">
             <End Role="Category" EntitySet="Category" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
-          <AssociationSet Name="FK__Product_P__Produ__66603565" Association="Self.FK__Product_P__Produ__66603565">
+          <AssociationSet Name="FK__Product_P__Produ__5812160E" Association="Self.FK__Product_P__Produ__5812160E">
             <End Role="Product" EntitySet="Product" />
             <End Role="Product_Promotion" EntitySet="Product_Promotion" />
           </AssociationSet>
-          <AssociationSet Name="FK__Product_P__Promo__6754599E" Association="Self.FK__Product_P__Promo__6754599E">
+          <AssociationSet Name="FK__Product_P__Promo__59063A47" Association="Self.FK__Product_P__Promo__59063A47">
             <End Role="Promotion" EntitySet="Promotion" />
             <End Role="Product_Promotion" EntitySet="Product_Promotion" />
           </AssociationSet>
-          <AssociationSet Name="FK__Review__OrderId__5FB337D6" Association="Self.FK__Review__OrderId__5FB337D6">
+          <AssociationSet Name="FK__Review__OrderId__6D0D32F4" Association="Self.FK__Review__OrderId__6D0D32F4">
             <End Role="Order" EntitySet="Order" />
             <End Role="Review" EntitySet="Review" />
           </AssociationSet>
-          <AssociationSet Name="FK__Review__ProductI__5DCAEF64" Association="Self.FK__Review__ProductI__5DCAEF64">
-            <End Role="Product" EntitySet="Product" />
-            <End Role="Review" EntitySet="Review" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Review__UserId__5EBF139D" Association="Self.FK__Review__UserId__5EBF139D">
-            <End Role="User" EntitySet="User" />
-            <End Role="Review" EntitySet="Review" />
-          </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="QLStoreTrangMiengModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -270,21 +290,44 @@
           <Property Name="PaymentMethod" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="UserId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="User" Relationship="Self.FK__Order__UserId__571DF1D5" FromRole="Order" ToRole="User" />
-          <NavigationProperty Name="Order_Product" Relationship="Self.FK__Order_Pro__Order__628FA481" FromRole="Order" ToRole="Order_Product" />
-          <NavigationProperty Name="Reviews" Relationship="Self.FK__Review__OrderId__5FB337D6" FromRole="Order" ToRole="Review" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Order__UserId__5FB337D6" FromRole="Order" ToRole="User" />
+          <NavigationProperty Name="Order_Product" Relationship="Self.FK__Order_Pro__Order__68487DD7" FromRole="Order" ToRole="Order_Product" />
+          <NavigationProperty Name="Payments" Relationship="Self.FK__Payment__OrderId__6477ECF3" FromRole="Order" ToRole="Payment" />
+          <NavigationProperty Name="Reviews" Relationship="Self.FK__Review__OrderId__6D0D32F4" FromRole="Order" ToRole="Review" />
         </EntityType>
         <EntityType Name="Order_Product">
           <Key>
             <PropertyRef Name="OrderId" />
             <PropertyRef Name="ProductId" />
           </Key>
-          <Property Name="Quantity" Type="Int32" Nullable="false" />
-          <Property Name="UnitPrice" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="OrderId" Type="Int32" Nullable="false" />
           <Property Name="ProductId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Order" Relationship="Self.FK__Order_Pro__Order__628FA481" FromRole="Order_Product" ToRole="Order" />
-          <NavigationProperty Name="Product" Relationship="Self.FK__Order_Pro__Produ__6383C8BA" FromRole="Order_Product" ToRole="Product" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Order" Relationship="Self.FK__Order_Pro__Order__68487DD7" FromRole="Order_Product" ToRole="Order" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__Order_Pro__Produ__693CA210" FromRole="Order_Product" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Payment">
+          <Key>
+            <PropertyRef Name="PaymentId" />
+          </Key>
+          <Property Name="PaymentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderId" Type="Int32" Nullable="false" />
+          <Property Name="PaymentMethodId" Type="Int32" Nullable="false" />
+          <Property Name="Amount" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="PaymentDate" Type="DateTime" Precision="7" />
+          <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Order" Relationship="Self.FK__Payment__OrderId__6477ECF3" FromRole="Payment" ToRole="Order" />
+          <NavigationProperty Name="PaymentMethod" Relationship="Self.FK__Payment__Payment__656C112C" FromRole="Payment" ToRole="PaymentMethod" />
+        </EntityType>
+        <EntityType Name="PaymentMethod">
+          <Key>
+            <PropertyRef Name="PaymentMethodId" />
+          </Key>
+          <Property Name="PaymentMethodId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MethodName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Payments" Relationship="Self.FK__Payment__Payment__656C112C" FromRole="PaymentMethod" ToRole="Payment" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -293,14 +336,13 @@
           <Property Name="ProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Price" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
-          <Property Name="ImageUrl" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Description" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="ImageUrl" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="StockQuantity" Type="Int32" />
           <Property Name="CategoryId" Type="Int32" Nullable="false" />
           <Property Name="CreatedDate" Type="DateTime" Precision="7" />
           <NavigationProperty Name="Category" Relationship="Self.FK__Product__Categor__52593CB8" FromRole="Product" ToRole="Category" />
-          <NavigationProperty Name="Order_Product" Relationship="Self.FK__Order_Pro__Produ__6383C8BA" FromRole="Product" ToRole="Order_Product" />
-          <NavigationProperty Name="Reviews" Relationship="Self.FK__Review__ProductI__5DCAEF64" FromRole="Product" ToRole="Review" />
+          <NavigationProperty Name="Order_Product" Relationship="Self.FK__Order_Pro__Produ__693CA210" FromRole="Product" ToRole="Order_Product" />
           <NavigationProperty Name="Promotions" Relationship="Self.Product_Promotion" FromRole="Product" ToRole="Promotion" />
         </EntityType>
         <EntityType Name="Promotion">
@@ -321,15 +363,11 @@
             <PropertyRef Name="ReviewId" />
           </Key>
           <Property Name="ReviewId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Rating" Type="Int32" Nullable="false" />
-          <Property Name="Comment" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedDate" Type="DateTime" Precision="7" />
-          <Property Name="ProductId" Type="Int32" Nullable="false" />
-          <Property Name="UserId" Type="Int32" Nullable="false" />
           <Property Name="OrderId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Order" Relationship="Self.FK__Review__OrderId__5FB337D6" FromRole="Review" ToRole="Order" />
-          <NavigationProperty Name="Product" Relationship="Self.FK__Review__ProductI__5DCAEF64" FromRole="Review" ToRole="Product" />
-          <NavigationProperty Name="User" Relationship="Self.FK__Review__UserId__5EBF139D" FromRole="Review" ToRole="User" />
+          <Property Name="Comment" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="Rating" Type="Int32" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="Order" Relationship="Self.FK__Review__OrderId__6D0D32F4" FromRole="Review" ToRole="Order" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -337,15 +375,14 @@
           </Key>
           <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Email" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Phone" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="Role" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Role" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedDate" Type="DateTime" Precision="7" />
           <Property Name="IsActive" Type="Boolean" />
-          <NavigationProperty Name="Orders" Relationship="Self.FK__Order__UserId__571DF1D5" FromRole="User" ToRole="Order" />
-          <NavigationProperty Name="Reviews" Relationship="Self.FK__Review__UserId__5EBF139D" FromRole="User" ToRole="Review" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__Order__UserId__5FB337D6" FromRole="User" ToRole="Order" />
         </EntityType>
         <Association Name="FK__Product__Categor__52593CB8">
           <End Role="Category" Type="Self.Category" Multiplicity="1" />
@@ -359,7 +396,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Order__UserId__571DF1D5">
+        <Association Name="FK__Order__UserId__5FB337D6">
           <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="Order" Type="Self.Order" Multiplicity="*" />
           <ReferentialConstraint>
@@ -371,7 +408,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Order_Pro__Order__628FA481">
+        <Association Name="FK__Order_Pro__Order__68487DD7">
           <End Role="Order" Type="Self.Order" Multiplicity="1" />
           <End Role="Order_Product" Type="Self.Order_Product" Multiplicity="*" />
           <ReferentialConstraint>
@@ -383,7 +420,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Review__OrderId__5FB337D6">
+        <Association Name="FK__Payment__OrderId__6477ECF3">
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="Payment">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Review__OrderId__6D0D32F4">
           <End Role="Order" Type="Self.Order" Multiplicity="1" />
           <End Role="Review" Type="Self.Review" Multiplicity="*" />
           <ReferentialConstraint>
@@ -395,7 +444,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Order_Pro__Produ__6383C8BA">
+        <Association Name="FK__Order_Pro__Produ__693CA210">
           <End Role="Product" Type="Self.Product" Multiplicity="1" />
           <End Role="Order_Product" Type="Self.Order_Product" Multiplicity="*" />
           <ReferentialConstraint>
@@ -407,27 +456,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Review__ProductI__5DCAEF64">
-          <End Role="Product" Type="Self.Product" Multiplicity="1" />
-          <End Role="Review" Type="Self.Review" Multiplicity="*" />
+        <Association Name="FK__Payment__Payment__656C112C">
+          <End Role="PaymentMethod" Type="Self.PaymentMethod" Multiplicity="1" />
+          <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Product">
-              <PropertyRef Name="ProductId" />
+            <Principal Role="PaymentMethod">
+              <PropertyRef Name="PaymentMethodId" />
             </Principal>
-            <Dependent Role="Review">
-              <PropertyRef Name="ProductId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Review__UserId__5EBF139D">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="Review" Type="Self.Review" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="UserId" />
-            </Principal>
-            <Dependent Role="Review">
-              <PropertyRef Name="UserId" />
+            <Dependent Role="Payment">
+              <PropertyRef Name="PaymentMethodId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -439,6 +476,8 @@
           <EntitySet Name="Categories" EntityType="Self.Category" />
           <EntitySet Name="Orders" EntityType="Self.Order" />
           <EntitySet Name="Order_Product" EntityType="Self.Order_Product" />
+          <EntitySet Name="Payments" EntityType="Self.Payment" />
+          <EntitySet Name="PaymentMethods" EntityType="Self.PaymentMethod" />
           <EntitySet Name="Products" EntityType="Self.Product" />
           <EntitySet Name="Promotions" EntityType="Self.Promotion" />
           <EntitySet Name="Reviews" EntityType="Self.Review" />
@@ -447,29 +486,29 @@
             <End Role="Category" EntitySet="Categories" />
             <End Role="Product" EntitySet="Products" />
           </AssociationSet>
-          <AssociationSet Name="FK__Order__UserId__571DF1D5" Association="Self.FK__Order__UserId__571DF1D5">
+          <AssociationSet Name="FK__Order__UserId__5FB337D6" Association="Self.FK__Order__UserId__5FB337D6">
             <End Role="User" EntitySet="Users" />
             <End Role="Order" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK__Order_Pro__Order__628FA481" Association="Self.FK__Order_Pro__Order__628FA481">
+          <AssociationSet Name="FK__Order_Pro__Order__68487DD7" Association="Self.FK__Order_Pro__Order__68487DD7">
             <End Role="Order" EntitySet="Orders" />
             <End Role="Order_Product" EntitySet="Order_Product" />
           </AssociationSet>
-          <AssociationSet Name="FK__Review__OrderId__5FB337D6" Association="Self.FK__Review__OrderId__5FB337D6">
+          <AssociationSet Name="FK__Payment__OrderId__6477ECF3" Association="Self.FK__Payment__OrderId__6477ECF3">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="Payment" EntitySet="Payments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Review__OrderId__6D0D32F4" Association="Self.FK__Review__OrderId__6D0D32F4">
             <End Role="Order" EntitySet="Orders" />
             <End Role="Review" EntitySet="Reviews" />
           </AssociationSet>
-          <AssociationSet Name="FK__Order_Pro__Produ__6383C8BA" Association="Self.FK__Order_Pro__Produ__6383C8BA">
+          <AssociationSet Name="FK__Order_Pro__Produ__693CA210" Association="Self.FK__Order_Pro__Produ__693CA210">
             <End Role="Product" EntitySet="Products" />
             <End Role="Order_Product" EntitySet="Order_Product" />
           </AssociationSet>
-          <AssociationSet Name="FK__Review__ProductI__5DCAEF64" Association="Self.FK__Review__ProductI__5DCAEF64">
-            <End Role="Product" EntitySet="Products" />
-            <End Role="Review" EntitySet="Reviews" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Review__UserId__5EBF139D" Association="Self.FK__Review__UserId__5EBF139D">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Review" EntitySet="Reviews" />
+          <AssociationSet Name="FK__Payment__Payment__656C112C" Association="Self.FK__Payment__Payment__656C112C">
+            <End Role="PaymentMethod" EntitySet="PaymentMethods" />
+            <End Role="Payment" EntitySet="Payments" />
           </AssociationSet>
           <AssociationSet Name="Product_Promotion" Association="Self.Product_Promotion">
             <End Role="Product" EntitySet="Products" />
@@ -506,10 +545,31 @@
           <EntitySetMapping Name="Order_Product">
             <EntityTypeMapping TypeName="QLStoreTrangMiengModel.Order_Product">
               <MappingFragment StoreEntitySet="Order_Product">
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Payments">
+            <EntityTypeMapping TypeName="QLStoreTrangMiengModel.Payment">
+              <MappingFragment StoreEntitySet="Payment">
+                <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="PaymentMethodId" ColumnName="PaymentMethodId" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PaymentMethods">
+            <EntityTypeMapping TypeName="QLStoreTrangMiengModel.PaymentMethod">
+              <MappingFragment StoreEntitySet="PaymentMethod">
+                <ScalarProperty Name="PaymentMethodId" ColumnName="PaymentMethodId" />
+                <ScalarProperty Name="MethodName" ColumnName="MethodName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -519,8 +579,8 @@
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
                 <ScalarProperty Name="StockQuantity" ColumnName="StockQuantity" />
                 <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
@@ -544,12 +604,10 @@
             <EntityTypeMapping TypeName="QLStoreTrangMiengModel.Review">
               <MappingFragment StoreEntitySet="Review">
                 <ScalarProperty Name="ReviewId" ColumnName="ReviewId" />
-                <ScalarProperty Name="Rating" ColumnName="Rating" />
-                <ScalarProperty Name="Comment" ColumnName="Comment" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -559,12 +617,12 @@
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="Role" ColumnName="Role" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

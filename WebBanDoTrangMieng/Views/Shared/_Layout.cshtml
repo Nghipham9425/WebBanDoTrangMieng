@@ -21,6 +21,9 @@
     
     <!-- Inter Font from Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Page-specific CSS -->
+    @RenderSection("styles", required: false)
 </head>
 
 <body>
@@ -83,13 +86,9 @@
                             <li>@Html.ActionLink("Tất cả sản phẩm", "Index", "Product", new { area = "" }, 
                                 new { @class = "dropdown-item text-dark" })</li>
                             <li><hr class="dropdown-divider"></li>
-                            <li>@Html.ActionLink("Bánh Flan", "Index", "Product", new { category = "flan" }, 
+                            <li>@Html.ActionLink("Bánh Tráng Miệng", "Index", "Product", new { categoryId = 1 }, 
                                 new { @class = "dropdown-item text-dark" })</li>
-                            <li>@Html.ActionLink("Tiramisu", "Index", "Product", new { category = "tiramisu" }, 
-                                new { @class = "dropdown-item text-dark" })</li>
-                            <li>@Html.ActionLink("Cheesecake", "Index", "Product", new { category = "cheesecake" }, 
-                                new { @class = "dropdown-item text-dark" })</li>
-                            <li>@Html.ActionLink("Pudding", "Index", "Product", new { category = "pudding" }, 
+                            <li>@Html.ActionLink("Nước Uống", "Index", "Product", new { categoryId = 2 }, 
                                 new { @class = "dropdown-item text-dark" })</li>
                         </ul>
                     </li>
@@ -240,28 +239,10 @@
                     <h5 class="text-success mb-3">Danh mục</h5>
                     <ul class="list-unstyled">
                         <li class="mb-2">
-                            <a href="#" class="text-light text-decoration-none">
-                                <i class="fas fa-cookie-bite me-2 text-success"></i>
-                                Bánh Flan
-                            </a>
+                            @Html.ActionLink("Bánh Tráng Miệng", "Index", "Product", new { categoryId = 1 }, new { @class = "text-light text-decoration-none" })
                         </li>
                         <li class="mb-2">
-                            <a href="#" class="text-light text-decoration-none">
-                                <i class="fas fa-birthday-cake me-2 text-success"></i>
-                                Tiramisu
-                            </a>
-                        </li>
-                        <li class="mb-2">
-                            <a href="#" class="text-light text-decoration-none">
-                                <i class="fas fa-cheese me-2 text-success"></i>
-                                Cheesecake
-                            </a>
-                        </li>
-                        <li class="mb-2">
-                            <a href="#" class="text-light text-decoration-none">
-                                <i class="fas fa-ice-cream me-2 text-success"></i>
-                                Pudding
-                            </a>
+                            @Html.ActionLink("Nước Uống", "Index", "Product", new { categoryId = 2 }, new { @class = "text-light text-decoration-none" })
                         </li>
                     </ul>
                 </div>
@@ -339,17 +320,17 @@
                 
                 <div class="modal-body p-0">
                     <!-- Nav Tabs -->
-                    <ul class="nav nav-tabs nav-fill bg-light" role="tablist">
+                    <ul class="nav nav-tabs nav-fill bg-light auth-tabs" role="tablist">
                         <li class="nav-item">
-                            <button class="nav-link active text-success fw-semibold py-3 position-relative" 
-                                    data-bs-toggle="tab" data-bs-target="#loginTab" type="button">
+                            <button class="nav-link active text-success fw-semibold py-3 position-relative auth-tab" 
+                                    data-bs-toggle="tab" data-bs-target="#loginForm" data-target="loginForm" type="button">
                                 <i class="fas fa-sign-in-alt me-2"></i>
                                 Đăng nhập
                             </button>
                         </li>
                         <li class="nav-item">
-                            <button class="nav-link text-success fw-semibold py-3 position-relative" 
-                                    data-bs-toggle="tab" data-bs-target="#registerTab" type="button">
+                            <button class="nav-link text-success fw-semibold py-3 position-relative auth-tab" 
+                                    data-bs-toggle="tab" data-bs-target="#registerForm" data-target="registerForm" type="button">
                                 <i class="fas fa-user-plus me-2"></i>
                                 Đăng ký
                             </button>
@@ -359,26 +340,27 @@
                     <!-- Tab Content -->
                     <div class="tab-content p-4">
                         <!-- Login Form -->
-                        <div class="tab-pane fade show active" id="loginTab">
-                            <form>
+                        <div class="tab-pane fade show active auth-form" id="loginForm">
+                            <form id="loginFormSubmit">
+                                @Html.AntiForgeryToken()
                                 <div class="mb-3">
                                     <label class="form-label text-success fw-semibold">
                                         <i class="fas fa-envelope me-2"></i>
                                         Email
                                     </label>
-                                    <input type="email" class="form-control" 
-                                           placeholder="Nhập email của bạn">
+                                    <input type="email" class="form-control" id="loginEmail" name="Email"
+                                           placeholder="Nhập email của bạn" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label text-success fw-semibold">
                                         <i class="fas fa-lock me-2"></i>
                                         Mật khẩu
                                     </label>
-                                    <input type="password" class="form-control" 
-                                           placeholder="Nhập mật khẩu">
+                                    <input type="password" class="form-control" id="loginPassword" name="Password"
+                                           placeholder="Nhập mật khẩu" required>
                                 </div>
                                 <div class="form-check mb-3">
-                                    <input type="checkbox" class="form-check-input" id="rememberMe">
+                                    <input type="checkbox" class="form-check-input" id="rememberMe" name="RememberMe">
                                     <label class="form-check-label" for="rememberMe">
                                         Ghi nhớ đăng nhập
                                     </label>
@@ -388,7 +370,7 @@
                                     Đăng nhập
                                 </button>
                                 <div class="text-center mt-3">
-                                    <a href="#" class="text-success text-decoration-none">
+                                    <a href="#" class="text-success text-decoration-none" id="forgotPassword">
                                         Quên mật khẩu?
                                     </a>
                                 </div>
@@ -396,45 +378,89 @@
                         </div>
 
                         <!-- Register Form -->
-                        <div class="tab-pane fade" id="registerTab">
-                            <form>
+                        <div class="tab-pane fade auth-form" id="registerForm">
+                            <form id="registerFormSubmit">
+                                @Html.AntiForgeryToken()
                                 <div class="mb-3">
                                     <label class="form-label text-success fw-semibold">
                                         <i class="fas fa-user me-2"></i>
                                         Họ và tên
                                     </label>
-                                    <input type="text" class="form-control" 
-                                           placeholder="Nhập họ và tên">
+                                    <input type="text" class="form-control" id="fullName" name="UserName"
+                                           placeholder="Nhập họ và tên" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label text-success fw-semibold">
                                         <i class="fas fa-envelope me-2"></i>
                                         Email
                                     </label>
-                                    <input type="email" class="form-control" 
-                                           placeholder="Nhập email của bạn">
+                                    <input type="email" class="form-control" id="registerEmail" name="Email"
+                                           placeholder="Nhập email của bạn" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-success fw-semibold">
+                                        <i class="fas fa-phone me-2"></i>
+                                        Số điện thoại
+                                    </label>
+                                    <input type="tel" class="form-control" id="phone" name="Phone"
+                                           placeholder="Nhập số điện thoại">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label text-success fw-semibold">
                                         <i class="fas fa-lock me-2"></i>
                                         Mật khẩu
                                     </label>
-                                    <input type="password" class="form-control" 
-                                           placeholder="Nhập mật khẩu (tối thiểu 6 ký tự)">
+                                    <input type="password" class="form-control" id="registerPassword" name="Password"
+                                           placeholder="Nhập mật khẩu (tối thiểu 6 ký tự)" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label text-success fw-semibold">
                                         <i class="fas fa-lock me-2"></i>
                                         Xác nhận mật khẩu
                                     </label>
-                                    <input type="password" class="form-control" 
-                                           placeholder="Nhập lại mật khẩu">
+                                    <input type="password" class="form-control" id="confirmPassword" name="ConfirmPassword"
+                                           placeholder="Nhập lại mật khẩu" required>
                                 </div>
                                 <button type="submit" class="btn btn-success w-100 fw-semibold text-uppercase">
                                     <i class="fas fa-user-plus me-2"></i>
                                     Đăng ký
                                 </button>
                             </form>
+                        </div>
+
+                        <!-- Reset Password Form -->
+                        <div class="tab-pane fade auth-form" id="resetPasswordForm" style="display: none;">
+                            <div class="text-center mb-4">
+                                <i class="fas fa-key text-success fs-1"></i>
+                                <h4 class="text-success mt-2">Quên mật khẩu?</h4>
+                                <p class="text-muted">Nhập email để nhận link reset mật khẩu</p>
+                            </div>
+                            <form id="resetPasswordFormSubmit">
+                                <div class="mb-3">
+                                    <label class="form-label text-success fw-semibold">
+                                        <i class="fas fa-envelope me-2"></i>
+                                        Email
+                                    </label>
+                                    <input type="email" class="form-control" id="resetEmail" name="Email"
+                                           placeholder="Nhập email đã đăng ký" required>
+                                </div>
+                                <button type="submit" class="btn btn-success w-100 fw-semibold text-uppercase mb-3">
+                                    <i class="fas fa-paper-plane me-2"></i>
+                                    Gửi link reset
+                                </button>
+                                <button type="button" class="btn btn-outline-success w-100" id="backToLogin">
+                                    <i class="fas fa-arrow-left me-2"></i>
+                                    Quay lại đăng nhập
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!-- Alert Messages -->
+                    <div id="authAlerts" class="px-4 pb-3" style="display: none;">
+                        <div class="alert alert-dismissible fade show" role="alert">
+                            <span id="authMessage"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
                     </div>
                 </div>

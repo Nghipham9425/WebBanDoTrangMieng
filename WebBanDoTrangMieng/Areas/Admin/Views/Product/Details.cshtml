@@ -1,7 +1,467 @@
-﻿
+﻿@model WebBanDoTrangMieng.Product
+
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Chi tiết sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2>Details</h2>
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="bg-white rounded-3 p-4 shadow-sm">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <a href="@Url.Action("Index")" class="btn btn-outline-secondary me-3">
+                            <i class="fas fa-arrow-left"></i>
+                        </a>
+                        <div>
+                            <h4 class="fw-bold text-primary mb-2">
+                                <i class="fas fa-eye me-2"></i>Chi tiết sản phẩm
+                            </h4>
+                            <p class="text-muted mb-0">Thông tin chi tiết của sản phẩm #@Model.ProductId</p>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="@Url.Action("Edit", new { id = Model.ProductId })" class="btn btn-warning">
+                            <i class="fas fa-edit me-2"></i>Chỉnh sửa
+                        </a>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                            <i class="fas fa-trash me-2"></i>Xóa
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left Column - Product Image -->
+        <div class="col-lg-4">
+            <div class="bg-white rounded-3 p-4 shadow-sm">
+                <h5 class="fw-bold mb-4">
+                    <i class="fas fa-image me-2 text-success"></i>
+                    Hình ảnh sản phẩm
+                </h5>
+                
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    if (Model.ImageUrl.Contains(","))
+                    {
+                        var images = Model.ImageUrl.Split(',').Select(url => url.Trim()).ToArray();
+                        var firstImage = images.FirstOrDefault();
+                        
+                        <div class="text-center">
+                            <img id="mainImage" src="@firstImage" alt="@Model.Name" 
+                                 class="img-fluid rounded-3 shadow-sm" 
+                                 style="max-height: 400px; object-fit: cover; cursor: pointer;"
+                                 onclick="openImageModal('@firstImage', '@Model.Name')">
+                            <div class="mt-3">
+                                <span class="badge bg-info">
+                                    <i class="fas fa-images me-1"></i>@images.Length hình ảnh
+                                </span>
+                                <button type="button" class="btn btn-outline-primary btn-sm ms-2" onclick="openImageModal('@firstImage', '@Model.Name')">
+                                    <i class="fas fa-expand me-1"></i>Xem lớn
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Image Thumbnails -->
+                        <div class="mt-3">
+                            <h6 class="fw-bold mb-2">Tất cả hình ảnh:</h6>
+                            <div class="row g-2">
+                                @for (int i = 0; i < images.Length; i++)
+                                {
+                                    <div class="col-4">
+                                        <img src="@images[i]" alt="@Model.Name @(i+1)" 
+                                             class="img-fluid rounded border thumbnail-img @(i == 0 ? "border-primary" : "")" 
+                                             style="height: 80px; width: 100%; object-fit: cover; cursor: pointer;"
+                                             onclick="changeMainImage('@images[i]', this)"
+                                             title="Ảnh @(i+1) - Click để xem">
+                                    </div>
+                                }
+                            </div>
+                            <div class="mt-2 text-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Click vào thumbnail để chuyển ảnh, click ảnh chính để xem full size
+                                </small>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center">
+                            <img src="@Model.ImageUrl" alt="@Model.Name" 
+                                 class="img-fluid rounded-3 shadow-sm" 
+                                 style="max-height: 400px; object-fit: cover; cursor: pointer;"
+                                 onclick="openImageModal('@Model.ImageUrl', '@Model.Name')">
+                            <div class="mt-3">
+                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="openImageModal('@Model.ImageUrl', '@Model.Name')">
+                                    <i class="fas fa-expand me-1"></i>Xem lớn
+                                </button>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="text-center p-5 bg-light rounded-3">
+                        <i class="fas fa-image fa-3x text-muted mb-3"></i>
+                        <p class="text-muted mb-0">Chưa có hình ảnh</p>
+                    </div>
+                }
+
+                <!-- Quick Actions -->
+                <div class="mt-4 pt-4 border-top">
+                    <h6 class="fw-bold mb-3">Thao tác nhanh</h6>
+                    <div class="d-grid gap-2">
+                        <a href="@Url.Action("Edit", new { id = Model.ProductId })" class="btn btn-outline-warning">
+                            <i class="fas fa-edit me-2"></i>Chỉnh sửa sản phẩm
+                        </a>
+                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                            <i class="fas fa-trash me-2"></i>Xóa sản phẩm
+                        </button>
+                        <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                            <i class="fas fa-list me-2"></i>Danh sách sản phẩm
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column - Product Information -->
+        <div class="col-lg-8">
+            <div class="bg-white rounded-3 p-4 shadow-sm">
+                <div class="d-flex align-items-start justify-content-between mb-4">
+                    <div>
+                        <h3 class="fw-bold text-dark mb-2">@Model.Name</h3>
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="badge bg-success">
+                                <i class="fas fa-check-circle me-1"></i>Đang hoạt động
+                            </span>
+                            @if (Model.StockQuantity.HasValue)
+                            {
+                                if (Model.StockQuantity.Value > 10)
+                                {
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-check-circle me-1"></i>Còn hàng
+                                    </span>
+                                }
+                                else if (Model.StockQuantity.Value > 0)
+                                {
+                                    <span class="badge bg-warning">
+                                        <i class="fas fa-exclamation-triangle me-1"></i>Sắp hết
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">
+                                        <i class="fas fa-times-circle me-1"></i>Hết hàng
+                                    </span>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <h4 class="fw-bold text-success mb-0">
+                            @if (Model.Price > 0)
+                            {
+                                @(string.Format("{0:N0}", Model.Price))<span class="fs-6">₫</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted">Chưa có giá</span>
+                            }
+                        </h4>
+                    </div>
+                </div>
+
+                <!-- Product Details -->
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3">
+                            <h6 class="fw-bold mb-3 text-primary">
+                                <i class="fas fa-info-circle me-2"></i>Thông tin cơ bản
+                            </h6>
+                            <div class="row g-2">
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-between py-2 border-bottom">
+                                        <span class="text-muted">Mã sản phẩm:</span>
+                                        <span class="fw-medium">#@Model.ProductId</span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-between py-2 border-bottom">
+                                        <span class="text-muted">Danh mục:</span>
+                                        <span class="fw-medium">
+                                            @if (Model.Category != null)
+                                            {
+                                                @Model.Category.Name
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">Chưa phân loại</span>
+                                            }
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-between py-2 border-bottom">
+                                        <span class="text-muted">Giá bán:</span>
+                                        <span class="fw-medium text-success">
+                                            @if (Model.Price > 0)
+                                            {
+                                                @(string.Format("{0:N0}₫", Model.Price))
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">Chưa cập nhật</span>
+                                            }
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-between py-2">
+                                        <span class="text-muted">Tồn kho:</span>
+                                        <span class="fw-medium">
+                                            @if (Model.StockQuantity.HasValue)
+                                            {
+                                                @Model.StockQuantity.Value <span class="text-muted">sản phẩm</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">Chưa cập nhật</span>
+                                            }
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3">
+                            <h6 class="fw-bold mb-3 text-info">
+                                <i class="fas fa-calendar me-2"></i>Thông tin thời gian
+                            </h6>
+                            <div class="row g-2">
+                                @if (Model.CreatedDate.HasValue)
+                                {
+                                    <div class="col-12">
+                                        <div class="d-flex justify-content-between py-2 border-bottom">
+                                            <span class="text-muted">Ngày tạo:</span>
+                                            <span class="fw-medium">@Model.CreatedDate.Value.ToString("dd/MM/yyyy")</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="d-flex justify-content-between py-2 border-bottom">
+                                            <span class="text-muted">Thời gian:</span>
+                                            <span class="fw-medium">@Model.CreatedDate.Value.ToString("HH:mm:ss")</span>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-between py-2 border-bottom">
+                                        <span class="text-muted">Trạng thái:</span>
+                                        <span class="badge bg-success">Đang hoạt động</span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-between py-2">
+                                        <span class="text-muted">Hiển thị:</span>
+                                        <span class="badge bg-info">Công khai</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Description -->
+                <div class="mt-4 pt-4 border-top">
+                    <h6 class="fw-bold mb-3">
+                        <i class="fas fa-file-text me-2 text-warning"></i>Mô tả sản phẩm
+                    </h6>
+                    @if (!string.IsNullOrEmpty(Model.Description))
+                    {
+                        <div class="p-3 bg-light rounded-3">
+                            <p class="mb-0">@Html.Raw(Html.Encode(Model.Description).ToString().Replace("\n", "<br />"))</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="p-3 bg-light rounded-3 text-center">
+                            <i class="fas fa-file-text fa-2x text-muted mb-2"></i>
+                            <p class="text-muted mb-0">Chưa có mô tả cho sản phẩm này</p>
+                        </div>
+                    }
+                </div>
+
+                <!-- Image URL Info -->
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <div class="mt-4 pt-4 border-top">
+                        <h6 class="fw-bold mb-3">
+                            <i class="fas fa-link me-2 text-secondary"></i>Thông tin hình ảnh
+                        </h6>
+                        <div class="p-3 bg-light rounded-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-muted">URL hình ảnh:</span>
+                                <div class="d-flex align-items-center gap-2">
+                                    <code class="bg-white px-2 py-1 rounded">@Model.ImageUrl</code>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="copyToClipboard('@Model.ImageUrl')">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Image Full Size Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">
+                    <i class="fas fa-image me-2"></i>Xem hình ảnh
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" alt="" class="img-fluid rounded" style="max-height: 70vh;">
+                <div class="mt-3">
+                    <p id="modalImageName" class="text-muted mb-0"></p>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Đóng
+                </button>
+                <button type="button" class="btn btn-primary" onclick="downloadImage()">
+                    <i class="fas fa-download me-2"></i>Tải về
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger" id="deleteModalLabel">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Xác nhận xóa
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <i class="fas fa-trash fa-3x text-danger mb-3"></i>
+                    <h6>Bạn có chắc chắn muốn xóa sản phẩm này?</h6>
+                    <p class="text-muted mb-0">
+                        <strong>@Model.Name</strong><br>
+                        Thao tác này không thể hoàn tác!
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Hủy bỏ
+                </button>
+                @using (Html.BeginForm("Delete", "Product", new { id = Model.ProductId }, FormMethod.Post, new { @class = "d-inline" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-2"></i>Xóa sản phẩm
+                    </button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                // Show success message
+                const toast = document.createElement('div');
+                toast.className = 'toast align-items-center text-white bg-success border-0 position-fixed top-0 end-0 m-3';
+                toast.style.zIndex = '9999';
+                toast.innerHTML = `
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <i class="fas fa-check me-2"></i>Đã sao chép URL vào clipboard!
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                `;
+                document.body.appendChild(toast);
+                
+                const bsToast = new bootstrap.Toast(toast);
+                bsToast.show();
+                
+                setTimeout(() => {
+                    toast.remove();
+                }, 3000);
+            }).catch(function(err) {
+                console.error('Không thể sao chép: ', err);
+            });
+        }
+
+        function changeMainImage(imageSrc, thumbnailElement) {
+            // Change main image
+            const mainImage = document.getElementById('mainImage');
+            if (mainImage) {
+                mainImage.src = imageSrc;
+                // Update main image onclick to show correct image in modal
+                mainImage.setAttribute('onclick', `openImageModal('${imageSrc}', '@Model.Name')`);
+            }
+            
+            // Update thumbnail borders
+            const thumbnails = document.querySelectorAll('.thumbnail-img');
+            thumbnails.forEach(thumb => {
+                thumb.classList.remove('border-primary');
+                thumb.classList.add('border');
+            });
+            
+            // Highlight selected thumbnail
+            thumbnailElement.classList.remove('border');
+            thumbnailElement.classList.add('border-primary');
+        }
+
+        function openImageModal(imageSrc, productName) {
+            const modalImage = document.getElementById('modalImage');
+            const modalImageName = document.getElementById('modalImageName');
+            
+            modalImage.src = imageSrc;
+            modalImage.alt = productName;
+            modalImageName.textContent = productName;
+            
+            const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
+            imageModal.show();
+        }
+
+        function downloadImage() {
+            const modalImage = document.getElementById('modalImage');
+            const imageSrc = modalImage.src;
+            const productName = modalImage.alt;
+            
+            // Create a temporary link to download the image
+            const link = document.createElement('a');
+            link.href = imageSrc;
+            link.download = productName + '.jpg';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+}
 
