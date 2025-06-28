@@ -11,7 +11,6 @@ namespace WebBanDoTrangMieng
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     
     public partial class Product
     {
@@ -33,32 +32,5 @@ namespace WebBanDoTrangMieng
         public virtual Category Category { get; set; }
         public virtual ICollection<Order_Product> Order_Product { get; set; }
         public virtual ICollection<Promotion> Promotions { get; set; }
-
-        // Helper methods for multiple images
-        public List<string> GetImageUrls()
-        {
-            if (string.IsNullOrEmpty(ImageUrl))
-                return new List<string>();
-            
-            return ImageUrl.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                          .Select(url => url.Trim())
-                          .ToList();
-        }
-
-        public string GetFirstImageUrl()
-        {
-            var images = GetImageUrls();
-            return images.FirstOrDefault() ?? "/Content/Images/Products/no-image.jpg";
-        }
-
-        public bool HasMultipleImages()
-        {
-            return GetImageUrls().Count > 1;
-        }
-
-        public int ImageCount()
-        {
-            return GetImageUrls().Count;
-        }
     }
 }

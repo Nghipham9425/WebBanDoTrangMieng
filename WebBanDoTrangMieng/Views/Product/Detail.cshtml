@@ -6,6 +6,8 @@
     var firstImage = images.FirstOrDefault() ?? "/Content/Images/Products/no-image.jpg";
 }
 
+@Html.AntiForgeryToken()
+
 @section styles {
     <link href="@Url.Content("~/Content/product-detail.css")" rel="stylesheet" type="text/css" />
 }
@@ -512,16 +514,46 @@ function decreaseQuantity() {
 
 function addToCart() {
     const quantity = document.getElementById('quantityInput').value;
+    const productId = @Model.ProductId;
     
-    // Show success message
-    showToast('Đã thêm ' + quantity + ' sản phẩm vào giỏ hàng!', 'success');
-    
-    // Add cart animation
-    const button = document.querySelector('.btn-add-to-cart');
-    button.style.transform = 'scale(0.95)';
-    setTimeout(() => {
-        button.style.transform = 'scale(1)';
-    }, 150);
+    $.ajax({
+        url: '@Url.Action("AddToCart", "Cart")',
+        type: 'POST',
+        data: {
+            productId: productId,
+            quantity: quantity,
+            __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+        },
+        success: function(response) {
+            if (response.success) {
+                showToast('Đã thêm ' + quantity + ' sản phẩm vào giỏ hàng!', 'success');
+                updateCartCount();
+                
+                // Add cart animation
+                const button = document.querySelector('.btn-add-to-cart');
+                button.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    button.style.transform = 'scale(1)';
+                }, 150);
+            } else {
+                showToast(response.message, 'error');
+            }
+        },
+        error: function() {
+            showToast('Có lỗi xảy ra khi thêm sản phẩm!', 'error');
+        }
+    });
+}
+
+function updateCartCount() {
+    $.get('@Url.Action("GetCartCount", "Cart")', function(data) {
+        $('.cart-count').text(data.count);
+        if (data.count > 0) {
+            $('.cart-count').show();
+        } else {
+            $('.cart-count').hide();
+        }
+    });
 }
 
 function toggleWishlist() {

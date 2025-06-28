@@ -3,47 +3,161 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using WebBanDoTrangMieng.Models;
 
 namespace WebBanDoTrangMieng.Controllers
 {
     public class CartController : Controller
     {
-        // GET: Cart - Hiển thị giỏ hàng
+        private QLStoreTrangMiengEntities db = new QLStoreTrangMiengEntities();
+
+        private Cart GetCart()
+        {
+            var cart= Session["Cart"] as Cart;
+            if(cart == null)
+            {
+                cart = new Cart();
+                Session["Cart"] = cart;
+            }
+            return cart;
+        }
+
         public ActionResult Index()
         {
-            // Ở đây sau này bạn sẽ lấy dữ liệu giỏ hàng từ session hoặc database
-            return View();
+           var cart=GetCart();
+           return View(cart);
         }
-
-        // GET: Cart/Checkout - Trang thanh toán
-        public ActionResult Checkout()
-        {
-            return View();
-        }
-
-        // POST: Cart/AddToCart - Thêm sản phẩm vào giỏ hàng (sử dụng AJAX)
+                // POST: Cart/AddToCart - Thêm sản phẩm vào giỏ hàng
         [HttpPost]
         public ActionResult AddToCart(int productId, int quantity = 1)
         {
-            // Xử lý thêm sản phẩm vào giỏ hàng
-            // Trả về JSON để cập nhật giao diện
-            return Json(new { success = true, message = "Đã thêm sản phẩm vào giỏ hàng" });
+            try
+            {
+                var product = db.Products.Find(productId);
+                if (product == null)
+                {
+                    return Json(new { success = false, message = "Sản phẩm không tồn tại" });
+                }
+
+                var cart = GetCart();
+                var existingItem = cart.Items.FirstOrDefault(x => x.ProductId == productId);
+
+                if (existingItem != null)
+                {
+                    // Nếu sản phẩm đã có trong giỏ, tăng số lượng
+                    existingItem.Quantity += quantity;
+                }
+                else
+                {
+                    // Thêm sản phẩm mới vào giỏ
+                    cart.Items.Add(new CartItem
+                    {
+                        ProductId = productId,
+                        ProductName = product.Name,
+                        Price = product.Price,
+                        Quantity = quantity,
+                        ImageUrl = product.ImageUrl
+                    });
+                }
+
+                Session["Cart"] = cart;
+
+                return Json(new { 
+                    success = true, 
+                    message = "Đã thêm sản phẩm vào giỏ hàng",
+                    cartCount = cart.TotalItems,
+                    cartTotal = cart.TotalAmount.ToString("N0")
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Có lỗi xảy ra: " + ex.Message });
+            }
         }
 
-        // POST: Cart/UpdateCart - Cập nhật số lượng sản phẩm
         [HttpPost]
         public ActionResult UpdateCart(int productId, int quantity)
         {
-            // Xử lý cập nhật số lượng sản phẩm
-            return Json(new { success = true });
+            try
+            {
+                var cart=GetCart();
+                var item=cart.Items.FirstOrDefault(x=>x.ProductId == productId);
+                if(item!=null)
+                {
+                    if(quantity <= 0)
+                    {
+                        cart.Items.Remove(item);
+                    }
+                    else
+                    {
+                        item.Quantity = quantity;
+                    }
+                }
+                Session["Cart"] = cart;
+                return Json (new {
+                    success = true,
+                    cartCount = cart.TotalItems,
+                    cartTotal = cart.TotalAmount.ToString("N0"),
+                    itemTotal= (item?.TotalPrice ?? 0).ToString("N0")
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Có lỗi xảy ra: " + ex.Message });
+            }
         }
-
         // POST: Cart/RemoveItem - Xóa sản phẩm khỏi giỏ hàng
         [HttpPost]
         public ActionResult RemoveItem(int productId)
         {
-            // Xử lý xóa sản phẩm
-            return Json(new { success = true });
+            try
+            {
+                var cart = GetCart();
+                var item = cart.Items.FirstOrDefault(x => x.ProductId == productId);
+
+                if (item != null)
+                {
+                    cart.Items.Remove(item);
+                    Session["Cart"] = cart;
+                }
+
+                return Json(new { 
+                    success = true,
+                    message = "Đã xóa sản phẩm khỏi giỏ hàng",
+                    cartCount = cart.TotalItems,
+                    cartTotal = cart.TotalAmount.ToString("N0")
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Có lỗi xảy ra: " + ex.Message });
+            }
+        }
+        //get Cart/GetCartCount -- lay so luong san pham trong gio hang
+        public ActionResult GetCartCount()
+        {
+            var cart=GetCart();
+            return Json(new {count = cart.TotalItems}, JsonRequestBehavior.AllowGet);
+        }
+        // GET: Cart/Checkout - Trang thanh toán
+        public ActionResult Checkout()
+        {
+            var cart = GetCart();
+            if (!cart.Items.Any())
+            {
+                TempData["ErrorMessage"] = "Giỏ hàng trống!";
+                return RedirectToAction("Index");
+            }
+            return View(cart);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }
