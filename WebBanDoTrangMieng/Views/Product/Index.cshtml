@@ -4,6 +4,8 @@
     ViewBag.Title = "Sản phẩm";
 }
 
+@Html.AntiForgeryToken()
+
 <div class="container">
     <!-- Banner -->
     <div class="position-relative mb-4 rounded overflow-hidden" style="height:200px; background:url('https://images.unsplash.com/photo-1528712306091-ed0763094c98?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;">
@@ -405,13 +407,42 @@
         });
 
         function addToCart(productId) {
-            // Implement add to cart functionality
-            showToast('Đã thêm sản phẩm vào giỏ hàng!', 'success');
+            $.ajax({
+                url: '@Url.Action("AddToCart", "Cart")',
+                type: 'POST',
+                data: {
+                    productId: productId,
+                    quantity: 1,
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function(response) {
+                    if (response.success) {
+                        showToast(response.message, 'success');
+                        updateCartCount();
+                    } else {
+                        showToast(response.message, 'error');
+                    }
+                },
+                error: function() {
+                    showToast('Có lỗi xảy ra khi thêm sản phẩm!', 'error');
+                }
+            });
         }
 
         function toggleWishlist(productId) {
             // Implement wishlist functionality
             showToast('Đã thêm vào danh sách yêu thích!', 'info');
+        }
+
+        function updateCartCount() {
+            $.get('@Url.Action("GetCartCount", "Cart")', function(data) {
+                $('.cart-count').text(data.count);
+                if (data.count > 0) {
+                    $('.cart-count').show();
+                } else {
+                    $('.cart-count').hide();
+                }
+            });
         }
 
         function showToast(message, type = 'success') {

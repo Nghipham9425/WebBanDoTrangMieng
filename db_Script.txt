@@ -5,7 +5,8 @@ CREATE DATABASE QLStoreTrangMieng;
 USE QLStoreTrangMieng;
 
 -- ==========================================
--- DATABASE SCRIPT - ĐÚNG THEO ERD
+-- DATABASE SCRIPT - Website Bán Bánh Tráng Miệng
+-- Phiên bản: 2.0 (Đã cập nhật với Cart System)
 -- ==========================================
 
 CREATE TABLE [User]
@@ -126,75 +127,141 @@ CREATE TABLE Review
 
 -- Insert Categories
 INSERT INTO Category (Name, Description) VALUES 
-(N'Bánh Flan', N'Các loại bánh flan truyền thống'),
-(N'Tiramisu', N'Tiramisu Ý nguyên chất'), 
-(N'Cheesecake', N'Bánh phô mai các loại'),
-(N'Pudding', N'Pudding trái cây'),
-(N'Bánh Tart', N'Bánh tart mini'),
-(N'Trà Sữa', N'Trà sữa các loại'),
-(N'Cà Phê', N'Cà phê và espresso'),
-(N'Sinh Tố', N'Sinh tố trái cây tươi'),
-(N'Nước Ép', N'Nước ép trái cây nguyên chất'),
-(N'Soda', N'Nước có gas và mocktail');
+(N'Tiramisu', N'Tiramisu Ý nguyên chất các loại'), 
+(N'Cheesecake', N'Bánh phô mai cao cấp'),
+(N'Mousse', N'Bánh mousse mềm mịn'),
+(N'Flan & Pudding', N'Bánh flan và pudding truyền thống'),
+(N'Croissant & Bánh Mì', N'Bánh croissant và bánh mì ngọt'),
+(N'Cà Phê', N'Cà phê và espresso các loại'),
+(N'Trà & Matcha', N'Trà và matcha latte'),
+(N'Nước Uống Đặc Biệt', N'Smoothie và nước uống đặc chế'),
+(N'Crochi', N'Bánh crochi Hàn Quốc'),
+(N'French Toast', N'Bánh mì nướng kiểu Pháp');
 
 -- Insert Payment Methods
 INSERT INTO PaymentMethod (MethodName, Description) VALUES 
 (N'COD', N'Thanh toán khi nhận hàng'),
 (N'Bank Transfer', N'Chuyển khoản ngân hàng'),
 (N'MoMo', N'Ví điện tử MoMo'),
-(N'Credit Card', N'Thẻ tín dụng'),
-(N'Debit Card', N'Thẻ ghi nợ');
+(N'VNPay', N'Cổng thanh toán VNPay'),
+(N'Credit Card', N'Thẻ tín dụng/ghi nợ');
 
 -- Insert Users
-INSERT INTO [User] (UserName, Email, Role, Password, Address) VALUES 
-(N'Admin', N'admin@trangmieng.com', N'Admin', N'admin123', N'Hà Nội');
+INSERT INTO [User] (UserName, Email, Role, Password, Address, Phone) VALUES 
+(N'Administrator', N'admin@trangmieng.com', N'Admin', N'admin123', N'Hà Nội, Việt Nam', N'0123456789'),
+(N'Nguyễn Văn An', N'customer1@gmail.com', N'Customer', N'123456', N'TP.HCM, Việt Nam', N'0987654321'),
+(N'Trần Thị Bình', N'customer2@gmail.com', N'Customer', N'123456', N'Đà Nẵng, Việt Nam', N'0912345678');
 
-INSERT INTO [User] (UserName, Email, Phone, Password, Address) VALUES 
-(N'Nguyễn Văn A', N'customer@gmail.com', N'0123456789', N'123456', N'TP.HCM');
-
--- Insert Products - TRÁNG MIỆNG
+-- Insert Products với đường dẫn ảnh thực tế
+-- TIRAMISU
 INSERT INTO Product (Name, Description, Price, CategoryId, StockQuantity, ImageUrl) VALUES 
-(N'Bánh Flan Caramen', N'Bánh flan truyền thống với caramen', 25000.00, 1, 50, N'/Content/Images/Products/flan-caramen.jpg'),
-(N'Bánh Flan Dâu', N'Bánh flan với topping dâu tây', 28000.00, 1, 40, N'/Content/Images/Products/flan-dau.jpg'),
-(N'Tiramisu Cà Phê', N'Tiramisu với hương vị cà phê đậm đà', 45000.00, 2, 30, N'/Content/Images/Products/tiramisu-cafe.jpg'),
-(N'Tiramisu Matcha', N'Tiramisu vị trà xanh Nhật Bản', 48000.00, 2, 25, N'/Content/Images/Products/tiramisu-matcha.jpg'),
-(N'Cheesecake Dâu', N'Bánh phô mai với topping dâu tây tươi', 55000.00, 3, 25, N'/Content/Images/Products/cheesecake-dau.jpg'),
-(N'Cheesecake Chocolate', N'Bánh phô mai vị chocolate đậm đà', 58000.00, 3, 20, N'/Content/Images/Products/cheesecake-choco.jpg'),
-(N'Pudding Xoài', N'Pudding xoài thơm ngon mát lạnh', 30000.00, 4, 40, N'/Content/Images/Products/pudding-xoai.jpg'),
-(N'Pudding Dâu', N'Pudding dâu tây ngọt thanh', 32000.00, 4, 35, N'/Content/Images/Products/pudding-dau.jpg'),
-(N'Tart Trái Cây', N'Tart mini với nhiều loại trái cây tươi', 35000.00, 5, 35, N'/Content/Images/Products/tart-traicay.jpg'),
-(N'Tart Chocolate', N'Tart chocolate đắng ngọt', 38000.00, 5, 30, N'/Content/Images/Products/tart-choco.jpg'),
+(N'Tiramisu Original', N'Tiramisu truyền thống với hương vị cà phê đậm đà, mascarpone mềm mịn', 65000.00, 1, 30, N'/Content/Images/Products/OriginalTiramisu.png'),
+(N'Tiramisu Dâu Tây', N'Tiramisu với lớp kem dâu tây tươi ngọt thanh', 68000.00, 1, 25, N'/Content/Images/Products/strawBerrytiramisu.png'),
+(N'Tiramisu Dưa Lưới', N'Tiramisu với hương vị dưa lưới mát lạnh', 70000.00, 1, 20, N'/Content/Images/Products/MelonTiramisu.png'),
+(N'Misu Thiếc', N'Phiên bản đặc biệt của tiramisu với lớp kem thiếc', 75000.00, 1, 15, N'/Content/Images/Products/misuThiec_1.jpg'),
+(N'Matchamisu', N'Tiramisu matcha Nhật Bản với hương vị trà xanh đậm đà', 72000.00, 1, 20, N'/Content/Images/Products/matchamisu_1.jpg'),
 
--- Insert Products - NƯỚC UỐNG
-(N'Trà Sữa Trân Châu', N'Trà sữa trân châu đen classic', 35000.00, 6, 60, N'/Content/Images/Products/trasua-tranchau.jpg'),
-(N'Trà Sữa Matcha', N'Trà sữa matcha Nhật Bản', 42000.00, 6, 45, N'/Content/Images/Products/trasua-matcha.jpg'),
-(N'Trà Sữa Taro', N'Trà sữa khoai môn tím', 38000.00, 6, 50, N'/Content/Images/Products/trasua-taro.jpg'),
-(N'Cà Phê Sữa Đá', N'Cà phê sữa đá truyền thống Việt Nam', 25000.00, 7, 70, N'/Content/Images/Products/cafe-suada.jpg'),
-(N'Cappuccino', N'Cappuccino Ý đậm đà', 38000.00, 7, 40, N'/Content/Images/Products/cappuccino.jpg'),
-(N'Latte', N'Café Latte mềm mại', 42000.00, 7, 35, N'/Content/Images/Products/latte.jpg'),
-(N'Sinh Tố Bơ', N'Sinh tố bơ tươi mát lạnh', 40000.00, 8, 30, N'/Content/Images/Products/sinhto-bo.jpg'),
-(N'Sinh Tố Xoài', N'Sinh tố xoài cát Hòa Lộc', 42000.00, 8, 25, N'/Content/Images/Products/sinhto-xoai.jpg'),
-(N'Nước Ép Cam', N'Nước ép cam tươi 100% nguyên chất', 30000.00, 9, 50, N'/Content/Images/Products/nuocep-cam.jpg'),
-(N'Nước Ép Dưa Hấu', N'Nước ép dưa hấu tươi mát', 28000.00, 9, 45, N'/Content/Images/Products/nuocep-duahau.jpg'),
-(N'Soda Chanh', N'Soda chanh tươi mát lạnh', 28000.00, 10, 60, N'/Content/Images/Products/soda-chanh.jpg'),
-(N'Soda Dâu', N'Soda dâu tây ngọt thanh', 32000.00, 10, 40, N'/Content/Images/Products/soda-dau.jpg');
+-- CHEESECAKE
+(N'Basque Cheesecake', N'Bánh phô mai Basque nướng cháy bề mặt đặc trưng', 85000.00, 2, 25, N'/Content/Images/Products/BasqueCheesecake.png'),
+
+-- MOUSSE
+(N'Mousse Blueberry', N'Mousse việt quất với lớp kem mịn màng', 58000.00, 3, 30, N'/Content/Images/Products/MousseBlueberry_1.jpg'),
+(N'Mousse Vải', N'Mousse vải thiều thơm ngon mát lạnh', 60000.00, 3, 25, N'/Content/Images/Products/mousseVai_1.jpg'),
+(N'Mousse Xoài', N'Mousse xoài cát Hòa Lộc ngọt thanh', 62000.00, 3, 28, N'/Content/Images/Products/MousseXoai_1.jpg'),
+
+-- FLAN & PUDDING
+(N'Flan Caramel', N'Bánh flan caramel truyền thống mềm mịn', 35000.00, 4, 40, N'/Content/Images/Products/flan_caramel.png'),
+(N'Butter Scotch Brulee', N'Bánh flan bơ scotch với lớp đường cháy', 45000.00, 4, 30, N'/Content/Images/Products/ButterScotchBrulee.png'),
+
+-- CROISSANT & BÁNH MÌ
+(N'Croissant Chocolate', N'Bánh sừng bò nhân chocolate Bỉ', 42000.00, 5, 35, N'/Content/Images/Products/choco_croissant.jpg'),
+(N'Croissant Matcha', N'Bánh sừng bò nhân matcha Nhật Bản', 45000.00, 5, 30, N'/Content/Images/Products/matcha_croissant.jpg'),
+
+-- CÀ PHÊ
+(N'Americano', N'Cà phê Americano đậm đà', 35000.00, 6, 50, N'/Content/Images/Products/Americano.png'),
+(N'Cappuccino', N'Cappuccino Ý với lớp foam mịn', 42000.00, 6, 45, N'/Content/Images/Products/Capuccino.png'),
+(N'Caramel Macchiato', N'Macchiato caramel ngọt ngào', 48000.00, 6, 40, N'/Content/Images/Products/CaremelMachiato.png'),
+(N'Espresso', N'Espresso nguyên chất đậm đà', 32000.00, 6, 60, N'/Content/Images/Products/Espresso.png'),
+(N'Mocha', N'Mocha chocolate đậm đà', 45000.00, 6, 35, N'/Content/Images/Products/Mocha.png'),
+(N'Vietnamese Milk Coffee', N'Cà phê sữa đá Việt Nam truyền thống', 28000.00, 6, 70, N'/Content/Images/Products/VietnameseMilkCoffee.png'),
+
+-- TRÀ & MATCHA
+(N'Matcha Latte', N'Matcha latte Nhật Bản nguyên chất', 52000.00, 7, 35, N'/Content/Images/Products/MatchaLatteS.png'),
+(N'Earl Grey With Boba', N'Trà Earl Grey với trân châu', 38000.00, 7, 45, N'/Content/Images/Products/EarlGreyWithBoba.png'),
+(N'Gentle Hojicha', N'Trà hojicha Nhật Bản nhẹ nhàng', 45000.00, 7, 30, N'/Content/Images/Products/gentleHojicha.png'),
+(N'Rich Hojicha', N'Trà hojicha đậm đà', 48000.00, 7, 25, N'/Content/Images/Products/richHojicha.png'),
+
+-- NƯỚC UỐNG ĐẶC BIỆT
+(N'Matcha Cloud Smoothie', N'Smoothie matcha mây mịn màng', 65000.00, 8, 20, N'/Content/Images/Products/MATCHA-MATCHA-CLOUD-SMOOTHIE-scaled.png'),
+(N'Strawberry Lemonade Crush', N'Nước ép dâu chanh đá xay', 45000.00, 8, 35, N'/Content/Images/Products/FROZEN-SLUSH-TEA-STRAWBERRY-LEMONADE-CRUSH.png'),
+(N'Peach Slush Tea', N'Trà đào đá xay mát lạnh', 42000.00, 8, 40, N'/Content/Images/Products/FROZEN-SLUSH-TEA-FROSTED-PEACH-SLUSH-TEA.png'),
+
+-- CROCHI
+(N'Crochi Chocolate', N'Bánh crochi nhân chocolate', 35000.00, 9, 40, N'/Content/Images/Products/CROCHI_choco.png'),
+(N'Crochi Matcha', N'Bánh crochi nhân matcha', 38000.00, 9, 35, N'/Content/Images/Products/CROCHI_matcha.png'),
+(N'Crochi Strawberry', N'Bánh crochi nhân dâu tây', 38000.00, 9, 35, N'/Content/Images/Products/CROCHI_Strawberry.png'),
+
+-- FRENCH TOAST
+(N'Cream Brulee Brioche French Toast', N'Bánh mì nướng brioche với kem brulee', 75000.00, 10, 20, N'/Content/Images/Products/CreamBruleeBriocheFrenchToasts.png'),
+(N'Sweet Bruleed Citrus French Toast', N'Bánh mì nướng cam cháy đường', 72000.00, 10, 22, N'/Content/Images/Products/SWEET-BRULEED-CITRUS-FRENCH-TOAST-scaled.png');
 
 -- Insert Promotions
 INSERT INTO Promotion (Code, Description, DiscountPercent, StartDate, EndDate) VALUES 
-(N'WELCOME10', N'Giảm 10% cho khách hàng mới', 10.00, GETDATE(), DATEADD(MONTH, 1, GETDATE())),
-(N'COMBO15', N'Giảm 15% khi mua combo tráng miệng + nước uống', 15.00, GETDATE(), DATEADD(DAY, 15, GETDATE()));
+(N'WELCOME10', N'Giảm 10% cho khách hàng mới', 10.00, GETDATE(), DATEADD(MONTH, 3, GETDATE())),
+(N'COMBO20', N'Giảm 20% khi mua combo tráng miệng + nước uống', 20.00, GETDATE(), DATEADD(MONTH, 1, GETDATE())),
+(N'WEEKEND15', N'Giảm 15% cuối tuần', 15.00, GETDATE(), DATEADD(DAY, 30, GETDATE()));
 
--- Insert Sample Product-Promotion relationships
+-- Insert Sample Orders
+INSERT INTO [Order] (UserId, ShippingAddress, PaymentMethod, Status) VALUES 
+(2, N'123 Nguyễn Huệ, Quận 1, TP.HCM', N'COD', N'Delivered'),
+(3, N'456 Trần Phú, Hải Châu, Đà Nẵng', N'MoMo', N'Processing');
+
+-- Insert Order Products
+INSERT INTO Order_Product (OrderId, ProductId, Quantity, Price) VALUES 
+(1, 1, 2, 65000.00), -- 2 Tiramisu Original
+(1, 14, 1, 42000.00), -- 1 Cappuccino
+(2, 6, 1, 85000.00), -- 1 Basque Cheesecake
+(2, 21, 1, 52000.00); -- 1 Matcha Latte
+
+-- Insert Sample Reviews
+INSERT INTO Review (OrderId, Comment, Rating) VALUES 
+(1, N'Tiramisu rất ngon, vị cà phê đậm đà. Cappuccino cũng tuyệt vời!', 5),
+(2, N'Basque Cheesecake có vị rất đặc biệt, matcha latte thơm ngon.', 4);
+
+-- Insert Product-Promotion relationships
 INSERT INTO Product_Promotion (ProductId, PromotionId) VALUES 
-(1, 1), -- Bánh Flan Caramen có khuyến mãi WELCOME10
-(3, 1), -- Tiramisu Cà Phê có khuyến mãi WELCOME10  
-(5, 2), -- Cheesecake Dâu có khuyến mãi COMBO15
-(11, 2); -- Trà Sữa Trân Châu có khuyến mãi COMBO15
+(1, 1), (2, 1), (3, 1), -- Tiramisu có khuyến mãi WELCOME10
+(14, 2), (15, 2), (16, 2), -- Cà phê có khuyến mãi COMBO20
+(21, 3), (22, 3); -- Matcha có khuyến mãi WEEKEND15
 
-PRINT N'Database updated successfully!';
-PRINT N'Đúng theo ERD - Không có Cart, ProductImage, Wishlist';
-PRINT N'Categories: 10 (5 tráng miệng + 5 nước uống)';
-PRINT N'Products: 22 (10 tráng miệng + 12 nước uống)';
-PRINT N'Payment Methods: 5 (COD, Bank Transfer, MoMo, Credit Card, Debit Card)';
-PRINT N'Admin: admin@trangmieng.com / admin123';
-PRINT N'Customer: customer@gmail.com / 123456';
+-- ==========================================
+-- COMPLETION MESSAGE
+-- ==========================================
+
+PRINT N'========================================';
+PRINT N'DATABASE CREATED SUCCESSFULLY!';
+PRINT N'========================================';
+PRINT N'Database: QLStoreTrangMieng';
+PRINT N'Categories: 10 loại sản phẩm';
+PRINT N'Products: 28 sản phẩm với ảnh thực tế';
+PRINT N'Payment Methods: 5 phương thức';
+PRINT N'Sample Orders: 2 đơn hàng mẫu';
+PRINT N'========================================';
+PRINT N'ADMIN ACCOUNT:';
+PRINT N'Email: admin@trangmieng.com';
+PRINT N'Password: admin123';
+PRINT N'========================================';
+PRINT N'CUSTOMER ACCOUNTS:';
+PRINT N'Email: customer1@gmail.com / 123456';
+PRINT N'Email: customer2@gmail.com / 123456';
+PRINT N'========================================';
+PRINT N'FEATURES READY:';
+PRINT N'✅ Product Management';
+PRINT N'✅ Order Management'; 
+PRINT N'✅ Cart System (Session-based)';
+PRINT N'✅ User Authentication';
+PRINT N'✅ Admin Panel';
+PRINT N'🚧 Payment Integration (MoMo)';
+PRINT N'🚧 Review System';
+PRINT N'🚧 Dashboard Analytics';
+PRINT N'========================================';

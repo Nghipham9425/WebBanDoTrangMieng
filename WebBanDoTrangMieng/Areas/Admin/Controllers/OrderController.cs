@@ -105,7 +105,7 @@ namespace WebBanDoTrangMieng.Areas.Admin.Controllers
         // POST: Admin/Order/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, string status, string note = "")
+        public ActionResult Edit(int id, string status)
         {
             var order = db.Orders.Find(id);
             if (order == null)

@@ -209,7 +209,7 @@
                                         <div class="col-3">
                                             @if (!string.IsNullOrEmpty(item.Product.ImageUrl))
                                             {
-                                                <img src="@Url.Content("~/Content/Images/Products/" + item.Product.GetImageUrls().FirstOrDefault())" 
+                                                <img src="@Url.Content(item.Product.ImageUrl)" 
                                                      alt="@item.Product.Name" 
                                                      class="img-fluid rounded product-thumb">
                                             }
