@@ -1,0 +1,316 @@
+﻿@model WebBanDoTrangMieng.Order
+@{
+    ViewBag.Title = "Cập nhật đơn hàng #" + Model.OrderId;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2 class="text-primary">
+                <i class="fas fa-edit"></i> Cập nhật đơn hàng #@Model.OrderId
+            </h2>
+            <p class="text-muted">Thay đổi trạng thái và quản lý đơn hàng</p>
+        </div>
+        <div class="col-md-4 text-right">
+            <a href="@Url.Action("Details", "Order", new { area = "Admin", id = Model.OrderId })" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </a>
+        </div>
+    </div>
+
+    <!-- Error Messages -->
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-triangle"></i> @TempData["ErrorMessage"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    <div class="row">
+        <!-- Order Summary -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5><i class="fas fa-info-circle"></i> Tóm tắt đơn hàng</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <label class="font-weight-bold">Mã đơn hàng:</label>
+                            <p class="text-primary">#@Model.OrderId</p>
+                        </div>
+                        <div class="col-6">
+                            <label class="font-weight-bold">Ngày tạo:</label>
+                            <p>@(Model.OrderDate?.ToString("dd/MM/yyyy") ?? "N/A")</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="font-weight-bold">Khách hàng:</label>
+                        <div class="d-flex align-items-center">
+                            <div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mr-2">
+                                @Model.User.UserName.Substring(0, 1).ToUpper()
+                            </div>
+                            <div>
+                                <strong>@Model.User.UserName</strong><br>
+                                <small class="text-muted">@Model.User.Email</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <label class="font-weight-bold">Trạng thái hiện tại:</label>
+                            <p>
+                                @switch (Model.Status)
+                                {
+                                    case "Pending":
+                                        <span class="badge badge-warning">⏳ Chờ xác nhận</span>
+                                        break;
+                                    case "Confirmed":
+                                        <span class="badge badge-info">✅ Đã xác nhận</span>
+                                        break;
+                                    case "Processing":
+                                        <span class="badge badge-primary">🔄 Đang chuẩn bị</span>
+                                        break;
+                                    case "Shipped":
+                                        <span class="badge badge-secondary">🚛 Đang giao</span>
+                                        break;
+                                }
+                            </p>
+                        </div>
+                        <div class="col-6">
+                            <label class="font-weight-bold">Tổng tiền:</label>
+                            <h5 class="text-success">@ViewBag.TotalAmount.ToString("N0") VNĐ</h5>
+                        </div>
+                    </div>
+
+                    <!-- Status Workflow -->
+                    <div class="mb-3">
+                        <label class="font-weight-bold">Quy trình xử lý:</label>
+                        <div class="status-workflow mt-2">
+                            <div class="workflow-step @(Model.Status == "Pending" ? "active" : (new[] {"Confirmed", "Processing", "Shipped", "Delivered"}.Contains(Model.Status) ? "completed" : ""))">
+                                <span class="step-icon">⏳</span>
+                                <span class="step-text">Chờ xác nhận</span>
+                            </div>
+                            <div class="workflow-arrow"></div>
+                            <div class="workflow-step @(Model.Status == "Confirmed" ? "active" : (new[] {"Processing", "Shipped", "Delivered"}.Contains(Model.Status) ? "completed" : ""))">
+                                <span class="step-icon">✅</span>
+                                <span class="step-text">Đã xác nhận</span>
+                            </div>
+                            <div class="workflow-arrow"></div>
+                            <div class="workflow-step @(Model.Status == "Processing" ? "active" : (new[] {"Shipped", "Delivered"}.Contains(Model.Status) ? "completed" : ""))">
+                                <span class="step-icon">🔄</span>
+                                <span class="step-text">Đang chuẩn bị</span>
+                            </div>
+                            <div class="workflow-arrow"></div>
+                            <div class="workflow-step @(Model.Status == "Shipped" ? "active" : (Model.Status == "Delivered" ? "completed" : ""))">
+                                <span class="step-icon">🚛</span>
+                                <span class="step-text">Đang giao</span>
+                            </div>
+                            <div class="workflow-arrow"></div>
+                            <div class="workflow-step @(Model.Status == "Delivered" ? "active completed" : "")">
+                                <span class="step-icon">📦</span>
+                                <span class="step-text">Đã giao</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Update Status Form -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5><i class="fas fa-cog"></i> Cập nhật trạng thái</h5>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("Edit", "Order", new { area = "Admin" }, FormMethod.Post, new { @class = "status-update-form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("id", Model.OrderId)
+
+                        <div class="form-group">
+                            <label class="font-weight-bold">Chọn trạng thái mới:</label>
+                            <select name="status" class="form-control form-control-lg" required id="statusSelect">
+                                @foreach (var option in ViewBag.StatusList as List<SelectListItem>)
+                                {
+                                    <option value="@option.Value" @(option.Selected ? "selected" : "")>
+                                        @option.Text
+                                    </option>
+                                }
+                            </select>
+                            <small class="form-text text-muted">
+                                Chỉ có thể chuyển sang trạng thái hợp lệ tiếp theo
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="font-weight-bold">Ghi chú (tùy chọn):</label>
+                            <textarea name="note" class="form-control" rows="3" 
+                                      placeholder="Thêm ghi chú về việc cập nhật trạng thái..."></textarea>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>Lưu ý:</strong> Việc thay đổi trạng thái sẽ được ghi lại và không thể hoàn tác.
+                        </div>
+
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-success btn-lg mr-2" id="updateBtn">
+                                <i class="fas fa-save"></i> Cập nhật trạng thái
+                            </button>
+                            <a href="@Url.Action("Details", "Order", new { area = "Admin", id = Model.OrderId })" 
+                               class="btn btn-secondary btn-lg">
+                                <i class="fas fa-times"></i> Hủy bỏ
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card mt-3">
+                <div class="card-header bg-light">
+                    <h6><i class="fas fa-bolt"></i> Thao tác nhanh</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <a href="@Url.Action("Details", "Order", new { area = "Admin", id = Model.OrderId })" 
+                               class="btn btn-outline-info btn-block btn-sm">
+                                <i class="fas fa-eye"></i> Xem chi tiết
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a href="@Url.Action("Index", "Order", new { area = "Admin" })" 
+                               class="btn btn-outline-secondary btn-block btn-sm">
+                                <i class="fas fa-list"></i> Danh sách đơn hàng
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.avatar-sm {
+    width: 35px;
+    height: 35px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.status-workflow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.workflow-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 5px;
+    border-radius: 8px;
+    min-width: 70px;
+    text-align: center;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+}
+
+.workflow-step.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+    transform: scale(1.05);
+}
+
+.workflow-step.completed {
+    background: #28a745;
+    color: white;
+    border-color: #28a745;
+}
+
+.step-icon {
+    font-size: 1.2em;
+    margin-bottom: 2px;
+}
+
+.step-text {
+    font-size: 0.75em;
+    font-weight: 600;
+}
+
+.workflow-arrow {
+    width: 0;
+    height: 0;
+    border-left: 8px solid #6c757d;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    margin: 0 2px;
+}
+
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.badge {
+    font-size: 0.8em;
+    padding: 0.4rem 0.6rem;
+}
+
+@@media (max-width: 768px) {
+    .status-workflow {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .workflow-arrow {
+        transform: rotate(90deg);
+        margin: 5px 0;
+    }
+    
+    .workflow-step {
+        min-width: 120px;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('.status-update-form');
+    const updateBtn = document.getElementById('updateBtn');
+    const statusSelect = document.getElementById('statusSelect');
+
+    form.addEventListener('submit', function(e) {
+        const selectedStatus = statusSelect.value;
+        const selectedText = statusSelect.options[statusSelect.selectedIndex].text;
+        
+        if (!confirm(`Bạn có chắc chắn muốn cập nhật trạng thái thành "${selectedText}"?\n\nHành động này không thể hoàn tác.`)) {
+            e.preventDefault();
+            return false;
+        }
+
+        updateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang cập nhật...';
+        updateBtn.disabled = true;
+    });
+
+    statusSelect.addEventListener('change', function() {
+        const selectedText = this.options[this.selectedIndex].text;
+        updateBtn.innerHTML = `<i class="fas fa-save"></i> Cập nhật thành ${selectedText}`;
+    });
+});
+</script>
+
