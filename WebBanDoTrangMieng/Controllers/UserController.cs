@@ -363,6 +363,64 @@ namespace WebBanDoTrangMieng.Controllers
         return View();
       }
     }
+
+    public ActionResult OrderHistory()
+    {
+        if(Session["UserId"]==null)
+        {
+            TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem lịch sử đơn hàng!";
+            return RedirectToAction("Home","Index");
+        }
+        int userId=int.Parse(Session["UserID"].ToString());
+        var orders=db.Orders.Where(o=>o.UserId==userId).OrderByDescending
+        (o=>o.OrderDate).ToList();
+
+        return View(orders);
+    }
+    public ActionResult OrderDetails(int id)
+    {
+    if (Session["UserId"] == null)
+        return RedirectToAction("Login");
+
+    int userId = (int)Session["UserId"];
+    var order = db.Orders
+        .Include("Order_Product.Product")
+        .FirstOrDefault(o => o.OrderId == id && o.UserId == userId);
+
+    if (order == null)
+        return HttpNotFound();
+
+    return View(order);
+    }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult CancelOrder(int id)
+    {
+        if (Session["UserId"] == null)
+        {
+            TempData["ErrorMessage"] = "Bạn cần đăng nhập để thực hiện thao tác này!";
+            return RedirectToAction("Login");
+        }
+        int userId = (int)Session["UserId"];
+        var order = db.Orders.FirstOrDefault(o => o.OrderId == id && o.UserId == userId);
+        if (order == null)
+        {
+            TempData["ErrorMessage"] = "Không tìm thấy đơn hàng hoặc bạn không có quyền hủy!";
+            return RedirectToAction("OrderHistory");
+        }
+        // Chỉ cho phép hủy nếu trạng thái là Pending, Confirmed hoặc Processing
+        if (order.Status == "Pending" || order.Status == "Confirmed" || order.Status == "Processing")
+        {
+            order.Status = "Cancelled";
+            db.SaveChanges();
+            TempData["SuccessMessage"] = "Đơn hàng đã được hủy thành công.";
+        }
+        else
+        {
+            TempData["ErrorMessage"] = "Đơn hàng không thể hủy ở trạng thái hiện tại.";
+        }
+        return RedirectToAction("OrderDetails", new { id = order.OrderId });
+    }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

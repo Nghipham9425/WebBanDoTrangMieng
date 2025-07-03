@@ -178,9 +178,9 @@
                     <div class="mb-3">
                         <label class="font-weight-bold">Địa chỉ giao hàng:</label>
                         <p>
-                            @if (!string.IsNullOrEmpty(Model.User.Address))
+                            @if (!string.IsNullOrEmpty(Model.ShippingAddress))
                             {
-                                @Model.User.Address
+                                @Model.ShippingAddress
                             }
                             else
                             {

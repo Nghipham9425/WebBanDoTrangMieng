@@ -142,13 +142,91 @@ namespace WebBanDoTrangMieng.Controllers
         // GET: Cart/Checkout - Trang thanh toán
         public ActionResult Checkout()
         {
+            // Kiểm tra đăng nhập
+            if (Session["UserId"] == null)
+            {
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập để đặt!";
+                return RedirectToAction("Index", "Home");
+            }
+
+            // Kiểm tra vai trò
+            if (Session["UserRole"] == null || Session["UserRole"].ToString() != "Customer")
+            {
+                TempData["ErrorMessage"] = "Chỉ khách hàng mới được đặt!";
+                return RedirectToAction("Index", "Home");
+            }
+
+            // Lấy thông tin user để fill vào form
+            int userId = (int)Session["UserId"];
+            var user = db.Users.Find(userId);
+            if (user != null)
+            {
+                ViewBag.UserName = user.UserName;
+                ViewBag.Email = user.Email;
+                ViewBag.Phone = user.Phone;
+                ViewBag.Address = user.Address;
+            }
+
+            var cart = GetCart();
+            if (!cart.Items.Any())
+            {
+                TempData["ErrorMessage"] = "Giỏ trống!";
+                return RedirectToAction("Index");
+            }
+            return View(cart);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Checkout(string fullName, string phone, string email, string address, string provinceName, string districtName, string wardName, string payment)
+        {
+            if (Session["UserId"] == null)
+            {
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập để đặt!";
+                return RedirectToAction("Index", "Home");
+            }
+            if (Session["UserRole"] == null || Session["UserRole"].ToString() != "Customer")
+            {
+                TempData["ErrorMessage"] = "Chỉ khách hàng mới được đặt!";
+                return RedirectToAction("Index", "Home");
+            }
+
             var cart = GetCart();
             if (!cart.Items.Any())
             {
                 TempData["ErrorMessage"] = "Giỏ hàng trống!";
                 return RedirectToAction("Index");
             }
-            return View(cart);
+
+            // Lưu địa chỉ dễ hiểu
+            string shippingAddress = $"{address}, {wardName}, {districtName}, {provinceName}";
+
+            var order = new Order
+            {
+                UserId = (int)Session["UserId"],
+                OrderDate = DateTime.Now,
+                ShippingAddress = shippingAddress,
+                PaymentMethod = payment,
+                Status = "Pending"
+            };
+            db.Orders.Add(order);
+            db.SaveChanges();
+
+            foreach (var item in cart.Items)
+            {
+                var orderProduct = new Order_Product
+                {
+                    OrderId = order.OrderId,
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity,
+                    Price = item.Price
+                };
+                db.Order_Product.Add(orderProduct);
+            }
+            db.SaveChanges();
+
+            Session["Cart"] = null;
+            TempData["SuccessMessage"] = "Đặt hàng thành công!";
+            return RedirectToAction("OrderHistory", "User");
         }
 
         protected override void Dispose(bool disposing)

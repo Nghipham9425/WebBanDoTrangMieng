@@ -21,6 +21,9 @@
     
     <!-- Inter Font from Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Additional Styles -->
+    @RenderSection("styles", required: false)
 </head>
 
 <body>
@@ -77,5 +80,14 @@
     <script src="~/Scripts/home-video.js"></script>
     
     @RenderSection("scripts", required: false)
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <script>
+            $(function() {
+                alert('@TempData["ErrorMessage"]');
+            });
+        </script>
+    }
 </body>     
 </html>
