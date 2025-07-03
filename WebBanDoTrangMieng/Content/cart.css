@@ -1,0 +1,52 @@
+/* ==========================================
+   CART.CSS - OPTIMIZED WITH BOOTSTRAP
+   ========================================== */
+
+/* CSS Variables Override Bootstrap */
+:root {
+  --bs-success: #7d9e5f;
+  --bs-success-rgb: 125, 158, 95;
+}
+
+/* ==========================================
+   CART ITEM ANIMATIONS (Special UX)
+   ========================================== */
+.cart-item-enter {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.cart-item-remove {
+  animation: fadeOut 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+/* ==========================================
+   MOBILE RESPONSIVE
+   ========================================== */
+@media (max-width: 768px) {
+  .cart-item-enter,
+  .cart-item-remove {
+    animation-duration: 0.3s;
+  }
+}

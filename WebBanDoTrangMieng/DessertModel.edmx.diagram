@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8c9b9076dbee4efe826f9b6b86474dc9" Name="Diagram1" ZoomLevel="40">
+        <EntityTypeShape EntityType="QLStoreTrangMiengModel.Category" Width="1.5" PointX="0.75" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLStoreTrangMiengModel.Order" Width="1.5" PointX="3" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLStoreTrangMiengModel.Order_Product" Width="1.5" PointX="5.25" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLStoreTrangMiengModel.Payment" Width="1.5" PointX="8.25" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLStoreTrangMiengModel.PaymentMethod" Width="1.5" PointX="6" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLStoreTrangMiengModel.Product" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLStoreTrangMiengModel.Promotion" Width="1.5" PointX="5.25" PointY="14.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLStoreTrangMiengModel.Review" Width="1.5" PointX="5.25" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLStoreTrangMiengModel.User" Width="1.5" PointX="0.75" PointY="4.875" IsExpanded="true" />
+        <AssociationConnector Association="QLStoreTrangMiengModel.FK__Product__Categor__52593CB8" ManuallyRouted="false" />
+        <AssociationConnector Association="QLStoreTrangMiengModel.FK__Order__UserId__5FB337D6" ManuallyRouted="false" />
+        <AssociationConnector Association="QLStoreTrangMiengModel.FK__Order_Pro__Order__68487DD7" ManuallyRouted="false" />
+        <AssociationConnector Association="QLStoreTrangMiengModel.FK__Payment__OrderId__6477ECF3" ManuallyRouted="false" />
+        <AssociationConnector Association="QLStoreTrangMiengModel.FK__Review__OrderId__6D0D32F4" ManuallyRouted="false" />
+        <AssociationConnector Association="QLStoreTrangMiengModel.FK__Order_Pro__Produ__693CA210" ManuallyRouted="false" />
+        <AssociationConnector Association="QLStoreTrangMiengModel.FK__Payment__Payment__656C112C" ManuallyRouted="false" />
+        <AssociationConnector Association="QLStoreTrangMiengModel.Product_Promotion" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

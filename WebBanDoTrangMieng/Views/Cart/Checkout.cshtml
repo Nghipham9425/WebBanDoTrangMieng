@@ -1,0 +1,222 @@
+﻿@model WebBanDoTrangMieng.Models.Cart
+@{
+    ViewBag.Title = "Thanh toán";
+}
+
+<div class="container my-5">
+    <!-- Header Section -->
+    <div class="text-center mb-5">
+        <h2 class="text-success fw-bold mb-3">
+            <i class="fas fa-credit-card me-2"></i>
+            Thanh toán
+        </h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Cart")" class="text-success">Giỏ hàng</a></li>
+                <li class="breadcrumb-item active text-muted" aria-current="page">Thanh toán</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="row">
+        <!-- Form Section -->
+        <div class="col-lg-8 mb-4">
+            @using (Html.BeginForm("Checkout", "Cart", FormMethod.Post, new { id = "checkout-form" }))
+            {
+                @Html.AntiForgeryToken()
+                <!-- Shipping Information -->
+                <div class="card border-success shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="mb-0">
+                            <i class="fas fa-truck me-2"></i>
+                            Thông tin giao hàng
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="fullName" class="form-label text-success fw-bold">Họ và tên</label>
+                                <input type="text" class="form-control border-success" id="fullName" name="fullName" placeholder="Nhập họ và tên" required value="@ViewBag.UserName">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="phone" class="form-label text-success fw-bold">Số điện thoại</label>
+                                <input type="tel" class="form-control border-success" id="phone" name="phone" placeholder="Nhập số điện thoại" required value="@ViewBag.Phone">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label text-success fw-bold">Email</label>
+                            <input type="email" class="form-control border-success" id="email" name="email" placeholder="Nhập địa chỉ email" required value="@ViewBag.Email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label text-success fw-bold">Địa chỉ chi tiết</label>
+                            <input type="text" class="form-control border-success" id="address" name="address" placeholder="Nhập địa chỉ chi tiết (số nhà, tên đường...)" required value="@ViewBag.Address">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="provinceSelect" class="form-label text-success fw-bold">Tỉnh/Thành phố</label>
+                                <select id="provinceSelect" name="Province" class="form-select border-success" required>
+                                    <option value="">Chọn tỉnh/thành phố</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="districtSelect" class="form-label text-success fw-bold">Quận/Huyện</label>
+                                <select id="districtSelect" name="District" class="form-select border-success" required>
+                                    <option value="">Chọn quận/huyện</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="wardSelect" class="form-label text-success fw-bold">Xã/Phường</label>
+                                <select id="wardSelect" name="Ward" class="form-select border-success" required>
+                                    <option value="">Chọn xã/phường</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- Thêm hidden input để lưu tên tỉnh/thành, quận/huyện, xã/phường -->
+                        <input type="hidden" id="provinceName" name="provinceName" />
+                        <input type="hidden" id="districtName" name="districtName" />
+                        <input type="hidden" id="wardName" name="wardName" />
+                    </div>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="card border-success shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="mb-0">
+                            <i class="fas fa-wallet me-2"></i>
+                            Phương thức thanh toán
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-check mb-3 p-3 border border-success rounded">
+                    <input class="form-check-input" type="radio" name="payment" id="cod" value="cod" checked>
+                    <label class="form-check-label fw-bold w-100" for="cod">
+                        <i class="fas fa-money-bill-wave text-success me-2"></i>
+                        Thanh toán khi nhận hàng (COD)
+                        <small class="d-block text-muted mt-1">Thanh toán bằng tiền mặt khi nhận hàng</small>
+                    </label>
+                </div>
+                <div class="form-check mb-3 p-3 border rounded">
+                    <input class="form-check-input" type="radio" name="payment" id="vnpay" value="7">
+                    <label class="form-check-label fw-bold w-100" for="vnpay">
+                           <i class="fab fa-paypal text-success me-2"></i>
+                        VNPAY - Thanh toán online
+                        <small class="d-block text-muted mt-1">Thanh toán qua cổng VNPAY</small>
+                    </label>
+                    </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <!-- End Form Section -->
+        <!-- Order Summary Section (bên phải) -->
+        <div class="col-lg-4">
+            <div class="card border-success shadow-sm mb-4 position-sticky" style="top: 20px;">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-shopping-basket me-2"></i>
+                        Sản phẩm trong đơn hàng
+                    </h4>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th>Đơn giá</th>
+                                <th>Số lượng</th>
+                                <th>Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td>
+                                        <img src="@item.ImageUrl" alt="@item.ProductName" style="width:48px; height:48px; object-fit:cover; border-radius:8px; margin-right:8px;">
+                                        @item.ProductName
+                                    </td>
+                                    <td>@item.Price.ToString("N0")đ</td>
+                                    <td>@item.Quantity</td>
+                                    <td>@((item.Price * item.Quantity).ToString("N0"))đ</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div class="text-end fw-bold p-3">
+                        Tạm tính: @Model.TotalAmount.ToString("N0")đ<br />
+                        Phí vận chuyển: 20.000đ<br />
+                        <span class="fs-5 text-success">Tổng cộng: @((Model.TotalAmount + 20000).ToString("N0"))đ</span>
+                    </div>
+                    <!-- Nút đặt hàng nằm trong card -->
+                    <button type="submit" class="btn btn-success btn-lg w-100 mt-2 mb-2" form="checkout-form">
+                        <i class="fas fa-shopping-cart me-2"></i>
+                        ĐẶT HÀNG
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+<script>
+$(document).ready(function () {
+    // Payment method selection with Bootstrap styling
+    $('input[name="payment"]').change(function () {
+        $('.form-check').removeClass('border-success bg-light');
+        $(this).closest('.form-check').addClass('border-success bg-light');
+    });
+    $('#cod').closest('.form-check').addClass('border-success bg-light');
+
+    // Load tỉnh/thành phố
+    $.get('https://provinces.open-api.vn/api/p/', function(data) {
+        $('#provinceSelect').append(
+            data.map(function(p) {
+                return `<option value="${p.code}">${p.name}</option>`;
+            })
+        );
+    });
+
+    // Khi chọn tỉnh, load quận/huyện
+    $('#provinceSelect').change(function() {
+        var provinceCode = $(this).val();
+        var provinceText = $(this).find('option:selected').text();
+        $('#provinceName').val(provinceText);
+        $('#districtSelect').html('<option value="">Chọn quận/huyện</option>');
+        $('#wardSelect').html('<option value="">Chọn xã/phường</option>');
+        if (provinceCode) {
+            $.get(`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`, function(data) {
+                $('#districtSelect').append(
+                    data.districts.map(function(d) {
+                        return `<option value="${d.code}">${d.name}</option>`;
+                    })
+                );
+            });
+        }
+    });
+
+    // Khi chọn quận/huyện, load xã/phường
+    $('#districtSelect').change(function() {
+        var districtCode = $(this).val();
+        var districtText = $(this).find('option:selected').text();
+        $('#districtName').val(districtText);
+        $('#wardSelect').html('<option value="">Chọn xã/phường</option>');
+        if (districtCode) {
+            $.get(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`, function(data) {
+                $('#wardSelect').append(
+                    data.wards.map(function(w) {
+                        return `<option value="${w.code}">${w.name}</option>`;
+                    })
+                );
+            });
+        }
+    });
+
+    // Khi chọn xã/phường
+    $('#wardSelect').change(function() {
+        var wardText = $(this).find('option:selected').text();
+        $('#wardName').val(wardText);
+    });
+});
+</script>
+}

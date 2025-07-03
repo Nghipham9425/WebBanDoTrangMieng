@@ -1,0 +1,68 @@
+﻿@model WebBanDoTrangMieng.User
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-success text-white text-center">
+                    <h4 class="mb-0"><i class="fas fa-user-edit me-2"></i>Chỉnh sửa thông tin cá nhân</h4>
+                </div>
+                <div class="card-body p-4">
+                    @if (ViewBag.Message != null)
+                    {
+                        <div class="alert alert-success text-center mb-4">
+                            <i class="fas fa-check-circle me-2"></i>@ViewBag.Message
+                        </div>
+                    }
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(model => model.UserId)
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-user me-2 text-success"></i>Họ tên
+                            </label>
+                            @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", placeholder = "Nhập họ tên" })
+                            @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-envelope me-2 text-success"></i>Email
+                            </label>
+                            @Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "Nhập email" })
+                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-phone me-2 text-success"></i>Số điện thoại
+                            </label>
+                            @Html.TextBoxFor(model => model.Phone, new { @class = "form-control", placeholder = "Nhập số điện thoại" })
+                            @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-map-marker-alt me-2 text-success"></i>Địa chỉ
+                            </label>
+                            @Html.TextBoxFor(model => model.Address, new { @class = "form-control", placeholder = "Nhập địa chỉ" })
+                            @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-save me-2"></i>Lưu thay đổi
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

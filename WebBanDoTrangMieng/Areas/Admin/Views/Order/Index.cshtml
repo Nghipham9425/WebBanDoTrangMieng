@@ -1,0 +1,296 @@
+﻿@model List<WebBanDoTrangMieng.Order>
+@{
+    ViewBag.Title = "Quản lý đơn hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- Header Section -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">
+            <i class="fas fa-shopping-cart text-primary"></i> 
+            Quản lý đơn hàng
+        </h1>
+        <div class="d-none d-sm-inline-block">
+            <span class="text-muted">Tổng: <strong>@ViewBag.TotalOrders</strong> đơn hàng</span>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Bộ lọc & Tìm kiếm</h6>
+        </div>
+        <div class="card-body">
+            @using (Html.BeginForm("Index", "Order", FormMethod.Get, new { @class = "row g-3" }))
+            {
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Trạng thái:</label>
+                    @Html.DropDownList("status", new List<SelectListItem>
+                    {
+                        new SelectListItem { Text = "🔍 Tất cả", Value = "", Selected = string.IsNullOrEmpty(ViewBag.CurrentStatus as string) },
+                        new SelectListItem { Text = "⏳ Chờ xác nhận", Value = "Pending", Selected = (ViewBag.CurrentStatus as string) == "Pending" },
+                        new SelectListItem { Text = "✅ Đã xác nhận", Value = "Confirmed", Selected = (ViewBag.CurrentStatus as string) == "Confirmed" },
+                        new SelectListItem { Text = "🔄 Đang chuẩn bị", Value = "Processing", Selected = (ViewBag.CurrentStatus as string) == "Processing" },
+                        new SelectListItem { Text = "🚛 Đang giao", Value = "Shipped", Selected = (ViewBag.CurrentStatus as string) == "Shipped" },
+                        new SelectListItem { Text = "📦 Đã giao", Value = "Delivered", Selected = (ViewBag.CurrentStatus as string) == "Delivered" },
+                        new SelectListItem { Text = "❌ Đã hủy", Value = "Cancelled", Selected = (ViewBag.CurrentStatus as string) == "Cancelled" }
+                    }, new { @class = "form-select" })
+                </div>
+                
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Tìm kiếm:</label>
+                    <div class="input-group">
+                        @Html.TextBox("search", ViewBag.Search as string ?? "", new { @class = "form-control", placeholder = "Nhập tên khách hàng, email hoặc mã đơn hàng..." })
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Tìm kiếm
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 d-flex align-items-end">
+                    <a href="@Url.Action("Index", "Order", new { area = "Admin" })" class="btn btn-outline-secondary">
+                        <i class="fas fa-redo"></i> Làm mới
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Orders Table -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Danh sách đơn hàng</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" style="border-color: #e3e6f0;">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="text-center" width="8%">Mã đơn</th>
+                            <th width="20%">Khách hàng</th>
+                            <th class="text-center" width="12%">Ngày đặt</th>
+                            <th class="text-center" width="12%">Trạng thái</th>
+                            <th class="text-center" width="15%">Thanh toán</th>
+                            <th class="text-center" width="13%">Tổng tiền</th>
+                            <th class="text-center" width="20%">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var order in Model)
+                            {
+                                <tr class="align-middle">
+                                    <td class="text-center">
+                                        <span class="badge bg-light text-primary px-3 py-2">
+                                            <strong>#@order.OrderId</strong>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 me-3">
+                                                <div class="avatar-sm bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                                    <i class="fas fa-user text-primary"></i>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <div class="fw-bold text-gray-800">@order.User.UserName</div>
+                                                <small class="text-muted">@order.User.Email</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="text-gray-800">@(order.OrderDate?.ToString("dd/MM/yyyy") ?? "N/A")</div>
+                                        <small class="text-muted">@(order.OrderDate?.ToString("HH:mm") ?? "")</small>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge @GetStatusBadgeClass(order.Status) px-3 py-2">
+                                            @GetStatusIcon(order.Status) @GetStatusText(order.Status)
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-light text-dark border px-3 py-2">
+                                            @GetPaymentIcon(order.PaymentMethod) @order.PaymentMethod
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="fw-bold text-success fs-6">
+                                            @{
+                                                decimal total = order.Order_Product?.Sum(op => op.Quantity * op.Price) ?? 0;
+                                            }
+                                            @total.ToString("N0") VNĐ
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group">
+                                                <a href="@Url.Action("Details", "Order", new { area = "Admin", id = order.OrderId })" 
+                                                   class="btn btn-outline-info btn-sm" 
+                                                   title="Xem chi tiết">
+                                                    <i class="fas fa-eye"></i> Chi tiết
+                                                </a>
+                                                @if (order.Status != "Delivered" && order.Status != "Cancelled")
+                                                {
+                                                    <a href="@Url.Action("Edit", "Order", new { area = "Admin", id = order.OrderId })" 
+                                                       class="btn btn-outline-warning btn-sm" 
+                                                       title="Cập nhật trạng thái">
+                                                        <i class="fas fa-edit"></i> Sửa
+                                                    </a>
+                                                }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center py-5">
+                                    <div class="text-muted">
+                                        <i class="fas fa-inbox fa-3x mb-3"></i>
+                                        <p class="mb-0">Không tìm thấy đơn hàng nào</p>
+                                        <small>Thử thay đổi bộ lọc hoặc tìm kiếm khác</small>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    @if (ViewBag.TotalPages > 1)
+    {
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="text-muted">
+                Hiển thị trang @ViewBag.CurrentPage của @ViewBag.TotalPages
+            </div>
+            <nav aria-label="Page navigation">
+                <ul class="pagination mb-0">
+                    @if (ViewBag.CurrentPage > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", "Order", new { area = "Admin", page = ViewBag.CurrentPage - 1, status = ViewBag.CurrentStatus, search = ViewBag.Search })">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </li>
+                    }
+                    
+                    @for (int i = Math.Max(1, ViewBag.CurrentPage - 2); i <= Math.Min(ViewBag.TotalPages, ViewBag.CurrentPage + 2); i++)
+                    {
+                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("Index", "Order", new { area = "Admin", page = i, status = ViewBag.CurrentStatus, search = ViewBag.Search })">
+                                @i
+                            </a>
+                        </li>
+                    }
+                    
+                    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", "Order", new { area = "Admin", page = ViewBag.CurrentPage + 1, status = ViewBag.CurrentStatus, search = ViewBag.Search })">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    }
+</div>
+
+<style>
+.avatar-sm {
+    width: 40px;
+    height: 40px;
+}
+
+.table th {
+    background-color: #f8f9fc;
+    border-bottom: 2px solid #e3e6f0;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+}
+
+.btn-group .btn {
+    margin: 0 2px;
+}
+
+.badge {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.card {
+    border: none;
+    border-radius: 0.5rem;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+}
+</style>
+
+@functions {
+    public string GetStatusBadgeClass(string status)
+    {
+        switch (status)
+        {
+            case "Pending": return "bg-warning text-dark";
+            case "Paid": return "bg-success text-white";
+            case "Confirmed": return "bg-info text-white";
+            case "Processing": return "bg-primary text-white";
+            case "Shipped": return "bg-secondary text-white";
+            case "Delivered": return "bg-success text-white";
+            case "Cancelled": return "bg-danger text-white";
+            default: return "bg-light text-dark";
+        }
+    }
+
+    public string GetStatusText(string status)
+    {
+        switch (status)
+        {
+            case "Pending": return "Chờ xác nhận";
+            case "Paid": return "Đã thanh toán";
+            case "Confirmed": return "Đã xác nhận";
+            case "Processing": return "Đang chuẩn bị";
+            case "Shipped": return "Đang giao";
+            case "Delivered": return "Đã giao";
+            case "Cancelled": return "Đã hủy";
+            default: return status;
+        }
+    }
+
+    public string GetStatusIcon(string status)
+    {
+        switch (status)
+        {
+            case "Pending": return "⏳";
+            case "Paid": return "💸";
+            case "Confirmed": return "✅";
+            case "Processing": return "🔄";
+            case "Shipped": return "🚛";
+            case "Delivered": return "📦";
+            case "Cancelled": return "❌";
+            default: return "��";
+        }
+    }
+
+    public string GetPaymentIcon(string method)
+    {
+        switch (method)
+        {
+            case "COD": return "💵";
+            case "MoMo": return "📱";
+            case "Bank Transfer": return "🏦";
+            case "Credit Card": return "💳";
+            case "Debit Card": return "💳";
+            default: return "💰";
+        }
+    }
+}

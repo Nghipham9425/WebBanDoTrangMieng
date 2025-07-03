@@ -1,0 +1,98 @@
+﻿@using WebBanDoTrangMieng
+@using System.Linq
+@{
+    ViewBag.Title = "Chi tiết đơn hàng #" + Model.OrderId;
+    string statusClass = "";
+    string statusIcon = "";
+    switch (Model.Status)
+    {
+        case "Pending": statusClass = "badge bg-warning text-dark"; statusIcon = "⏳"; break;
+        case "Confirmed": statusClass = "badge bg-info text-white"; statusIcon = "✅"; break;
+        case "Processing": statusClass = "badge bg-primary text-white"; statusIcon = "🔄"; break;
+        case "Shipped": statusClass = "badge bg-secondary text-white"; statusIcon = "🚛"; break;
+        case "Delivered": statusClass = "badge bg-success text-white"; statusIcon = "📦"; break;
+        case "Cancelled": statusClass = "badge bg-danger text-white"; statusIcon = "❌"; break;
+        default: statusClass = "badge bg-light text-dark"; statusIcon = "📋"; break;
+    }
+    var orderProducts = Model.Order_Product as IEnumerable<Order_Product>;
+    var total = orderProducts?.Sum(op => op.Quantity * op.Price) ?? 0;
+}
+
+<div class="container py-4">
+    <div class="mb-4">
+        <h2 class="fw-bold mb-2 text-success">
+            <i class="fas fa-receipt me-2"></i>Chi tiết đơn hàng #@Model.OrderId
+        </h2>
+        <div class="mb-2 text-muted">Ngày đặt: <strong>@(Model.OrderDate?.ToString("dd/MM/yyyy HH:mm"))</strong></div>
+        <div class="mb-2">
+            Trạng thái: <span class="@statusClass fs-6">@statusIcon @Model.Status</span>
+        </div>
+    </div>
+    <!-- Thông tin khách hàng -->
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white fw-bold">
+            <i class="fas fa-user me-2"></i> Thông tin khách hàng
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <strong>Tên khách hàng:</strong> @Model.User.UserName
+                </div>
+                <div class="col-md-6 mb-2">
+                    <strong>Email:</strong> <a href="mailto:@Model.User.Email">@Model.User.Email</a>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <strong>Số điện thoại:</strong> <a href="tel:@Model.User.Phone">@Model.User.Phone</a>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <strong>Địa chỉ giao hàng:</strong> @Model.ShippingAddress
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Nút hủy đơn hàng nếu trạng thái là Pending, Confirmed hoặc Processing -->
+    @if (Model.Status == "Pending" || Model.Status == "Confirmed" || Model.Status == "Processing")
+    {
+        <form method="post" action="@Url.Action("CancelOrder", "User", new { id = Model.OrderId })" onsubmit="return confirm('Bạn chắc chắn muốn hủy đơn hàng này?');">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-danger mb-4">
+                <i class="fas fa-times-circle me-1"></i> Hủy đơn hàng
+            </button>
+        </form>
+    }
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-success text-white fw-bold fs-5">
+            <i class="fas fa-shopping-basket me-2"></i> Sản phẩm
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-bordered table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Ảnh</th>
+                        <th>Tên sản phẩm</th>
+                        <th class="text-center">Số lượng</th>
+                        <th class="text-center">Đơn giá</th>
+                        <th class="text-center">Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in (Model.Order_Product as IEnumerable<Order_Product>))
+                {
+                    <tr>
+                        <td class="text-center">
+                            <img src="@item.Product.ImageUrl" alt="@item.Product.Name" style="width:48px; height:48px; object-fit:cover; border-radius:8px; box-shadow:0 1px 4px #ccc;">
+                        </td>
+                        <td>@item.Product.Name</td>
+                        <td class="text-center">@item.Quantity</td>
+                        <td class="text-center text-success fw-semibold">@item.Price.ToString("N0") VNĐ</td>
+                        <td class="text-center text-primary fw-bold">@((item.Quantity * item.Price).ToString("N0")) VNĐ</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+            <div class="text-end p-3">
+                <span class="fw-bold fs-5 text-success">Tổng cộng: @total.ToString("N0") VNĐ</span>
+            </div>
+        </div>
+    </div>
+</div>

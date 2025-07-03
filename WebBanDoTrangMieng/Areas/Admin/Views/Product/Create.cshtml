@@ -1,0 +1,229 @@
+﻿@model WebBanDoTrangMieng.Product
+
+@{
+    ViewBag.Title = "Thêm sản phẩm mới";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <a href="@Url.Action("Index")" class="btn btn-outline-secondary me-3">
+                            <i class="fas fa-arrow-left"></i>
+                        </a>
+                        <div>
+                            <h4 class="mb-1">
+                                <i class="fas fa-plus-circle me-2 text-success"></i>
+                                Thêm sản phẩm mới
+                            </h4>
+                            <p class="text-muted mb-0">Điền thông tin chi tiết để tạo sản phẩm mới</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            @ViewBag.Error
+        </div>
+    }
+
+    @using (Html.BeginForm("Create", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row">
+            <!-- Left Column -->
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Thông tin cơ bản
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Product Name -->
+                        <div class="mb-3">
+                            @Html.LabelFor(model => model.Name, "Tên sản phẩm", new { @class = "form-label" })
+                            <span class="text-danger">*</span>
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", placeholder = "Nhập tên sản phẩm", required = "required" } })
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="row">
+                            <!-- Category -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    @Html.LabelFor(model => model.CategoryId, "Danh mục", new { @class = "form-label" })
+                                    <span class="text-danger">*</span>
+                                    @Html.DropDownList("CategoryId", (SelectList)ViewBag.CategoryId, "-- Chọn danh mục --", new { @class = "form-select", required = "required" })
+                                    @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <!-- Stock -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    @Html.LabelFor(model => model.StockQuantity, "Số lượng tồn kho", new { @class = "form-label" })
+                                    @Html.EditorFor(model => model.StockQuantity, new { htmlAttributes = new { @class = "form-control", placeholder = "0", min = "0", type = "number" } })
+                                    @Html.ValidationMessageFor(model => model.StockQuantity, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Price -->
+                        <div class="mb-3">
+                            @Html.LabelFor(model => model.Price, "Giá (VNĐ)", new { @class = "form-label" })
+                            <span class="text-danger">*</span>
+                            <div class="input-group">
+                                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control", placeholder = "0", min = "0", step = "1000", required = "required", type = "number" } })
+                                <span class="input-group-text">₫</span>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            @Html.LabelFor(model => model.Description, "Mô tả", new { @class = "form-label" })
+                            @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = "4", placeholder = "Mô tả chi tiết về sản phẩm..." })
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-image me-2"></i>
+                            Hình ảnh sản phẩm
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Upload Image -->
+                        <div class="mb-3">
+                            <label class="form-label">Upload hình ảnh</label>
+                            <input type="file" id="imageFile" name="imageFile" accept="image/*" class="form-control">
+                            <div class="form-text">Chọn file JPG, PNG hoặc GIF (tối đa 5MB)</div>
+                        </div>
+
+                        <!-- Image Preview -->
+                        <div class="mb-3" id="imagePreview" style="display: none;">
+                            <label class="form-label">Xem trước hình ảnh</label>
+                            <div class="text-center">
+                                <img id="previewImg" src="" alt="Preview" class="img-fluid rounded border" style="max-height: 200px;">
+                                <div class="mt-2">
+                                    <button type="button" class="btn btn-outline-danger btn-sm" id="removeImage">
+                                        <i class="fas fa-times me-1"></i>Xóa ảnh
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Image URL -->
+                        <div class="mb-3">
+                            @Html.LabelFor(model => model.ImageUrl, "Hoặc nhập URL hình ảnh", new { @class = "form-label" })
+                            @Html.EditorFor(model => model.ImageUrl, new { htmlAttributes = new { @class = "form-control", placeholder = "https://example.com/image.jpg" } })
+                            @Html.ValidationMessageFor(model => model.ImageUrl, "", new { @class = "text-danger" })
+                        </div>
+
+                        <!-- Info Note -->
+                        <div class="alert alert-info">
+                            <i class="fas fa-lightbulb me-2"></i>
+                            <small>Sản phẩm sẽ được tự động kích hoạt sau khi tạo thành công</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save me-2"></i>
+                                Lưu sản phẩm
+                            </button>
+                            <a href="@Url.Action("Index")" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>
+                                Hủy bỏ
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function() {
+            const $imageFile = $('#imageFile');
+            const $imagePreview = $('#imagePreview');
+            const $previewImg = $('#previewImg');
+            const $removeImage = $('#removeImage');
+            const $imageUrlInput = $('input[name="ImageUrl"]');
+
+            // File input change
+            $imageFile.on('change', function(e) {
+                if (e.target.files.length > 0) {
+                    handleFileSelect(e.target.files[0]);
+                }
+            });
+
+            // Handle file selection
+            function handleFileSelect(file) {
+                if (file && file.type.startsWith('image/')) {
+                    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                        alert('File quá lớn. Vui lòng chọn file nhỏ hơn 5MB.');
+                        $imageFile.val('');
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        $previewImg.attr('src', e.target.result);
+                        $imagePreview.show();
+                        $imageUrlInput.val(''); // Clear URL input when file is selected
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    alert('Vui lòng chọn file hình ảnh hợp lệ (JPG, PNG, GIF).');
+                    $imageFile.val('');
+                }
+            }
+
+            // Remove image
+            $removeImage.on('click', function() {
+                $imageFile.val('');
+                $previewImg.attr('src', '');
+                $imagePreview.hide();
+            });
+
+            // Clear file input when URL is entered
+            $imageUrlInput.on('input', function() {
+                if ($(this).val().trim() !== '') {
+                    $imageFile.val('');
+                    $previewImg.attr('src', '');
+                    $imagePreview.hide();
+                }
+            });
+        });
+    </script>
+}

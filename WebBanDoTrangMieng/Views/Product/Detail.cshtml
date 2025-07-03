@@ -1,0 +1,384 @@
+﻿@model WebBanDoTrangMieng.Product
+
+@{
+    ViewBag.Title = Model.Name + " - Chi tiết sản phẩm";
+    var images = Model.ImageUrl?.Split(',').Select(url => url.Trim()).ToArray() ?? new string[0];
+    var firstImage = images.FirstOrDefault() ?? "/Content/Images/Products/no-image.jpg";
+}
+
+@Html.AntiForgeryToken()
+
+@section styles {
+    <link href="@Url.Content("~/Content/product-detail.css")" rel="stylesheet" type="text/css" />
+}
+
+<div class="container-fluid py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <div class="container">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Home")" class="text-decoration-none">
+                        <i class="fas fa-home me-1"></i>Trang chủ
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Product")" class="text-decoration-none">Sản phẩm</a>
+                </li>
+                @if (Model.Category != null)
+                {
+                    <li class="breadcrumb-item">
+                        <a href="@Url.Action("Index", "Product", new { categoryId = Model.CategoryId })" class="text-decoration-none">@Model.Category.Name</a>
+                    </li>
+                }
+                <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+            </ol>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Product Detail -->
+        <div class="row g-5">
+            <!-- Product Images -->
+            <div class="col-lg-6">
+                <div class="product-gallery">
+                    <!-- Main Image -->
+                    <div class="position-relative mb-3">
+                        <div class="ratio ratio-1x1">
+                            <img src="@firstImage" alt="@Model.Name" class="main-product-image rounded-4 shadow-lg object-fit-cover" id="mainImage">
+                        </div>
+                        
+                        <!-- Image Badges -->
+                        <div class="image-badges">
+                            @if (Model.CreatedDate.HasValue && Model.CreatedDate.Value > DateTime.Now.AddDays(-7))
+                            {
+                                <span class="badge bg-success shadow-sm">
+                                    <i class="fas fa-star me-1"></i>Mới
+                                </span>
+                            }
+                            @if (Model.StockQuantity.HasValue && Model.StockQuantity.Value < 10)
+                            {
+                                <span class="badge bg-warning text-dark shadow-sm">
+                                    <i class="fas fa-fire me-1"></i>Sắp hết
+                                </span>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Thumbnails -->
+                    @if (images.Length > 1)
+                    {
+                        <div class="row g-2">
+                            @for (int i = 0; i < Math.Min(images.Length, 6); i++)
+                            {
+                                <div class="col-2">
+                                    <div class="ratio ratio-1x1">
+                                        <img src="@images[i]" alt="@Model.Name @(i+1)" 
+                                             class="thumbnail-image rounded-3 shadow-sm object-fit-cover @(i == 0 ? "active" : "")" 
+                                             onclick="changeImage(this, @i)">
+                                    </div>
+                                </div>
+                            }
+                            @if (images.Length > 6)
+                            {
+                                <div class="col-2">
+                                    <div class="ratio ratio-1x1">
+                                        <div class="more-images-overlay rounded-3 shadow-sm d-flex align-items-center justify-content-center text-white fw-bold">
+                                            +@(images.Length - 5)
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Product Info -->
+            <div class="col-lg-6">
+                <div class="h-100">
+                    <!-- Product Title -->
+                    <h1 class="product-title mb-3">@Model.Name</h1>
+
+                    <!-- Rating -->
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="text-warning me-2 fs-5">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="text-muted">4.5 (23 đánh giá)</span>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="mb-4">
+                        <div class="current-price">@Model.Price.ToString("N0")đ</div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-4">
+                        @if (!string.IsNullOrEmpty(Model.Description))
+                        {
+                            <p class="fs-6 lh-lg text-muted">@Model.Description</p>
+                        }
+                        else
+                        {
+                            <p class="fs-6 lh-lg text-muted">Sản phẩm được chế biến tươi mỗi ngày với nguyên liệu cao cấp, đảm bảo chất lượng và hương vị tuyệt vời nhất.</p>
+                        }
+                    </div>
+
+                    <!-- Product Info -->
+                    <div class="row g-3 mb-4">
+                        @if (Model.Category != null)
+                        {
+                            <div class="col-6">
+                                <div class="info-item">
+                                    <i class="fas fa-tag text-primary me-2"></i>
+                                    <span class="info-label">Danh mục:</span>
+                                    <span class="info-value">@Model.Category.Name</span>
+                                </div>
+                            </div>
+                        }
+                        <div class="col-6">
+                            <div class="info-item">
+                                <i class="fas fa-weight-hanging text-success me-2"></i>
+                                <span class="info-label">Khối lượng:</span>
+                                <span class="info-value">250g</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="info-item">
+                                <i class="fas fa-clock text-warning me-2"></i>
+                                <span class="info-label">Thời gian:</span>
+                                <span class="info-value">Tươi mỗi ngày</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="info-item">
+                                @if (Model.StockQuantity.HasValue && Model.StockQuantity.Value > 0)
+                                {
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <span class="info-label">Tình trạng:</span>
+                                    <span class="info-value text-success">Còn hàng</span>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-times-circle text-danger me-2"></i>
+                                    <span class="info-label">Tình trạng:</span>
+                                    <span class="info-value text-danger">Hết hàng</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quantity Selector -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold fs-5 text-dark mb-2">Số lượng:</label>
+                        <div class="quantity-selector">
+                            <button class="quantity-btn" onclick="decreaseQuantity()">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <input type="number" class="quantity-input" id="quantityInput" value="1" min="1" max="10">
+                            <button class="quantity-btn" onclick="increaseQuantity()">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex gap-3 align-items-center mb-4">
+                        <button class="btn-add-to-cart" onclick="addToCart()">
+                            <i class="fas fa-shopping-cart me-2"></i>
+                            <span>Thêm vào giỏ hàng</span>
+                        </button>
+                        <button class="btn-share" onclick="shareProduct()" title="Chia sẻ">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                    </div>
+
+                    <!-- Social Share -->
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="fw-semibold text-dark">Chia sẻ:</span>
+                        <div class="d-flex gap-2">
+                            <a href="#" class="social-btn facebook" title="Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="social-btn twitter" title="Twitter">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="social-btn pinterest" title="Pinterest">
+                                <i class="fab fa-pinterest-p"></i>
+                            </a>
+                            <a href="#" class="social-btn instagram" title="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Tabs -->
+        <div class="mt-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent border-0 p-0">
+                    <ul class="nav nav-pills nav-fill product-tabs" id="productTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="description-tab" data-bs-toggle="pill" 
+                                    data-bs-target="#description" type="button" role="tab">
+                                <i class="fas fa-info-circle me-2"></i>Mô tả chi tiết
+                            </button>
+                        </li>   
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="reviews-tab" data-bs-toggle="pill" 
+                                    data-bs-target="#reviews" type="button" role="tab">
+                                <i class="fas fa-star me-2"></i>Đánh giá
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body p-4">
+                    <div class="tab-content" id="productTabContent">
+                        <!-- Description Tab -->
+                        <div class="tab-pane fade show active" id="description" role="tabpanel">
+                            <h4 class="mb-3">Giới thiệu sản phẩm</h4>
+                            <p class="lh-lg">@Model.Name là một trong những sản phẩm đặc biệt tại cửa hàng của chúng tôi. Được chế biến từ những nguyên liệu tươi ngon nhất, sản phẩm mang đến hương vị độc đáo và khó quên.</p>
+                            <p class="lh-lg">Mỗi món bánh đều được làm thủ công bởi các đầu bếp giàu kinh nghiệm, đảm bảo chất lượng cao nhất cho khách hàng. Sản phẩm không sử dụng chất bảo quản, hoàn toàn tự nhiên và an toàn cho sức khỏe.</p>
+                            
+                            <div class="alert alert-info mt-4">
+                                <h6 class="alert-heading">
+                                    <i class="fas fa-info-circle me-2"></i>Hướng dẫn bảo quản
+                                </h6>
+                                <ul class="mb-0">
+                                    <li>Bảo quản trong tủ lạnh ở nhiệt độ 2-8°C</li>
+                                    <li>Sử dụng trong vòng 2-3 ngày sau khi mua</li>
+                                    <li>Lấy ra khỏi tủ lạnh 10-15 phút trước khi thưởng thức</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- Reviews Tab -->
+                        <div class="tab-pane fade" id="reviews" role="tabpanel">
+                            <!-- Danh sách đánh giá thực tế -->
+                            <div class="mb-4">
+                                @if (ViewBag.Reviews != null && ((IEnumerable<WebBanDoTrangMieng.Review>)ViewBag.Reviews).Any())
+                                {
+                                    foreach (var review in (IEnumerable<WebBanDoTrangMieng.Review>)ViewBag.Reviews)
+                                    {
+                                        <div class="review-item mb-3 border-bottom pb-2">
+                                            <div class="review-header d-flex align-items-center">
+                                                <div class="reviewer-avatar me-2">
+                                                    <i class="fas fa-user"></i>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0 fw-semibold">@review.Order.User.UserName</h6>
+                                                    <div class="text-muted small">@(review.CreatedDate != null ? ((DateTime)review.CreatedDate).ToString("dd/MM/yyyy") : "")</div>
+                                                </div>
+                                                <div class="ms-auto text-warning">
+                                                    @for (int i = 0; i < review.Rating; i++) { <i class="fas fa-star"></i> }
+                                                    @for (int i = review.Rating; i < 5; i++) { <i class="far fa-star"></i> }
+                                                </div>
+                                            </div>
+                                            <p class="mb-0">@review.Comment</p>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <div class="text-muted">Chưa có đánh giá nào cho sản phẩm này.</div>
+                                }
+                            </div>
+
+                            <!-- Form đánh giá chỉ hiện khi đủ điều kiện -->
+                            @if (ViewBag.CanReview == true)
+                            {
+                                <div class="card bg-light mb-3">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">Viết đánh giá của bạn</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        @using (Html.BeginForm("AddReview", "Product", FormMethod.Post))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            @Html.Hidden("productId", Model.ProductId)
+                                            <div class="mb-3">
+                                                <label class="form-label">Đánh giá *</label>
+                                                <div class="rating-input">
+                                                    @for (int i = 5; i >= 1; i--)
+                                                    {
+                                                        <input type="radio" id="star@i" name="Rating" value="@i" @(i == 5 ? "checked" : "")>
+                                                        <label for="star@i">★</label>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Nội dung đánh giá *</label>
+                                                <textarea name="Comment" class="form-control" rows="4" placeholder="Chia sẻ trải nghiệm của bạn..." required></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-paper-plane me-2"></i>Gửi đánh giá
+                                            </button>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            else if (Session["UserId"] != null)
+                            {
+                                <div class="alert alert-info">Bạn chỉ có thể đánh giá khi đã mua và nhận sản phẩm này (đơn hàng hoàn thành).</div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-warning">Vui lòng đăng nhập để đánh giá sản phẩm.</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function increaseQuantity() {
+    const input = document.getElementById('quantityInput');
+    const currentValue = parseInt(input.value);
+    if (currentValue < 10) {
+        input.value = currentValue + 1;
+    }
+}
+
+function decreaseQuantity() {
+    const input = document.getElementById('quantityInput');
+    const currentValue = parseInt(input.value);
+    if (currentValue > 1) {
+        input.value = currentValue - 1;
+    }
+}
+
+function addToCart() {
+    const quantity = document.getElementById('quantityInput').value;
+    const productId = @Model.ProductId;
+    
+    $.ajax({
+        url: '@Url.Action("AddToCart", "Cart")',
+        type: 'POST',
+        data: {
+            productId: productId,
+            quantity: quantity,
+            __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+        },
+        success: function(response) {
+            if (response.success) {
+                alert('Đã thêm ' + quantity + ' sản phẩm vào giỏ hàng!');
+            } else {
+                alert(response.message);
+            }
+        },
+        error: function() {
+            alert('Có lỗi xảy ra khi thêm sản phẩm!');
+        }
+    });
+}
+</script>
+

@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Đồ Tráng Miệng</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="@ViewBag.Description ?? 'Cửa hàng đồ tráng miệng online chất lượng cao với bánh flan, tiramisu, cheesecake và nhiều món ngon khác.'">
+    <meta name="keywords" content="bánh flan, tiramisu, cheesecake, đồ tráng miệng, bánh ngọt, pudding">
+    <meta name="author" content="Đồ Tráng Miệng">
+    
+    <!-- Favicon -->
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    
+    <!-- CSS Bundle -->
+    @Styles.Render("~/Content/css")
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Inter Font from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Additional Styles -->
+    @RenderSection("styles", required: false)
+</head>
+
+<body>
+    <!-- ==========================================
+         TOP HEADER SECTION - Bootstrap Success Theme
+         ========================================== -->
+    <div class="bg-success text-white py-2">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                    <span class="small"><i class="fas fa-phone me-1"></i> Hotline: 0123-456-789</span>
+                    <span class="small d-none d-md-inline"><i class="fas fa-envelope me-1"></i> info@dotrangmieng.com</span>
+                    <span class="small d-none d-lg-inline"><i class="fas fa-clock me-1"></i> Mở cửa: 8:00 - 22:00</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <a href="#" class="text-white-50 hover-text-white" title="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="text-white-50 hover-text-white" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="text-white-50 hover-text-white" title="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-white-50 hover-text-white" title="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Partial("_Navbar")
+
+
+    <!-- ==========================================
+         MAIN CONTENT AREA
+         ========================================== -->
+    <main>
+        @RenderBody()
+    </main>
+
+    <!-- ==========================================
+         FOOTER SECTION - Bootstrap Success Theme
+         ========================================== -->
+    @Html.Partial("_Footer")
+    @Html.Partial("__AuthModal")
+    <!-- ==========================================
+         JAVASCRIPT FILES
+         ========================================== -->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/layout.js"></script>
+    <script src="~/Scripts/auth-modal.js"></script>
+    <script src="~/Scripts/home-video.js"></script>
+    
+    @RenderSection("scripts", required: false)
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <script>
+            $(function() {
+                alert('@TempData["ErrorMessage"]');
+            });
+        </script>
+    }
+</body>     
+</html>
