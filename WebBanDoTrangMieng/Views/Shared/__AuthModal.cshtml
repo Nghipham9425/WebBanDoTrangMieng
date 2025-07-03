@@ -1,0 +1,164 @@
+﻿<!-- ==========================================
+     AUTH MODAL - Bootstrap Success Theme
+     ========================================== -->
+<div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title fw-semibold" id="authModalLabel">
+                    <i class="fas fa-user-circle me-2"></i>
+                    Tài khoản
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            
+            <div class="modal-body p-0">
+                <!-- Nav Tabs -->
+                <ul class="nav nav-tabs nav-fill bg-light auth-tabs" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link active text-success fw-semibold py-3 position-relative" 
+                                data-bs-toggle="tab" data-bs-target="#loginTab" type="button">
+                            <i class="fas fa-sign-in-alt me-2"></i>
+                            Đăng nhập
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link text-success fw-semibold py-3 position-relative" 
+                                data-bs-toggle="tab" data-bs-target="#registerTab" type="button">
+                            <i class="fas fa-user-plus me-2"></i>
+                            Đăng ký
+                        </button>
+                    </li>
+                </ul>
+
+                <!-- Tab Content -->
+                <div class="tab-content p-4">
+                    <!-- Login Tab -->
+                    <div class="tab-pane fade show active" id="loginTab">
+                        <form id="loginForm" action="/User/LoginAjax" method="post">
+                            @Html.AntiForgeryToken()
+                            <div class="mb-3">
+                                <label class="form-label text-success fw-semibold">
+                                    <i class="fas fa-envelope me-2"></i>
+                                    Email
+                                </label>
+                                <input type="email" class="form-control" id="loginEmail" name="Email"
+                                       placeholder="Nhập email của bạn" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label text-success fw-semibold">
+                                    <i class="fas fa-lock me-2"></i>
+                                    Mật khẩu
+                                </label>
+                                <input type="password" class="form-control" id="loginPassword" name="Password"
+                                       placeholder="Nhập mật khẩu" required>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input type="checkbox" class="form-check-input" id="rememberMe" name="RememberMe">
+                                <label class="form-check-label" for="rememberMe">
+                                    Ghi nhớ đăng nhập
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100 fw-semibold text-uppercase">
+                                <i class="fas fa-sign-in-alt me-2"></i>
+                                Đăng nhập
+                            </button>
+                            <div class="text-center mt-3">
+                                <a href="#" class="text-success text-decoration-none" id="forgotPasswordLink">
+                                    Quên mật khẩu?
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Register Tab -->
+                    <div class="tab-pane fade" id="registerTab">
+                        <form id="registerForm" action="/User/RegisterAjax" method="post">
+                            @Html.AntiForgeryToken()
+                            <div class="mb-3">
+                                <label class="form-label text-success fw-semibold">
+                                    <i class="fas fa-user me-2"></i>
+                                    Họ và tên
+                                </label>
+                                <input type="text" class="form-control" id="fullName" name="UserName"
+                                       placeholder="Nhập họ và tên" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label text-success fw-semibold">
+                                    <i class="fas fa-envelope me-2"></i>
+                                    Email
+                                </label>
+                                <input type="email" class="form-control" id="registerEmail" name="Email"
+                                       placeholder="Nhập email của bạn" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label text-success fw-semibold">
+                                    <i class="fas fa-phone me-2"></i>
+                                    Số điện thoại
+                                </label>
+                                <input type="tel" class="form-control" id="phone" name="Phone"
+                                       placeholder="Nhập số điện thoại">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label text-success fw-semibold">
+                                    <i class="fas fa-lock me-2"></i>
+                                    Mật khẩu
+                                </label>
+                                <input type="password" class="form-control" id="registerPassword" name="Password"
+                                       placeholder="Nhập mật khẩu (tối thiểu 6 ký tự)" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label text-success fw-semibold">
+                                    <i class="fas fa-lock me-2"></i>
+                                    Xác nhận mật khẩu
+                                </label>
+                                <input type="password" class="form-control" id="confirmPassword" name="ConfirmPassword"
+                                       placeholder="Nhập lại mật khẩu" required>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100 fw-semibold text-uppercase">
+                                <i class="fas fa-user-plus me-2"></i>
+                                Đăng ký
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Reset Password Tab -->
+                    <div class="tab-pane fade" id="resetTab">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-key text-success fs-1"></i>
+                            <h4 class="text-success mt-2">Quên mật khẩu?</h4>
+                            <p class="text-muted">Nhập email để nhận link reset mật khẩu</p>
+                        </div>
+                        <form id="resetForm" action="/User/SendResetPasswordEmail" method="post">
+                            @Html.AntiForgeryToken()
+                            <div class="mb-3">
+                                <label class="form-label text-success fw-semibold">
+                                    <i class="fas fa-envelope me-2"></i>
+                                    Email
+                                </label>
+                                <input type="email" class="form-control" id="resetEmail" name="Email"
+                                       placeholder="Nhập email đã đăng ký" required>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100 fw-semibold text-uppercase mb-3">
+                                <i class="fas fa-paper-plane me-2"></i>
+                                Gửi link reset
+                            </button>
+                            <button type="button" class="btn btn-outline-success w-100" id="backToLogin">
+                                <i class="fas fa-arrow-left me-2"></i>
+                                Quay lại đăng nhập
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Alert Messages -->
+                <div id="authAlerts" class="px-4 pb-3" style="display: none;">
+                    <div class="alert alert-dismissible fade show" role="alert">
+                        <span id="authMessage"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

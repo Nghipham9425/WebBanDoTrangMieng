@@ -1,0 +1,137 @@
+﻿<!-- ==========================================
+         MAIN NAVIGATION - Bootstrap Success Theme
+         ========================================== -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <!-- Brand Logo -->
+            @Html.ActionLink("Đồ Tráng Miệng", "Index", "Home", new { area = "" }, 
+                new { @class = "navbar-brand fw-bold text-success fs-3" })
+            
+            <!-- Mobile Menu Toggle -->
+            <button class="navbar-toggler border-success" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="fas fa-bars text-success"></i>
+            </button>
+
+            <!-- Navigation Menu -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        @Html.ActionLink("Trang chủ", "Index", "Home", new { area = "" }, 
+                            new { @class = "nav-link text-dark fw-semibold" })
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-dark fw-semibold" href="#" role="button" 
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Sản phẩm
+                        </a>
+                        <ul class="dropdown-menu border-0 shadow-lg">
+                            <li>@Html.ActionLink("Tất cả sản phẩm", "Index", "Product", new { area = "" }, 
+                                new { @class = "dropdown-item text-dark" })</li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>@Html.ActionLink("Bánh Flan", "Index", "Product", new { category = "flan" }, 
+                                new { @class = "dropdown-item text-dark" })</li>
+                            <li>@Html.ActionLink("Tiramisu", "Index", "Product", new { category = "tiramisu" }, 
+                                new { @class = "dropdown-item text-dark" })</li>
+                            <li>@Html.ActionLink("Cheesecake", "Index", "Product", new { category = "cheesecake" }, 
+                                new { @class = "dropdown-item text-dark" })</li>
+                            <li>@Html.ActionLink("Pudding", "Index", "Product", new { category = "pudding" }, 
+                                new { @class = "dropdown-item text-dark" })</li>
+                            <li>@Html.ActionLink("Bánh kem", "Index", "Product", new { category = "banh-kem" }, 
+                                new { @class = "dropdown-item text-dark" })</li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>@Html.ActionLink("Đồ uống", "Index", "Product", new { category = "do-uong" }, 
+                                new { @class = "dropdown-item text-dark" })</li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Giới thiệu", "About", "Home", new { area = "" }, 
+                            new { @class = "nav-link text-dark fw-semibold" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Liên hệ", "Contact", "Home", new { area = "" }, 
+                            new { @class = "nav-link text-dark fw-semibold" })
+                    </li>
+                </ul>
+
+                <!-- Action Buttons -->
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link text-success" title="Tìm kiếm">
+                            <i class="fas fa-search"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item position-relative">
+                        <a href="@Url.Action("Index", "Cart")" class="nav-link text-success" title="Giỏ hàng">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger small">
+                                0
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        @if (Session["UserId"] != null)
+                        {
+                            <!-- User is logged in -->
+                            <a class="nav-link dropdown-toggle text-success" href="#" role="button" 
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user"></i>
+                                <span class="d-none d-md-inline ms-1">@Session["UserName"]</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg">
+                                <li>
+                                    <div class="dropdown-item-text bg-light">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-user-circle text-success fs-3 me-2"></i>
+                                            <div>
+                                                <strong class="text-success">@Session["UserName"]</strong><br>
+                                                <small class="text-muted">@Session["Email"]</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a href="#" class="dropdown-item text-dark">
+                                        <i class="fas fa-user me-2 text-success"></i>
+                                        Thông tin cá nhân
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="dropdown-item text-dark">
+                                        <i class="fas fa-shopping-bag me-2 text-success"></i>
+                                        Lịch sử đơn hàng
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="dropdown-item text-dark">
+                                        <i class="fas fa-heart me-2 text-success"></i>
+                                        Sản phẩm yêu thích
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="dropdown-item text-dark">
+                                        <i class="fas fa-cog me-2 text-success"></i>
+                                        Cài đặt
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a href="@Url.Action("Logout", "User")" class="dropdown-item text-danger">
+                                        <i class="fas fa-sign-out-alt me-2"></i>
+                                        Đăng xuất
+                                    </a>
+                                </li>
+                            </ul>
+                        }
+                        else
+                        {
+                            <!-- User is not logged in -->
+                            <a href="#" class="nav-link text-success user-toggle" title="Tài khoản">
+                                <i class="fas fa-user"></i>
+                            </a>
+                        }
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
