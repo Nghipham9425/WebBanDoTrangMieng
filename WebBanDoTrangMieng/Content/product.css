@@ -9,7 +9,7 @@
 }
 
 /* ==========================================
-   PRODUCT HOVER EFFECTS (Special)
+   PRODUCT CARD HOVER EFFECTS
    ========================================== */
 .product-card:hover {
   transform: translateY(-8px);
@@ -21,7 +21,8 @@
   overflow: hidden;
 }
 
-.product-img img {
+.product-img img,
+.product-card:hover .product-img img {
   transition: transform 0.5s ease;
 }
 
@@ -30,7 +31,7 @@
 }
 
 /* ==========================================
-   PRODUCT GALLERY EFFECTS
+   PRODUCT GALLERY
    ========================================== */
 .product-main-image {
   overflow: hidden;
@@ -60,7 +61,7 @@
 }
 
 /* ==========================================
-   QUANTITY CONTROLS SPECIAL STYLING
+   QUANTITY CONTROLS
    ========================================== */
 .quantity-controls {
   display: flex;
@@ -123,7 +124,7 @@
 }
 
 /* ==========================================
-   ADD TO CART BUTTON SPECIAL EFFECT
+   ADD TO CART BUTTON EFFECTS
    ========================================== */
 .add-to-cart-btn {
   position: relative;
@@ -241,6 +242,9 @@
   background-color: rgba(255, 255, 255, 0.95) !important;
 }
 
+/* ==========================================
+   PRODUCT INFO STYLING
+   ========================================== */
 .product-info {
   padding: 20px;
   text-align: center;
@@ -334,54 +338,6 @@
 }
 
 /* ==========================================
-   RESPONSIVE DESIGN FOR CARDS
-   ========================================== */
-@media (max-width: 1199px) {
-  .product-image-container {
-    height: 260px;
-  }
-}
-
-@media (max-width: 991px) {
-  .product-image-container {
-    height: 240px;
-  }
-
-  .product-title {
-    font-size: 15px;
-    height: 40px;
-  }
-
-  .product-price {
-    font-size: 18px;
-  }
-}
-
-@media (max-width: 767px) {
-  .product-image-container {
-    height: 220px;
-  }
-
-  .product-info {
-    padding: 15px;
-  }
-
-  .product-title {
-    font-size: 14px;
-    height: 36px;
-  }
-
-  .product-price {
-    font-size: 16px;
-  }
-
-  .product-actions .btn {
-    padding: 8px 16px;
-    font-size: 13px;
-  }
-}
-
-/* ==========================================
    LIST VIEW DESIGN
    ========================================== */
 .product-list-card {
@@ -441,53 +397,33 @@
   color: #6c757d;
 }
 
-/* List view responsive */
+/* ==========================================
+   RESPONSIVE DESIGN
+   ========================================== */
+@media (max-width: 1199px) {
+  .product-image-container { height: 260px; }
+}
+
 @media (max-width: 991px) {
-  .list-image-container {
-    height: 160px;
-  }
-
-  .list-product-title {
-    font-size: 16px;
-  }
-
-  .list-product-price {
-    font-size: 20px;
-  }
+  .product-image-container { height: 240px; }
+  .product-title { font-size: 15px; height: 40px; }
+  .product-price { font-size: 18px; }
+  .list-image-container { height: 160px; }
+  .list-product-title { font-size: 16px; }
+  .list-product-price { font-size: 20px; }
 }
 
 @media (max-width: 767px) {
-  .list-image-container {
-    height: 140px;
-  }
-
-  .list-product-info {
-    padding: 15px;
-  }
-
-  .list-product-title {
-    font-size: 15px;
-  }
-
-  .list-product-price {
-    font-size: 18px;
-  }
-
-  .list-product-description {
-    font-size: 13px;
-  }
-}
-
-/* ==========================================
-   MOBILE RESPONSIVE
-   ========================================== */
-@media (max-width: 768px) {
-  .quantity-controls {
-    justify-content: center;
-    margin: 0 auto;
-  }
-
-  .product-thumbnail {
-    margin-bottom: 10px;
-  }
+  .product-image-container { height: 220px; }
+  .product-info { padding: 15px; }
+  .product-title { font-size: 14px; height: 36px; }
+  .product-price { font-size: 16px; }
+  .product-actions .btn { padding: 8px 16px; font-size: 13px; }
+  .list-image-container { height: 140px; }
+  .list-product-info { padding: 15px; }
+  .list-product-title { font-size: 15px; }
+  .list-product-price { font-size: 18px; }
+  .list-product-description { font-size: 13px; }
+  .quantity-controls { justify-content: center; margin: 0 auto; }
+  .product-thumbnail { margin-bottom: 10px; }
 }

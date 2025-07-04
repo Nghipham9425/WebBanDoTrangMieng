@@ -4,15 +4,15 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="8c9b9076dbee4efe826f9b6b86474dc9" Name="Diagram1" ZoomLevel="40">
+      <Diagram DiagramId="8c9b9076dbee4efe826f9b6b86474dc9" Name="Diagram1" ZoomLevel="44">
         <EntityTypeShape EntityType="QLStoreTrangMiengModel.Category" Width="1.5" PointX="0.75" PointY="1.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="QLStoreTrangMiengModel.Order" Width="1.5" PointX="3" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLStoreTrangMiengModel.Order" Width="1.5" PointX="10.875" PointY="3.25" IsExpanded="true" />
         <EntityTypeShape EntityType="QLStoreTrangMiengModel.Order_Product" Width="1.5" PointX="5.25" PointY="5.25" IsExpanded="true" />
         <EntityTypeShape EntityType="QLStoreTrangMiengModel.Payment" Width="1.5" PointX="8.25" PointY="5" IsExpanded="true" />
         <EntityTypeShape EntityType="QLStoreTrangMiengModel.PaymentMethod" Width="1.5" PointX="6" PointY="2.375" IsExpanded="true" />
         <EntityTypeShape EntityType="QLStoreTrangMiengModel.Product" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="QLStoreTrangMiengModel.Promotion" Width="1.5" PointX="5.25" PointY="14.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="QLStoreTrangMiengModel.Review" Width="1.5" PointX="5.25" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLStoreTrangMiengModel.Promotion" Width="1.5" PointX="2.125" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLStoreTrangMiengModel.Review" Width="1.5" PointX="5.375" PointY="8.25" IsExpanded="true" />
         <EntityTypeShape EntityType="QLStoreTrangMiengModel.User" Width="1.5" PointX="0.75" PointY="4.875" IsExpanded="true" />
         <AssociationConnector Association="QLStoreTrangMiengModel.FK__Product__Categor__52593CB8" ManuallyRouted="false" />
         <AssociationConnector Association="QLStoreTrangMiengModel.FK__Order__UserId__5FB337D6" ManuallyRouted="false" />

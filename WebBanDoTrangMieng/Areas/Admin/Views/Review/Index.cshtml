@@ -1,0 +1,77 @@
+﻿@model IEnumerable<WebBanDoTrangMieng.Models.ViewModel.ProductReviewVM>
+@{
+    ViewBag.Title = "Quản lý đánh giá sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="container py-4">
+    <h2 class="mb-4">Quản lý đánh giá sản phẩm</h2>
+    <div class="mb-3">
+        <strong>Tổng sản phẩm có đánh giá:</strong> @(ViewBag.TotalProducts ?? 0)
+    </div>
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Ảnh</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Số đánh giá</th>
+                        <th>Điểm TB</th>
+                        <th>Mới nhất</th>
+                        <th class="text-center">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model)
+                {
+                    var img = item.Product.ImageUrl?.Split(',').FirstOrDefault() ?? "/Content/Images/Products/no-image.jpg";
+                    <tr>
+                        <td>
+                            <img src="@img" alt="@item.Product.Name" style="width:48px;height:48px;object-fit:cover;border-radius:6px;">
+                        </td>
+                        <td>@item.Product.Name</td>
+                        <td>@item.ReviewCount</td>
+                        <td><span class="badge bg-warning text-dark">@item.AverageRating.ToString("F1")</span></td>
+                        <td>@(item.LatestReview?.ToString("dd/MM/yyyy") ?? "N/A")</td>
+                        <td class="text-center">
+                            <a href="@Url.Action("ProductReviews", new { productId = item.Product.ProductId })" class="btn btn-sm btn-primary">Xem chi tiết</a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center my-5">
+            <i class="fas fa-star text-muted"></i> Chưa có sản phẩm nào có đánh giá.
+        </div>
+    }
+    @if (ViewBag.TotalPages > 1)
+    {
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+                @if (ViewBag.CurrentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1 })">&laquo;</a>
+                    </li>
+                }
+                @for (int i = Math.Max(1, ViewBag.CurrentPage - 2); i <= Math.Min(ViewBag.TotalPages, ViewBag.CurrentPage + 2); i++)
+                {
+                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                    </li>
+                }
+                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1 })">&raquo;</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+</div>

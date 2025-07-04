@@ -1,0 +1,39 @@
+@model WebBanDoTrangMieng.Product
+
+@{
+    var reviewCount = ViewBag.Reviews != null ? ((IEnumerable<WebBanDoTrangMieng.Review>)ViewBag.Reviews).Count() : 0;
+}
+
+<!-- Product Tabs -->
+<div class="mt-5">
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-transparent border-0 p-0">
+            <ul class="nav nav-pills nav-fill product-tabs" id="productTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="description-tab" data-bs-toggle="pill"
+                            data-bs-target="#description" type="button" role="tab">
+                        <i class="fas fa-info-circle me-2"></i>Mô t? chi ti?t
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="reviews-tab" data-bs-toggle="pill"
+                            data-bs-target="#reviews" type="button" role="tab">
+                        <i class="fas fa-star me-2"></i>?ánh giá (@reviewCount)
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body p-4">
+            <div class="tab-content" id="productTabContent">
+                <!-- Description Tab -->
+                <div class="tab-pane fade show active" id="description" role="tabpanel">
+                    @Html.Partial("_ProductDescription", Model)
+                </div>
+                <!-- Reviews Tab -->
+                <div class="tab-pane fade" id="reviews" role="tabpanel">
+                    @Html.Partial("_ProductReviews", Model)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
