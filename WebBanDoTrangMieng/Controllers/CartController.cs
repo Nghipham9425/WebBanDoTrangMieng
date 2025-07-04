@@ -226,6 +226,14 @@ namespace WebBanDoTrangMieng.Controllers
                     Price = item.Price
                 };
                 db.Order_Product.Add(orderProduct);
+
+                // Trừ tồn kho sản phẩm
+                var product = db.Products.Find(item.ProductId);
+                if (product != null && product.StockQuantity.HasValue)
+                {
+                    product.StockQuantity -= item.Quantity;
+                    if (product.StockQuantity < 0) product.StockQuantity = 0; // Không cho âm
+                }
             }
             db.SaveChanges();
 

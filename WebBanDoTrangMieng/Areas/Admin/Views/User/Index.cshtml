@@ -1,0 +1,83 @@
+﻿@model IEnumerable<WebBanDoTrangMieng.User>
+@{
+    ViewBag.Title = "Danh sách người dùng";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="container mt-4">
+    <h2>Danh sách người dùng</h2>
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    <div class="mb-3">
+        <a href="@Url.Action("Create", "User", new { area = "Admin" })" class="btn btn-success">
+            <i class="fas fa-plus"></i> Thêm mới
+        </a>
+    </div>
+    <table class="table table-bordered table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>ID</th>
+                <th>Tên đăng nhập</th>
+                <th>Email</th>
+                <th>Vai trò</th>
+                <th>Điện thoại</th>
+                <th>Trạng thái</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.UserId</td>
+                    <td>@item.UserName</td>
+                    <td>@item.Email</td>
+                    <td>@item.Role</td>
+                    <td>@item.Phone</td>
+                    <td>
+                        <span class="badge @(item.IsActive == true ? "bg-success" : "bg-secondary")">
+                            @(item.IsActive == true ? "Hoạt động" : "Ngưng")
+                        </span>
+                    </td>
+                    <td>
+                        @if (item.Role == "Customer" || item.Role == "User")
+                        {
+                            <button type="button" class="btn btn-sm btn-outline-warning toggle-active" data-id="@item.UserId">
+                                Đổi trạng thái
+                            </button>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Edit", "User", new { id = item.UserId, area = "Admin" })" class="btn btn-primary btn-sm">
+                                <i class="fas fa-edit"></i> Sửa
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.toggle-active').click(function () {
+            var id = $(this).data('id');
+            $.post('@Url.Action("ToggleActive", "User", new { area = "Admin" })', { id: id }, function (res) {
+                if (res.success) {
+                    location.reload();
+                } else {
+                    alert(res.message || 'Có lỗi xảy ra!');
+                }
+            }).fail(function(xhr) {
+                alert('Lỗi kết nối server!');
+            });
+        });
+    });
+</script>
+

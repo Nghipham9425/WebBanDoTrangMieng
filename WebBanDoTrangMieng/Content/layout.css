@@ -1,21 +1,11 @@
 /* ==========================================
-   CSS VARIABLES - MATCHA GREEN THEME
+   OPTIMIZED LAYOUT.CSS - LAYOUT SPECIFIC ONLY
    ========================================== */
-:root {
-  --bs-success: #7d9e5f;
-  --bs-success-rgb: 125, 158, 95;
-}
+
+/* Remove duplicate CSS variables - already in Site.css */
 
 /* ==========================================
-   GLOBAL OVERRIDES
-   ========================================== */
-body {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial,
-    sans-serif;
-}
-
-/* ==========================================
-   CUSTOM HOVER EFFECTS
+   NAVIGATION SPECIFIC HOVER EFFECTS
    ========================================== */
 .hover-text-white:hover {
   color: white !important;
@@ -41,15 +31,9 @@ body {
 }
 
 @keyframes pulse {
-  0% {
-    transform: translate(-50%, -50%) scale(1);
-  }
-  50% {
-    transform: translate(-50%, -50%) scale(1.1);
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(1);
-  }
+  0% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.1); }
+  100% { transform: translate(-50%, -50%) scale(1); }
 }
 
 /* ==========================================
@@ -59,11 +43,9 @@ body {
   .navbar-brand {
     font-size: 1.5rem !important;
   }
-
   .small {
     font-size: 0.75rem !important;
   }
-
   .gap-3 {
     gap: 0.5rem !important;
   }

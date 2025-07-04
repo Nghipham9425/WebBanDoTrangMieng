@@ -1,15 +1,9 @@
 /* ==========================================
-   COMPONENTS.CSS - OPTIMIZED WITH BOOTSTRAP
+   OPTIMIZED COMPONENTS.CSS - REUSABLE COMPONENTS ONLY
    ========================================== */
 
-/* CSS Variables Override Bootstrap */
-:root {
-  --bs-success: #7d9e5f;
-  --bs-success-rgb: 125, 158, 95;
-}
-
 /* ==========================================
-   SEARCH OVERLAY (Custom Component)
+   SEARCH OVERLAY COMPONENT
    ========================================== */
 .search-overlay {
   display: none;
@@ -32,7 +26,7 @@
 }
 
 /* ==========================================
-   BACK TO TOP BUTTON (Custom Component)
+   BACK TO TOP BUTTON COMPONENT
    ========================================== */
 .back-to-top {
   position: fixed;
@@ -67,7 +61,7 @@
 
 /* Add subtle pulse animation when first appears */
 .back-to-top.animate-pulse {
-  animation: pulse 2s infinite;
+  animation: componentPulse 2s infinite;
 }
 
 /* ==========================================
@@ -88,7 +82,7 @@
 }
 
 /* ==========================================
-   WISHLIST BUTTON ANIMATION (Custom)
+   WISHLIST BUTTON COMPONENT
    ========================================== */
 .btn-wishlist:hover {
   transform: scale(1.1);
@@ -96,44 +90,15 @@
 }
 
 /* ==========================================
-   LOADING ANIMATIONS (Custom)
+   COMPONENT SPECIFIC ANIMATIONS
    ========================================== */
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.fade-in-up {
-  animation: fadeInUp 0.5s ease-out;
+@keyframes componentPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
 /* ==========================================
-   MOBILE RESPONSIVE OVERRIDES
+   MOBILE RESPONSIVE FOR COMPONENTS
    ========================================== */
 @media (max-width: 768px) {
   .search-container {

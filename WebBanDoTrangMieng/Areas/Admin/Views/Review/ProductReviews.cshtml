@@ -1,0 +1,132 @@
+﻿@model IEnumerable<WebBanDoTrangMieng.Areas.Admin.Controllers.ReviewViewModel>
+@{
+    var product = ViewBag.Product as WebBanDoTrangMieng.Product;
+    int page = ViewBag.Page ?? 1;
+    int totalReviews = ViewBag.TotalReviews ?? 0;
+    int totalPages = ViewBag.TotalPages ?? 1;
+    ViewBag.Title = "Đánh giá sản phẩm: " + product?.Name;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container py-4">
+    <h2 class="mb-4">Đánh giá sản phẩm: <span class="text-primary">@ViewBag.Product.Name</span></h2>
+    <div class="mb-3">
+        <a href="@Url.Action("Index", "Review", new { area = "Admin" })" class="btn btn-outline-secondary">
+            &larr; Quay lại danh sách
+        </a>
+    </div>
+    <div class="mb-3">
+        <strong>Tổng đánh giá:</strong> @totalReviews
+        <span class="mx-2">|</span>
+        <strong>Hiện:</strong> @Model.Count(r => r.IsVisible)
+        <span class="mx-2">|</span>
+        <strong>Ẩn:</strong> @Model.Count(r => !r.IsVisible)
+        <span class="mx-2">|</span>
+        <strong>Điểm TB:</strong> @(Model.Any() ? Model.Average(r => r.Rating).ToString("F1") : "0")
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Người dùng</th>
+                        <th>Email</th>
+                        <th>Đơn hàng</th>
+                        <th>Điểm</th>
+                        <th>Bình luận</th>
+                        <th>Ngày</th>
+                        <th>Trạng thái</th>
+                        <th class="text-center">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var review in Model)
+                {
+                    var formattedDate = review.CreatedDate.HasValue
+                        ? review.CreatedDate.Value.ToString("dd/MM/yyyy 'lúc' HH:mm")
+                        : "";
+                    <tr>
+                        <td>@review.ReviewId</td>
+                        <td>@review.UserName</td>
+                        <td>@review.UserEmail</td>
+                        <td>#@review.OrderId</td>
+                        <td>
+                            <span class="badge bg-warning text-dark">@review.Rating/5</span>
+                        </td>
+                        <td>@review.Comment</td>
+                        <td><small class="text-muted">@formattedDate</small></td>
+                        <td>
+                            @if (review.IsVisible)
+                            {
+                                <span class="badge bg-success">Hiển thị</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Ẩn</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-warning me-1" onclick="toggleReview(@review.ReviewId, 'Hide')" @(review.IsVisible ? "" : "disabled")>Ẩn</button>
+                            <button class="btn btn-sm btn-success" onclick="toggleReview(@review.ReviewId, 'Show')" @(!review.IsVisible ? "" : "disabled")>Hiện</button>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center my-5">
+            <i class="fas fa-star text-muted"></i> Chưa có đánh giá nào cho sản phẩm này.
+        </div>
+    }
+
+    @if (ViewBag.TotalPages > 1)
+    {
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+                @if (ViewBag.Page > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("ProductReviews", new { productId = product.ProductId, page = ViewBag.Page - 1 })">&laquo;</a>
+                    </li>
+                }
+                @for (int i = Math.Max(1, ViewBag.Page - 2); i <= Math.Min(ViewBag.TotalPages, ViewBag.Page + 2); i++)
+                {
+                    <li class="page-item @(i == ViewBag.Page ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("ProductReviews", new { productId = product.ProductId, page = i })">@i</a>
+                    </li>
+                }
+                @if (ViewBag.Page < ViewBag.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("ProductReviews", new { productId = product.ProductId, page = ViewBag.Page + 1 })">&raquo;</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+</div>
+
+@Html.AntiForgeryToken()
+
+<script>
+function toggleReview(id, action) {
+    var confirmMsg = action === 'Hide'
+        ? 'Bạn có chắc muốn ẩn đánh giá này?'
+        : 'Bạn có chắc muốn hiển thị lại đánh giá này?';
+    if (confirm(confirmMsg)) {
+        $.post('@Url.Action("Hide", "Review")'.replace('Hide', action), {
+            id: id,
+            __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+        }, function(res) {
+            if (res.success) location.reload();
+            else alert(res.message || 'Có lỗi xảy ra');
+        });
+    }
+}
+</script>

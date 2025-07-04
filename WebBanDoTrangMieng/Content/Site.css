@@ -1,5 +1,5 @@
 /* ==========================================
-   SITE.CSS - OPTIMIZED WITH BOOTSTRAP
+   OPTIMIZED SITE.CSS - MINIMAL GLOBAL STYLES
    ========================================== */
 
 /* CSS Variables Override Bootstrap */
@@ -12,12 +12,11 @@
    GLOBAL OVERRIDES
    ========================================== */
 body {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial,
-    sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
 }
 
 /* ==========================================
-   CUSTOM ANIMATIONS
+   CUSTOM ANIMATIONS - Only essential ones
    ========================================== */
 @keyframes fadeInUp {
   from {
@@ -35,7 +34,7 @@ body {
 }
 
 /* ==========================================
-   HOVER EFFECTS
+   ESSENTIAL HOVER EFFECTS
    ========================================== */
 .hover-lift:hover {
   transform: translateY(-3px);
