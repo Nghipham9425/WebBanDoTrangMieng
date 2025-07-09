@@ -1,0 +1,281 @@
+﻿@model WebBanDoTrangMieng.Promotion
+@{
+    ViewBag.Title = "Chi tiết mã giảm giá";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-10 mx-auto">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">
+                    <i class="fas fa-tag text-primary"></i>
+                    Chi tiết mã giảm giá: <strong class="text-primary">@Model.Code</strong>
+                </h4>
+                <div class="btn-group">
+                    <a href="@Url.Action("Edit", new { id = Model.PromotionId })" class="btn btn-warning btn-sm">
+                        <i class="fas fa-edit"></i> Sửa
+                    </a>
+                    @if (Model.IsActive == true)
+                    {
+                        <button onclick="deactivatePromotion(@Model.PromotionId)" class="btn btn-danger btn-sm">
+                            <i class="fas fa-ban"></i> Vô hiệu hóa
+                        </button>
+                    }
+                    else
+                    {
+                        <button onclick="activatePromotion(@Model.PromotionId)" class="btn btn-success btn-sm">
+                            <i class="fas fa-check"></i> Kích hoạt
+                        </button>
+                    }
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- Thông tin cơ bản -->
+                    <div class="col-md-6">
+                        <h5 class="text-primary mb-3">
+                            <i class="fas fa-info-circle"></i>
+                            Thông tin cơ bản
+                        </h5>
+                        <table class="table table-borderless">
+                            <tr>
+                                <td width="40%"><strong>Mã giảm giá:</strong></td>
+                                <td>
+                                    <span class="badge bg-primary fs-6">@Model.Code</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Mô tả:</strong></td>
+                                <td>@(Model.Description ?? "Không có mô tả")</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Phần trăm giảm:</strong></td>
+                                <td>
+                                    <span class="badge bg-success fs-6">@Model.DiscountPercent%</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Trạng thái:</strong></td>
+                                <td>
+                                    @if (Model.IsActive == true && Model.EndDate >= DateTime.Now)
+                                    {
+                                        <span class="badge bg-success">
+                                            <i class="fas fa-check-circle"></i> Đang hoạt động
+                                        </span>
+                                    }
+                                    else if (Model.EndDate < DateTime.Now)
+                                    {
+                                        <span class="badge bg-warning">
+                                            <i class="fas fa-clock"></i> Đã hết hạn
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">
+                                            <i class="fas fa-ban"></i> Đã vô hiệu hóa
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Thông tin thời gian -->
+                    <div class="col-md-6">
+                        <h5 class="text-primary mb-3">
+                            <i class="fas fa-calendar-alt"></i>
+                            Thông tin thời gian
+                        </h5>
+                        <table class="table table-borderless">
+                            <tr>
+                                <td width="40%"><strong>Ngày bắt đầu:</strong></td>
+                                <td>
+                                    <i class="fas fa-calendar-plus text-success"></i>
+                                    @Model.StartDate.ToString("dd/MM/yyyy HH:mm")
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ngày kết thúc:</strong></td>
+                                <td>
+                                    <i class="fas fa-calendar-minus text-danger"></i>
+                                    @Model.EndDate.ToString("dd/MM/yyyy HH:mm")
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Thời gian còn lại:</strong></td>
+                                <td>
+                                    @if (Model.EndDate >= DateTime.Now)
+                                    {
+                                        var timeLeft = Model.EndDate.Subtract(DateTime.Now);
+                                        if (timeLeft.Days > 0)
+                                        {
+                                            <span class="text-success">
+                                                <i class="fas fa-hourglass-half"></i>
+                                                @timeLeft.Days ngày, @timeLeft.Hours giờ
+                                            </span>
+                                        }
+                                        else if (timeLeft.Hours > 0)
+                                        {
+                                            <span class="text-warning">
+                                                <i class="fas fa-hourglass-half"></i>
+                                                @timeLeft.Hours giờ, @timeLeft.Minutes phút
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-danger">
+                                                <i class="fas fa-exclamation-triangle"></i>
+                                                @timeLeft.Minutes phút (sắp hết hạn!)
+                                            </span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">
+                                            <i class="fas fa-times-circle"></i>
+                                            Đã hết hạn
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Tổng thời gian:</strong></td>
+                                <td>
+                                    @{
+                                        var totalDuration = Model.EndDate.Subtract(Model.StartDate);
+                                    }
+                                    <span class="text-info">
+                                        <i class="fas fa-clock"></i>
+                                        @totalDuration.Days ngày
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Thống kê sử dụng (placeholder) -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <h5 class="text-primary mb-3">
+                            <i class="fas fa-chart-bar"></i>
+                            Thống kê sử dụng
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="card bg-primary text-white">
+                                    <div class="card-body text-center">
+                                        <h4 class="mb-1">0</h4>
+                                        <small>Lượt sử dụng</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-success text-white">
+                                    <div class="card-body text-center">
+                                        <h4 class="mb-1">0đ</h4>
+                                        <small>Tổng tiền giảm</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-info text-white">
+                                    <div class="card-body text-center">
+                                        <h4 class="mb-1">0</h4>
+                                        <small>Đơn hàng áp dụng</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-warning text-white">
+                                    <div class="card-body text-center">
+                                        <h4 class="mb-1">0%</h4>
+                                        <small>Tỷ lệ sử dụng</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="alert alert-info mt-3">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>Lưu ý:</strong> Thống kê sử dụng sẽ được cập nhật khi có hệ thống tracking promotion usage.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phạm vi áp dụng -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <h5 class="text-primary mb-3">
+                            <i class="fas fa-target"></i>
+                            Phạm vi áp dụng
+                        </h5>
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>Áp dụng:</strong> Mã giảm giá này áp dụng cho toàn bộ đơn hàng khi khách hàng nhập mã tại trang thanh toán.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-between">
+                    <a href="@Url.Action("Index")" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Quay lại danh sách
+                    </a>
+                    <div>
+                        <a href="@Url.Action("Edit", new { id = Model.PromotionId })" class="btn btn-warning">
+                            <i class="fas fa-edit"></i> Chỉnh sửa
+                        </a>
+                        <button onclick="copyPromotionCode()" class="btn btn-info">
+                            <i class="fas fa-copy"></i> Copy mã
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+<script>
+function deactivatePromotion(id) {
+    if (confirm('Bạn có chắc muốn vô hiệu hóa mã giảm giá này?')) {
+        $.post('@Url.Action("Delete")', { id: id }, function(result) {
+            if (result.success) {
+                location.reload();
+            } else {
+                alert(result.message);
+            }
+        });
+    }
+}
+
+function activatePromotion(id) {
+    if (confirm('Bạn có chắc muốn kích hoạt lại mã giảm giá này?')) {
+        $.post('@Url.Action("Restore")', { id: id }, function(result) {
+            if (result.success) {
+                location.reload();
+            } else {
+                alert(result.message);
+            }
+        });
+    }
+}
+
+function copyPromotionCode() {
+    var code = '@Model.Code';
+    navigator.clipboard.writeText(code).then(function() {
+        // Hiển thị thông báo đã copy
+        var alert = $('<div class="alert alert-success alert-dismissible fade show position-fixed" style="top: 20px; right: 20px; z-index: 9999;">' +
+                     '<i class="fas fa-check-circle"></i> Đã copy mã: <strong>' + code + '</strong>' +
+                     '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
+                     '</div>');
+        $('body').append(alert);
+        
+        setTimeout(function() {
+            alert.alert('close');
+        }, 3000);
+    });
+}
+</script>
+}

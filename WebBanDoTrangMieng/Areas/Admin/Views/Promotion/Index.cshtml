@@ -1,0 +1,173 @@
+﻿@model List<WebBanDoTrangMieng.Promotion>
+@{
+    ViewBag.Title = "Quản lý mã giảm giá";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">
+                <i class="fas fa-tags text-primary"></i>
+                Quản lý mã giảm giá
+            </h2>
+            <a href="@Url.Action("Create")" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Thêm mã giảm giá
+            </a>
+        </div>
+
+        <!-- Filter -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <form method="get" class="row g-3">
+                    <div class="col-md-4">
+                        <select name="status" class="form-select">
+                            <option value="">-- Tất cả trạng thái --</option>
+                            <option value="active" @(ViewBag.CurrentStatus == "active" ? "selected" : "")>Đang hoạt động</option>
+                            <option value="expired" @(ViewBag.CurrentStatus == "expired" ? "selected" : "")>Đã hết hạn</option>
+                            <option value="inactive" @(ViewBag.CurrentStatus == "inactive" ? "selected" : "")>Đã vô hiệu hóa</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-outline-primary">
+                            <i class="fas fa-filter"></i> Lọc
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Promotion List -->
+        <div class="card">
+            <div class="card-body">
+                @if (Model.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Mã</th>
+                                    <th>Mô tả</th>
+                                    <th>Giảm giá</th>
+                                    <th>Thời gian</th>
+                                    <th>Trạng thái</th>
+                                    <th width="150">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <strong class="text-primary">@item.Code</strong>
+                                        </td>
+                                        <td>@item.Description</td>
+                                        <td>
+                                            <span class="badge bg-success">@item.DiscountPercent%</span>
+                                        </td>
+                                        <td>
+                                            <small>
+                                                Từ: @item.StartDate.ToString("dd/MM/yyyy")<br>
+                                                Đến: @item.EndDate.ToString("dd/MM/yyyy")
+                                            </small>
+                                        </td>
+                                        <td>
+                                            @if (item.IsActive == true && item.EndDate >= DateTime.Now)
+                                            {
+                                                <span class="badge bg-success">Đang hoạt động</span>
+                                            }
+                                            else if (item.EndDate < DateTime.Now)
+                                            {
+                                                <span class="badge bg-warning">Đã hết hạn</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-secondary">Đã vô hiệu hóa</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="@Url.Action("Edit", new { id = item.PromotionId })" 
+                                                   class="btn btn-outline-primary" title="Sửa">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                
+                                                @if (item.IsActive == true)
+                                                {
+                                                    <button onclick="deletePromotion(@item.PromotionId)" 
+                                                            class="btn btn-outline-danger" title="Vô hiệu hóa">
+                                                        <i class="fas fa-ban"></i>
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    <button onclick="restorePromotion(@item.PromotionId)" 
+                                                            class="btn btn-outline-success" title="Kích hoạt">
+                                                        <i class="fas fa-check"></i>
+                                                    </button>
+                                                }
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    if (ViewBag.TotalPages > 1)
+                    {
+                        <nav class="mt-4">
+                            <ul class="pagination justify-content-center">
+                                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                                {
+                                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = i, status = ViewBag.CurrentStatus })">@i</a>
+                                    </li>
+                                }
+                            </ul>
+                        </nav>
+                    }
+                }
+                else
+                {
+                    <div class="text-center py-5">
+                        <i class="fas fa-tags fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">Chưa có mã giảm giá nào</h5>
+                        <a href="@Url.Action("Create")" class="btn btn-primary mt-2">
+                            <i class="fas fa-plus"></i> Tạo mã giảm giá đầu tiên
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+<script>
+function deletePromotion(id) {
+    if (confirm('Bạn có chắc muốn vô hiệu hóa mã giảm giá này?')) {
+        $.post('@Url.Action("Delete")', { id: id }, function(result) {
+            if (result.success) {
+                location.reload();
+            } else {
+                alert(result.message);
+            }
+        });
+    }
+}
+
+function restorePromotion(id) {
+    if (confirm('Bạn có chắc muốn kích hoạt lại mã giảm giá này?')) {
+        $.post('@Url.Action("Restore")', { id: id }, function(result) {
+            if (result.success) {
+                location.reload();
+            } else {
+                alert(result.message);
+            }
+        });
+    }
+}
+</script>
+}

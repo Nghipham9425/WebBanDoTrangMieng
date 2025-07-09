@@ -13,102 +13,6 @@ namespace WebBanDoTrangMieng.Controllers
     {
         private QLStoreTrangMiengEntities db = new QLStoreTrangMiengEntities();
 
-        // GET: User/Register
-        public ActionResult Register()
-        {
-            return View();
-        }
-
-        // POST: User/Register
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Register(RegisterVM model)
-        {
-            if (ModelState.IsValid)
-            {
-                // Kiểm tra email đã tồn tại chưa
-                var existingUser = db.Users.SingleOrDefault(u => u.Email == model.Email);
-                if (existingUser != null)
-                {
-                    ModelState.AddModelError("Email", "Email này đã được sử dụng!");
-                    return View(model);
-                }
-
-                // Tạo user mới
-                var user = new User()
-                {
-                    UserName = model.UserName,
-                    Email = model.Email,
-                    Password = model.Password, // Nên mã hóa password
-                    Phone = model.Phone,
-                    Address = model.Address,
-                    Role = "Customer",
-                    CreatedDate = DateTime.Now,
-                    IsActive = true
-                };
-
-                db.Users.Add(user);
-                db.SaveChanges();
-
-                // Lưu session
-                Session["UserId"] = user.UserId;
-                Session["UserName"] = user.UserName;
-                Session["UserRole"] = user.Role;
-                Session["Email"] = user.Email;
-
-                // Tạo cookie xác thực
-                FormsAuthentication.SetAuthCookie(user.Email, false);
-
-                return RedirectToAction("Index", "Home");
-            }
-            return View(model);
-        }
-
-        // GET: User/Login
-        public ActionResult Login()
-        {
-            return View();
-        }
-
-        // POST: User/Login
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginVM model)
-        {
-            if (ModelState.IsValid)
-            {
-                // Kiểm tra user có tồn tại không
-                var user = db.Users.SingleOrDefault(u => u.Email == model.Email && u.Password == model.Password && u.IsActive == true);
-
-                if (user != null)
-                {
-                    // Lưu thông tin đăng nhập vào session
-                    Session["UserId"] = user.UserId;
-                    Session["UserName"] = user.UserName;
-                    Session["UserRole"] = user.Role;
-                    Session["Email"] = user.Email;
-
-                    // Tạo cookie xác thực
-                    FormsAuthentication.SetAuthCookie(user.Email, model.RememberMe);
-
-                    // Kiểm tra vai trò người dùng và chuyển hướng
-                    if (user.Role == "Admin")
-                    {
-                        return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
-                    }
-                    else if (user.Role == "Customer")
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Email hoặc mật khẩu không đúng.");
-                }
-            }
-            return View(model);
-        }
-
         // AJAX: Register từ modal
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -305,7 +209,7 @@ namespace WebBanDoTrangMieng.Controllers
        var user=db.Users.SingleOrDefault(u=>u.Email==email && u.IsActive==true);
        if(user==null)
        {
-        ViewBag.Error="Email khong ton tai";
+        ViewBag.Error="Email không tồn tại";
         return View();
        }
        ViewBag.Token=token;

@@ -122,11 +122,11 @@ CREATE TABLE Review
 );
 
 -- ==========================================
--- SAMPLE DATA
+-- SAMPLE DATA (INSERT ALL)
 -- ==========================================
 
 -- Insert Categories
-INSERT INTO Category (Name, Description) VALUES 
+INSERT INTO [dbo].[Category] (Name, Description) VALUES 
 (N'Tiramisu', N'Tiramisu Ý nguyên chất các loại'), 
 (N'Cheesecake', N'Bánh phô mai cao cấp'),
 (N'Mousse', N'Bánh mousse mềm mịn'),
@@ -139,7 +139,7 @@ INSERT INTO Category (Name, Description) VALUES
 (N'French Toast', N'Bánh mì nướng kiểu Pháp');
 
 -- Insert Payment Methods
-INSERT INTO PaymentMethod (MethodName, Description) VALUES 
+INSERT INTO [dbo].[PaymentMethod] (MethodName, Description) VALUES 
 (N'COD', N'Thanh toán khi nhận hàng'),
 (N'Bank Transfer', N'Chuyển khoản ngân hàng'),
 (N'MoMo', N'Ví điện tử MoMo'),
@@ -147,36 +147,31 @@ INSERT INTO PaymentMethod (MethodName, Description) VALUES
 (N'Credit Card', N'Thẻ tín dụng/ghi nợ');
 
 -- Insert Users
-INSERT INTO [User] (UserName, Email, Role, Password, Address, Phone) VALUES 
+INSERT INTO [dbo].[User] (UserName, Email, Role, Password, Address, Phone) VALUES 
 (N'Administrator', N'admin@trangmieng.com', N'Admin', N'admin123', N'Hà Nội, Việt Nam', N'0123456789'),
 (N'Nguyễn Văn An', N'customer1@gmail.com', N'Customer', N'123456', N'TP.HCM, Việt Nam', N'0987654321'),
 (N'Trần Thị Bình', N'customer2@gmail.com', N'Customer', N'123456', N'Đà Nẵng, Việt Nam', N'0912345678');
 
--- Insert Products với đường dẫn ảnh thực tế
+-- Insert Products
+INSERT INTO [dbo].[Product] (Name, Description, Price, CategoryId, StockQuantity, ImageUrl) VALUES 
 -- TIRAMISU
-INSERT INTO Product (Name, Description, Price, CategoryId, StockQuantity, ImageUrl) VALUES 
 (N'Tiramisu Original', N'Tiramisu truyền thống với hương vị cà phê đậm đà, mascarpone mềm mịn', 65000.00, 1, 30, N'/Content/Images/Products/OriginalTiramisu.png'),
 (N'Tiramisu Dâu Tây', N'Tiramisu với lớp kem dâu tây tươi ngọt thanh', 68000.00, 1, 25, N'/Content/Images/Products/strawBerrytiramisu.png'),
 (N'Tiramisu Dưa Lưới', N'Tiramisu với hương vị dưa lưới mát lạnh', 70000.00, 1, 20, N'/Content/Images/Products/MelonTiramisu.png'),
 (N'Misu Thiếc', N'Phiên bản đặc biệt của tiramisu với lớp kem thiếc', 75000.00, 1, 15, N'/Content/Images/Products/misuThiec_1.jpg'),
 (N'Matchamisu', N'Tiramisu matcha Nhật Bản với hương vị trà xanh đậm đà', 72000.00, 1, 20, N'/Content/Images/Products/matchamisu_1.jpg'),
-
 -- CHEESECAKE
 (N'Basque Cheesecake', N'Bánh phô mai Basque nướng cháy bề mặt đặc trưng', 85000.00, 2, 25, N'/Content/Images/Products/BasqueCheesecake.png'),
-
 -- MOUSSE
 (N'Mousse Blueberry', N'Mousse việt quất với lớp kem mịn màng', 58000.00, 3, 30, N'/Content/Images/Products/MousseBlueberry_1.jpg'),
 (N'Mousse Vải', N'Mousse vải thiều thơm ngon mát lạnh', 60000.00, 3, 25, N'/Content/Images/Products/mousseVai_1.jpg'),
 (N'Mousse Xoài', N'Mousse xoài cát Hòa Lộc ngọt thanh', 62000.00, 3, 28, N'/Content/Images/Products/MousseXoai_1.jpg'),
-
 -- FLAN & PUDDING
 (N'Flan Caramel', N'Bánh flan caramel truyền thống mềm mịn', 35000.00, 4, 40, N'/Content/Images/Products/flan_caramel.png'),
 (N'Butter Scotch Brulee', N'Bánh flan bơ scotch với lớp đường cháy', 45000.00, 4, 30, N'/Content/Images/Products/ButterScotchBrulee.png'),
-
 -- CROISSANT & BÁNH MÌ
 (N'Croissant Chocolate', N'Bánh sừng bò nhân chocolate Bỉ', 42000.00, 5, 35, N'/Content/Images/Products/choco_croissant.jpg'),
 (N'Croissant Matcha', N'Bánh sừng bò nhân matcha Nhật Bản', 45000.00, 5, 30, N'/Content/Images/Products/matcha_croissant.jpg'),
-
 -- CÀ PHÊ
 (N'Americano', N'Cà phê Americano đậm đà', 35000.00, 6, 50, N'/Content/Images/Products/Americano.png'),
 (N'Cappuccino', N'Cappuccino Ý với lớp foam mịn', 42000.00, 6, 45, N'/Content/Images/Products/Capuccino.png'),
@@ -184,52 +179,48 @@ INSERT INTO Product (Name, Description, Price, CategoryId, StockQuantity, ImageU
 (N'Espresso', N'Espresso nguyên chất đậm đà', 32000.00, 6, 60, N'/Content/Images/Products/Espresso.png'),
 (N'Mocha', N'Mocha chocolate đậm đà', 45000.00, 6, 35, N'/Content/Images/Products/Mocha.png'),
 (N'Vietnamese Milk Coffee', N'Cà phê sữa đá Việt Nam truyền thống', 28000.00, 6, 70, N'/Content/Images/Products/VietnameseMilkCoffee.png'),
-
 -- TRÀ & MATCHA
 (N'Matcha Latte', N'Matcha latte Nhật Bản nguyên chất', 52000.00, 7, 35, N'/Content/Images/Products/MatchaLatteS.png'),
 (N'Earl Grey With Boba', N'Trà Earl Grey với trân châu', 38000.00, 7, 45, N'/Content/Images/Products/EarlGreyWithBoba.png'),
 (N'Gentle Hojicha', N'Trà hojicha Nhật Bản nhẹ nhàng', 45000.00, 7, 30, N'/Content/Images/Products/gentleHojicha.png'),
 (N'Rich Hojicha', N'Trà hojicha đậm đà', 48000.00, 7, 25, N'/Content/Images/Products/richHojicha.png'),
-
 -- NƯỚC UỐNG ĐẶC BIỆT
 (N'Matcha Cloud Smoothie', N'Smoothie matcha mây mịn màng', 65000.00, 8, 20, N'/Content/Images/Products/MATCHA-MATCHA-CLOUD-SMOOTHIE-scaled.png'),
 (N'Strawberry Lemonade Crush', N'Nước ép dâu chanh đá xay', 45000.00, 8, 35, N'/Content/Images/Products/FROZEN-SLUSH-TEA-STRAWBERRY-LEMONADE-CRUSH.png'),
 (N'Peach Slush Tea', N'Trà đào đá xay mát lạnh', 42000.00, 8, 40, N'/Content/Images/Products/FROZEN-SLUSH-TEA-FROSTED-PEACH-SLUSH-TEA.png'),
-
 -- CROCHI
 (N'Crochi Chocolate', N'Bánh crochi nhân chocolate', 35000.00, 9, 40, N'/Content/Images/Products/CROCHI_choco.png'),
 (N'Crochi Matcha', N'Bánh crochi nhân matcha', 38000.00, 9, 35, N'/Content/Images/Products/CROCHI_matcha.png'),
 (N'Crochi Strawberry', N'Bánh crochi nhân dâu tây', 38000.00, 9, 35, N'/Content/Images/Products/CROCHI_Strawberry.png'),
-
 -- FRENCH TOAST
 (N'Cream Brulee Brioche French Toast', N'Bánh mì nướng brioche với kem brulee', 75000.00, 10, 20, N'/Content/Images/Products/CreamBruleeBriocheFrenchToasts.png'),
 (N'Sweet Bruleed Citrus French Toast', N'Bánh mì nướng cam cháy đường', 72000.00, 10, 22, N'/Content/Images/Products/SWEET-BRULEED-CITRUS-FRENCH-TOAST-scaled.png');
 
 -- Insert Promotions
-INSERT INTO Promotion (Code, Description, DiscountPercent, StartDate, EndDate) VALUES 
+INSERT INTO [dbo].[Promotion] (Code, Description, DiscountPercent, StartDate, EndDate) VALUES 
 (N'WELCOME10', N'Giảm 10% cho khách hàng mới', 10.00, GETDATE(), DATEADD(MONTH, 3, GETDATE())),
 (N'COMBO20', N'Giảm 20% khi mua combo tráng miệng + nước uống', 20.00, GETDATE(), DATEADD(MONTH, 1, GETDATE())),
 (N'WEEKEND15', N'Giảm 15% cuối tuần', 15.00, GETDATE(), DATEADD(DAY, 30, GETDATE()));
 
 -- Insert Sample Orders
-INSERT INTO [Order] (UserId, ShippingAddress, PaymentMethod, Status) VALUES 
+INSERT INTO [dbo].[Order] (UserId, ShippingAddress, PaymentMethod, Status) VALUES 
 (2, N'123 Nguyễn Huệ, Quận 1, TP.HCM', N'COD', N'Delivered'),
 (3, N'456 Trần Phú, Hải Châu, Đà Nẵng', N'MoMo', N'Processing');
 
 -- Insert Order Products
-INSERT INTO Order_Product (OrderId, ProductId, Quantity, Price) VALUES 
+INSERT INTO [dbo].[Order_Product] (OrderId, ProductId, Quantity, Price) VALUES 
 (1, 1, 2, 65000.00), -- 2 Tiramisu Original
 (1, 14, 1, 42000.00), -- 1 Cappuccino
 (2, 6, 1, 85000.00), -- 1 Basque Cheesecake
 (2, 21, 1, 52000.00); -- 1 Matcha Latte
 
--- Insert Sample Reviews
-INSERT INTO Review (OrderId, Comment, Rating) VALUES 
-(1, N'Tiramisu rất ngon, vị cà phê đậm đà. Cappuccino cũng tuyệt vời!', 5),
-(2, N'Basque Cheesecake có vị rất đặc biệt, matcha latte thơm ngon.', 4);
+-- Insert Sample Reviews (có trường IsVisible)
+INSERT INTO [dbo].[Review] (OrderId, Comment, Rating, IsVisible) VALUES 
+(1, N'Tiramisu rất ngon, vị cà phê đậm đà. Cappuccino cũng tuyệt vời!', 5, 1),
+(2, N'Basque Cheesecake có vị rất đặc biệt, matcha latte thơm ngon.', 4, 1);
 
 -- Insert Product-Promotion relationships
-INSERT INTO Product_Promotion (ProductId, PromotionId) VALUES 
+INSERT INTO [dbo].[Product_Promotion] (ProductId, PromotionId) VALUES 
 (1, 1), (2, 1), (3, 1), -- Tiramisu có khuyến mãi WELCOME10
 (14, 2), (15, 2), (16, 2), -- Cà phê có khuyến mãi COMBO20
 (21, 3), (22, 3); -- Matcha có khuyến mãi WEEKEND15

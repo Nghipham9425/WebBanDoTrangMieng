@@ -35,7 +35,24 @@ else
                     <td>@(order.OrderDate?.ToString("dd/MM/yyyy HH:mm"))</td>
                     <td>@order.Status</td>
                     <td>
-                      @((order.Order_Product?.Sum(op => op.Quantity * op.Price) ?? 0).ToString("N0")) VNĐ
+                      @{
+                          decimal orderTotal = order.Order_Product?.Sum(op => op.Quantity * op.Price) ?? 0;
+                          
+                          // Giả sử có discount (sẽ implement logic thực tế sau)
+                          decimal discount = 0;
+                          if (order.PaymentMethod != null && order.PaymentMethod.Contains("DISCOUNT:"))
+                          {
+                              // Parse discount từ PaymentMethod (hack tạm thời)
+                              var parts = order.PaymentMethod.Split('|');
+                              if (parts.Length > 1 && parts[1].StartsWith("DISCOUNT:"))
+                              {
+                                  decimal.TryParse(parts[1].Replace("DISCOUNT:", ""), out discount);
+                              }
+                          }
+                          
+                          orderTotal = orderTotal - discount + 20000; // Trừ discount, cộng phí ship
+                      }
+                      @orderTotal.ToString("N0") VNĐ
                     </td>
                     <td>
                         <a href="@Url.Action("OrderDetails", "User", new { id = order.OrderId })" class="btn btn-sm btn-info">Xem chi tiết</a>
