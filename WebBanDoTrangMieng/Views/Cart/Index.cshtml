@@ -81,8 +81,9 @@
                             <label for="promoCode" class="form-label fw-semibold">Mã giảm giá</label>
                             <div class="input-group">
                                 <input type="text" id="promoCode" class="form-control" placeholder="Nhập mã giảm giá" style="height: 38px;">
-                                <button type="button" class="btn btn-outline-success d-flex align-items-center justify-content-center" style="height: 38px; min-width: 80px;">Áp dụng</button>
+                                <button type="button" id="applyPromoBtn" class="btn btn-outline-success d-flex align-items-center justify-content-center" style="height: 38px; min-width: 80px;">Áp dụng</button>
                             </div>
+                            <div id="promoResult" class="mt-2" style="display: none;"></div>
                         </div>
                         <div class="border-top pt-3">
                             <ul class="list-group list-group-flush mb-3">
@@ -90,13 +91,13 @@
                                     <span>Tiền hàng:</span>
                                     <span class="subtotal-amount fw-semibold">@Model.TotalAmount.ToString("N0")đ</span>
                                 </li>
+                                <li id="discountRow" class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 py-2" style="display: none;">
+                                    <span class="text-success">Giảm giá (<span id="discountCode"></span>):</span>
+                                    <span class="discount-amount text-success fw-semibold">-0đ</span>
+                                </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 py-2">
                                     <span>Phí vận chuyển:</span>
                                     <span class="shipping-fee">20.000đ</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 py-2 border-top">
-                                    <span class="fw-semibold">Tạm tính:</span>
-                                    <span class="cart-subtotal fw-semibold">@((Model.TotalAmount + 20000).ToString("N0"))đ</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 py-2 border-top">
                                     <span class="fw-bold text-success fs-5">Tổng cộng:</span>
@@ -158,6 +159,23 @@
                 var productId = $(this).data('product-id');
                 if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?')) {
                     removeFromCart(productId);
+                }
+            });
+
+            // Áp dụng mã giảm giá
+            $('#applyPromoBtn').click(function () {
+                var promoCode = $('#promoCode').val().trim();
+                if (!promoCode) {
+                    showToast('<i class="fas fa-exclamation-triangle"></i> Vui lòng nhập mã giảm giá', 'error');
+                    return;
+                }
+                applyPromotion(promoCode);
+            });
+
+            // Enter key trong input mã giảm giá
+            $('#promoCode').keypress(function (e) {
+                if (e.which == 13) {
+                    $('#applyPromoBtn').click();
                 }
             });
 
@@ -236,6 +254,99 @@
                 // Cập nhật tạm tính và tổng cộng
                 $('.cart-subtotal').text(total.toLocaleString() + 'đ');
                 $('.cart-total').text(total.toLocaleString() + 'đ');
+            }
+
+            // Áp dụng mã giảm giá
+            function applyPromotion(promoCode) {
+                $('#applyPromoBtn').prop('disabled', true).text('Đang xử lý...');
+                
+                $.ajax({
+                    url: '/Cart/ApplyPromotion',
+                    type: 'POST',
+                    data: { promoCode: promoCode },
+                    success: function (response) {
+                        console.log('Response:', response); // Debug
+                        if (response.success) {
+                            // Hiển thị thông tin giảm giá
+                            $('#discountCode').text(response.promoCode || 'N/A');
+                            $('.discount-amount').text('-' + (response.discountAmount || '0') + 'đ');
+                            $('#discountRow').show();
+                            
+                            // Cập nhật tổng tiền
+                            $('.cart-total').text(response.newTotal + 'đ');
+                            
+                            // Thay đổi button thành "Hủy mã"
+                            $('#applyPromoBtn').removeClass('btn-outline-success').addClass('btn-outline-danger')
+                                .text('Hủy mã').off('click').click(function() {
+                                    removePromotion();
+                                });
+                            
+                            // Disable input
+                            $('#promoCode').prop('readonly', true);
+                            
+                            // Hiển thị thông báo thành công
+                            $('#promoResult').html(`
+                                <div class="alert alert-success py-2 mb-0">
+                                    <i class="fas fa-check-circle"></i> 
+                                    ${response.message} (Giảm ${response.discountPercent}%)
+                                </div>
+                            `).show();
+                            
+                            showToast('<i class="fas fa-check-circle"></i> ' + response.message, 'success');
+                        } else {
+                            $('#promoResult').html(`
+                                <div class="alert alert-danger py-2 mb-0">
+                                    <i class="fas fa-exclamation-triangle"></i> 
+                                    ${response.message}
+                                </div>
+                            `).show();
+                            showToast('<i class="fas fa-exclamation-triangle"></i> ' + response.message, 'error');
+                        }
+                    },
+                    error: function () {
+                        showToast('<i class="fas fa-exclamation-triangle"></i> Có lỗi xảy ra', 'error');
+                    },
+                    complete: function () {
+                        $('#applyPromoBtn').prop('disabled', false);
+                    }
+                });
+            }
+
+            // Hủy mã giảm giá
+            function removePromotion() {
+                $.ajax({
+                    url: '/Cart/RemovePromotion',
+                    type: 'POST',
+                    success: function (response) {
+                        if (response.success) {
+                            // Ẩn thông tin giảm giá
+                            $('#discountRow').hide();
+                            
+                            // Cập nhật lại tổng tiền
+                            $('.cart-total').text(response.newTotal + 'đ');
+                            
+                            // Reset button
+                            $('#applyPromoBtn').removeClass('btn-outline-danger').addClass('btn-outline-success')
+                                .text('Áp dụng').off('click').click(function() {
+                                    var promoCode = $('#promoCode').val().trim();
+                                    if (!promoCode) {
+                                        showToast('<i class="fas fa-exclamation-triangle"></i> Vui lòng nhập mã giảm giá', 'error');
+                                        return;
+                                    }
+                                    applyPromotion(promoCode);
+                                });
+                            
+                            // Enable input và clear
+                            $('#promoCode').prop('readonly', false).val('');
+                            $('#promoResult').hide();
+                            
+                            showToast('<i class="fas fa-check-circle"></i> ' + response.message, 'success');
+                        }
+                    },
+                    error: function () {
+                        showToast('<i class="fas fa-exclamation-triangle"></i> Có lỗi xảy ra', 'error');
+                    }
+                });
             }
 
             // Hiển thị thông báo toast

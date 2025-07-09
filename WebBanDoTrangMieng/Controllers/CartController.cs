@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebBanDoTrangMieng.Models;
 
+
 namespace WebBanDoTrangMieng.Controllers
 {
     public class CartController : Controller
@@ -139,6 +140,87 @@ namespace WebBanDoTrangMieng.Controllers
             var cart=GetCart();
             return Json(new {count = cart.TotalItems}, JsonRequestBehavior.AllowGet);
         }
+
+        // POST: Cart/ApplyPromotion - Áp dụng mã giảm giá
+        [HttpPost]
+        public ActionResult ApplyPromotion(string promoCode)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(promoCode))
+                {
+                    return Json(new { success = false, message = "Vui lòng nhập mã giảm giá" });
+                }
+
+                // Tìm mã giảm giá trong database
+                var promotion = db.Promotions.FirstOrDefault(p => 
+                    p.Code.ToUpper() == promoCode.ToUpper() && 
+                    p.IsActive == true &&
+                    p.StartDate <= DateTime.Now &&
+                    p.EndDate >= DateTime.Now);
+
+                if (promotion == null)
+                {
+                    return Json(new { success = false, message = "Mã giảm giá không hợp lệ hoặc đã hết hạn" });
+                }
+
+                // Debug log
+                System.Diagnostics.Debug.WriteLine($"Found promotion: {promotion.Code}, Discount: {promotion.DiscountPercent}");
+
+                var cart = GetCart();
+                if (!cart.Items.Any())
+                {
+                    return Json(new { success = false, message = "Giỏ hàng trống" });
+                }
+
+                // Tính discount
+                decimal discountAmount = (cart.TotalAmount * promotion.DiscountPercent) / 100;
+                
+                // Lưu thông tin promotion vào session
+                Session["AppliedPromotion"] = new Models.ViewModel.AppliedPromotionVM {
+                    Code = promotion.Code,
+                    DiscountPercent = promotion.DiscountPercent,
+                    DiscountAmount = discountAmount,
+                    Description = promotion.Description
+                };
+
+                return Json(new { 
+                    success = true, 
+                    message = "Áp dụng mã giảm giá thành công",
+                    promoCode = promotion.Code,
+                    discountPercent = promotion.DiscountPercent,
+                    discountAmount = discountAmount.ToString("N0"),
+                    originalTotal = cart.TotalAmount.ToString("N0"),
+                    newTotal = (cart.TotalAmount - discountAmount + 20000).ToString("N0") // +20k shipping
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Có lỗi xảy ra: " + ex.Message });
+            }
+        }
+
+        // POST: Cart/RemovePromotion - Xóa mã giảm giá
+        [HttpPost]
+        public ActionResult RemovePromotion()
+        {
+            try
+            {
+                Session["AppliedPromotion"] = null;
+                var cart = GetCart();
+                
+                return Json(new { 
+                    success = true, 
+                    message = "Đã hủy mã giảm giá",
+                    originalTotal = cart.TotalAmount.ToString("N0"),
+                    newTotal = (cart.TotalAmount + 20000).ToString("N0") // +20k shipping
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Có lỗi xảy ra: " + ex.Message });
+            }
+        }
         // GET: Cart/Checkout - Trang thanh toán
         public ActionResult Checkout()
         {
@@ -199,18 +281,40 @@ namespace WebBanDoTrangMieng.Controllers
             string shippingAddress = $"{address}, {wardName}, {districtName}, {provinceName}";
 
 
-            int paymentId = int.Parse(payment); // hoặc dùng int.TryParse để an toàn
+            int paymentId;
+            if (!int.TryParse(payment, out paymentId))
+            {
+                TempData["ErrorMessage"] = "Phương thức thanh toán không hợp lệ!";
+                return RedirectToAction("Checkout");
+            }
             var paymentMethodName = db.PaymentMethods
                 .Where(m => m.PaymentMethodId == paymentId)
                 .Select(m => m.MethodName)
                 .FirstOrDefault();
+
+            // Lấy discount info trước khi xóa session
+            decimal discountAmount = 0;
+            string discountCode = "";
+            var appliedPromotion = Session["AppliedPromotion"] as Models.ViewModel.AppliedPromotionVM;
+            if (appliedPromotion != null)
+            {
+                discountAmount = appliedPromotion.DiscountAmount;
+                discountCode = appliedPromotion.Code;
+            }
+
+            // Hack: Lưu discount vào PaymentMethod field
+            string paymentMethodWithDiscount = paymentMethodName;
+            if (discountAmount > 0)
+            {
+                paymentMethodWithDiscount = $"{paymentMethodName}|DISCOUNT:{discountAmount}|CODE:{discountCode}";
+            }
 
             var order = new Order
             {
                 UserId = (int)Session["UserId"],
                 OrderDate = DateTime.Now,
                 ShippingAddress = shippingAddress,
-                PaymentMethod = paymentMethodName, // Lưu tên phương thức thanh toán
+                PaymentMethod = paymentMethodWithDiscount, // Lưu với discount info
                 Status = "Pending"
             };
             db.Orders.Add(order);
@@ -239,17 +343,31 @@ namespace WebBanDoTrangMieng.Controllers
 
             if (payment == "7") // VNPAY
             {
-                // Xóa giỏ hàng trước khi redirect
+                // Xóa giỏ hàng và promotion trước khi redirect (sử dụng discountAmount đã có)
                 Session["Cart"] = null;
-                return RedirectToAction("VnpayCheckout", "Payment", new { orderId = order.OrderId });
+                Session["AppliedPromotion"] = null;
+                return RedirectToAction("VnpayCheckout", "Payment", new { orderId = order.OrderId, discountAmount = discountAmount });
             }
             else // COD
             {
+                // Xóa giỏ hàng và promotion
                 Session["Cart"] = null;
-                TempData["SuccessMessage"] = "Đặt hàng thành công!";
-                return RedirectToAction("OrderHistory", "User");
+                Session["AppliedPromotion"] = null;
+                // Hiển thị trang trạng thái đơn hàng thay vì chuyển thẳng về lịch sử
+                return RedirectToAction(
+                    "OrderStatus",
+                    "Payment",
+                    new {
+                        orderCode = order.OrderId.ToString(),
+                        status = "Thành công",
+                        message = "Đặt hàng thành công!"
+                    }
+                );
             }
         }
+
+
+
 
         protected override void Dispose(bool disposing)
         {

@@ -1,0 +1,32 @@
+﻿@model WebBanDoTrangMieng.Models.ViewModel.OrderStatusVM
+@{
+    ViewBag.Title = "Trạng thái đơn hàng";
+    bool isSuccess = Model.Status != null && Model.Status.ToLower().Contains("thành công");
+}
+<!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<div class="container py-5">
+    <div class="text-center">
+        <h2 class="mb-4 @(isSuccess ? "text-success" : "text-danger")">Trạng thái đơn hàng</h2>
+        <div class="alert @(isSuccess ? "alert-success" : "alert-danger")" role="alert">
+            <strong>@Model.Message</strong>
+        </div>
+        <p>Mã đơn hàng: <strong>@Model.OrderCode</strong></p>
+        <p>Trạng thái: <span class="fw-bold">@Model.Status</span></p>
+        <a href="@Url.Action("OrderHistory", "User")" class="btn btn-success mt-4">Xem lịch sử đặt hàng</a>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            icon: '@(isSuccess ? "success" : "error")',
+            title: '@(isSuccess ? "Thành công!" : "Thất bại!")',
+            text: '@Html.Raw(Model.Message)'.replace(/\n/g, '\n'),
+            confirmButtonText: 'Đóng',
+            customClass: {
+                confirmButton: 'btn btn-success'
+            },
+            buttonsStyling: false
+        });
+    });
+</script>

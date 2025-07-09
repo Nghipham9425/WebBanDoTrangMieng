@@ -15,7 +15,28 @@
         default: statusClass = "badge bg-light text-dark"; statusIcon = "📋"; break;
     }
     var orderProducts = Model.Order_Product as IEnumerable<Order_Product>;
-    var total = orderProducts?.Sum(op => op.Quantity * op.Price) ?? 0;
+    var subtotal = orderProducts?.Sum(op => op.Quantity * op.Price) ?? 0;
+    
+    // Parse discount từ PaymentMethod
+    decimal discountAmount = 0;
+    string discountCode = "";
+    if (!string.IsNullOrEmpty(Model.PaymentMethod) && Model.PaymentMethod.Contains("DISCOUNT:"))
+    {
+        var parts = Model.PaymentMethod.Split('|');
+        foreach (var part in parts)
+        {
+            if (part.StartsWith("DISCOUNT:"))
+            {
+                decimal.TryParse(part.Replace("DISCOUNT:", ""), out discountAmount);
+            }
+            else if (part.StartsWith("CODE:"))
+            {
+                discountCode = part.Replace("CODE:", "");
+            }
+        }
+    }
+    
+    var total = subtotal - discountAmount + 20000; // Trừ discount, cộng phí ship
 }
 
 <div class="container py-4">
@@ -91,6 +112,13 @@
                 </tbody>
             </table>
             <div class="text-end p-3">
+                <div class="mb-2">Tiền hàng: @subtotal.ToString("N0") VNĐ</div>
+                @if (discountAmount > 0)
+                {
+                    <div class="mb-2 text-success">Giảm giá (@discountCode): -@discountAmount.ToString("N0") VNĐ</div>
+                }
+                <div class="mb-2">Phí vận chuyển: 20.000 VNĐ</div>
+                <hr>
                 <span class="fw-bold fs-5 text-success">Tổng cộng: @total.ToString("N0") VNĐ</span>
             </div>
         </div>

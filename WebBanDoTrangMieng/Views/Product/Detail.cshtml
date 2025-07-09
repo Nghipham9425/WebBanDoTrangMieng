@@ -155,7 +155,7 @@
             <div class="col-lg-6">
                 <div class="h-100">
                     <!-- Product Title -->
-                    <h1 class="product-title mb-3">@Model.Name</h1>
+                    <h1 >@Model.Name</h1>
 
                     <!-- Rating -->
                     <div class="d-flex align-items-center mb-3">
@@ -369,7 +369,6 @@
                                 }
                             </div>
 
-                            <!-- Form đánh giá chỉ hiện khi đủ điều kiện -->
                             @if (ViewBag.CanReview == true)
                             {
                                 <div class="card bg-light mb-3">
@@ -384,16 +383,11 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Đánh giá *</label>
                                                 <div class="rating-input" id="ratingInput">
-                                                    <input type="radio" id="star1" name="Rating" value="1" required>
-                                                    <label for="star1" data-rating="1">★</label>
-                                                    <input type="radio" id="star2" name="Rating" value="2">
-                                                    <label for="star2" data-rating="2">★</label>
-                                                    <input type="radio" id="star3" name="Rating" value="3">
-                                                    <label for="star3" data-rating="3">★</label>
-                                                    <input type="radio" id="star4" name="Rating" value="4">
-                                                    <label for="star4" data-rating="4">★</label>
-                                                    <input type="radio" id="star5" name="Rating" value="5">
-                                                    <label for="star5" data-rating="5">★</label>
+                                                    @for (int i = 5; i >= 1; i--)
+                                                    {
+                                                        <input type="radio" id="star@i" name="Rating" value="@i" @(i == 5 ? "required" : "") />
+                                                        <label for="star@i" data-rating="@i">★</label>
+                                                    }
                                                 </div>
                                                 <small class="text-muted">Click vào sao để chọn đánh giá</small>
                                             </div>
@@ -474,56 +468,56 @@ function addToCart() {
 }
 
 // Fixed Rating stars functionality 
-$(document).ready(function() {
-    const ratingInput = $('#ratingInput');
-    if (ratingInput.length) {
-        const stars = ratingInput.find('label');
-        let currentRating = 0;
-        
-        // Handle star click
-        stars.on('click', function() {
-            const rating = parseInt($(this).data('rating'));
-            currentRating = rating;
-            
-            // Set the corresponding radio button as checked
-            $('#star' + rating).prop('checked', true);
-            
-            // Update visual display
-            updateStarDisplay(rating);
-            
-            console.log('Rating selected:', rating); // Debug log
-        });
-        
-        // Handle star hover
-        stars.on('mouseenter', function() {
-            const rating = parseInt($(this).data('rating'));
-            updateStarDisplay(rating);
-        });
-        
-        // Handle mouse leave - restore current rating
-        ratingInput.on('mouseleave', function() {
-            updateStarDisplay(currentRating);
-        });
-        
-        // Function to update star display
-        function updateStarDisplay(rating) {
-            stars.each(function(index) {
-                const starRating = index + 1; // Stars are 1-indexed
-                if (starRating <= rating) {
-                    $(this).addClass('active').css('color', '#ffc107');
-                } else {
-                    $(this).removeClass('active').css('color', '#ddd');
-                }
-            });
-        }
-        
-        // Initialize display
-        updateStarDisplay(0);
-    }
+    $(document).ready(function () {
+        const ratingInput = $('#ratingInput');
+        if (ratingInput.length) {
+            const stars = ratingInput.find('label');
+            let currentRating = 0;
 
-    // Auto-hide alerts after 5 seconds
-    setTimeout(function() {
-        $('.alert').fadeOut('slow');
-    }, 5000);
-});
+            // Click star
+            stars.on('click', function () {
+                const rating = parseInt($(this).data('rating'));
+                currentRating = rating;
+                $('#star' + rating).prop('checked', true);
+                updateStarDisplay(rating);
+            });
+
+            // Hover star
+            stars.on('mouseenter', function () {
+                const rating = parseInt($(this).data('rating'));
+                updateStarDisplay(rating);
+            });
+
+            // Mouse leave
+            ratingInput.on('mouseleave', function () {
+                updateStarDisplay(currentRating);
+            });
+
+            // Update star display
+            function updateStarDisplay(rating) {
+                stars.each(function () {
+                    const starRating = parseInt($(this).data('rating'));
+                    if (starRating <= rating) {
+                        $(this).addClass('active').css('color', '#ffc107');
+                    } else {
+                        $(this).removeClass('active').css('color', '#ddd');
+                    }
+                });
+            }
+
+            // Nếu đã chọn thì giữ lại khi reload (ví dụ khi submit lỗi)
+            const checked = ratingInput.find('input[type="radio"]:checked').val();
+            if (checked) {
+                currentRating = parseInt(checked);
+                updateStarDisplay(currentRating);
+            } else {
+                updateStarDisplay(0);
+            }
+        }
+
+        // Auto-hide alerts after 5 seconds
+        setTimeout(function () {
+            $('.alert').fadeOut('slow');
+        }, 5000);
+    });
 </script>

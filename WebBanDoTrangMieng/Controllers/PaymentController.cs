@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using WebBanDoTrangMieng;
 using WebBanDoTrangMieng.Helpers;
 using System.Text;
+using WebBanDoTrangMieng.Models.ViewModel;
 
 namespace WebBanDoTrangMieng.Controllers
 {
@@ -19,7 +20,7 @@ namespace WebBanDoTrangMieng.Controllers
         }
 
         // Action tạo URL thanh toán VNPAY sử dụng PayLib
-        public ActionResult VnpayCheckout(int orderId)
+        public ActionResult VnpayCheckout(int orderId, decimal discountAmount = 0)
         {
             var order = db.Orders.Find(orderId);
             if (order == null)
@@ -29,6 +30,15 @@ namespace WebBanDoTrangMieng.Controllers
             }
             decimal amount = db.Order_Product.Where(x => x.OrderId == orderId)
                 .Sum(x => x.Quantity * x.Price);
+            
+            // Áp dụng discount nếu có
+            if (discountAmount > 0)
+            {
+                amount = amount - discountAmount;
+            }
+            
+            // Thêm phí ship
+            amount += 20000;
             string vnp_Returnurl = System.Configuration.ConfigurationManager.AppSettings["vnp_Returnurl"];
             string vnp_Url = System.Configuration.ConfigurationManager.AppSettings["vnp_Url"];
             string vnp_TmnCode = System.Configuration.ConfigurationManager.AppSettings["vnp_TmnCode"];
@@ -89,7 +99,10 @@ namespace WebBanDoTrangMieng.Controllers
             string amount = vnpay.GetResponseData("vnp_Amount");
             string bankCode = vnpay.GetResponseData("vnp_BankCode");
 
-            // Cập nhật trạng thái payment và order
+            string status = "Thất bại";
+            string message = "Thanh toán thất bại. Vui lòng thử lại hoặc liên hệ hỗ trợ.";
+            string orderCode = orderId;
+
             if (checkSignature && (!string.IsNullOrEmpty(orderId)))
             {
                 int paymentId;
@@ -103,29 +116,39 @@ namespace WebBanDoTrangMieng.Controllers
                             payment.Status = "Success";
                             var order = db.Orders.Find(payment.OrderId);
                             if (order != null)
+                            {
                                 order.Status = "Paid";
+                                status = "Thành công";
+                                message = "Thanh toán thành công cho đơn hàng!";
+                                orderCode = order.OrderId.ToString();
+                            }
                         }
                         else
                         {
                             payment.Status = "Failed";
                             var order = db.Orders.Find(payment.OrderId);
                             if (order != null)
+                            {
                                 order.Status = "Cancelled";
+                                orderCode = order.OrderId.ToString();
+                            }
                         }
                         db.SaveChanges();
                     }
                 }
             }
+            else
+            {
+                message = "Dữ liệu thanh toán không hợp lệ.";
+            }
 
-            ViewBag.CheckSignature = checkSignature;
-            ViewBag.ResponseCode = vnp_ResponseCode;
-            ViewBag.TransactionStatus = vnp_TransactionStatus;
-            ViewBag.OrderId = orderId;
-            ViewBag.VnpayTranId = vnpayTranId;
-            ViewBag.Amount = amount;
-            ViewBag.BankCode = bankCode;
-
-            return View();
+            var vm = new OrderStatusVM
+            {
+                OrderCode = orderCode,
+                Status = status,
+                Message = message
+            };
+            return View("OrderStatus", vm);
         }
 
         // Action xử lý IPN từ VNPAY (cập nhật trạng thái thanh toán vào DB)
@@ -194,6 +217,18 @@ namespace WebBanDoTrangMieng.Controllers
             }
 
             return Content($"{{\"RspCode\":\"{rspCode}\",\"Message\":\"{message}\"}}", "application/json");
+        }
+
+        // Hiển thị trạng thái đơn hàng sau khi thanh toán
+        public ActionResult OrderStatus(string orderCode, string status, string message)
+        {
+            var vm = new OrderStatusVM
+            {
+                OrderCode = orderCode,
+                Status = status,
+                Message = message
+            };
+            return View(vm);
         }
     }
 }

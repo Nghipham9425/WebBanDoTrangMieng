@@ -1,6 +1,3 @@
-/* ==========================================
-   CART.CSS - OPTIMIZED WITH BOOTSTRAP
-   ========================================== */
 
 /* CSS Variables Override Bootstrap */
 :root {
@@ -8,9 +5,7 @@
   --bs-success-rgb: 125, 158, 95;
 }
 
-/* ==========================================
-   CART ITEM ANIMATIONS (Special UX)
-   ========================================== */
+
 .cart-item-enter {
   animation: fadeInUp 0.5s ease-out;
 }
@@ -41,9 +36,6 @@
   }
 }
 
-/* ==========================================
-   MOBILE RESPONSIVE
-   ========================================== */
 @media (max-width: 768px) {
   .cart-item-enter,
   .cart-item-remove {

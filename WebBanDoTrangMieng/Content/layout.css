@@ -1,12 +1,5 @@
-/* ==========================================
-   OPTIMIZED LAYOUT.CSS - LAYOUT SPECIFIC ONLY
-   ========================================== */
 
-/* Remove duplicate CSS variables - already in Site.css */
 
-/* ==========================================
-   NAVIGATION SPECIFIC HOVER EFFECTS
-   ========================================== */
 .hover-text-white:hover {
   color: white !important;
   transform: translateY(-1px);
@@ -23,9 +16,6 @@
   color: var(--bs-success) !important;
 }
 
-/* ==========================================
-   CART BADGE ANIMATION
-   ========================================== */
 .position-relative .badge {
   animation: pulse 2s infinite;
 }
@@ -36,9 +26,6 @@
   100% { transform: translate(-50%, -50%) scale(1); }
 }
 
-/* ==========================================
-   MOBILE RESPONSIVE ADJUSTMENTS
-   ========================================== */
 @media (max-width: 767.98px) {
   .navbar-brand {
     font-size: 1.5rem !important;
