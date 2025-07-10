@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace WebBanDoTrangMieng.Areas.Admin.Controllers
 {
+    [AdminAuthorize]
     public class DashboardController : Controller
     {
         // GET: Admin/Dashboard

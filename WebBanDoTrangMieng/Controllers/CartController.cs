@@ -10,7 +10,7 @@ namespace WebBanDoTrangMieng.Controllers
 {
     public class CartController : Controller
     {
-        private QLStoreTrangMiengEntities db = new QLStoreTrangMiengEntities();
+        private readonly QLStoreTrangMiengEntities db = new QLStoreTrangMiengEntities();
 
         private Cart GetCart()
         {
@@ -259,7 +259,7 @@ namespace WebBanDoTrangMieng.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Checkout(string fullName, string phone, string email, string address, string provinceName, string districtName, string wardName, string payment)
+        public ActionResult Checkout(string address, string provinceName, string districtName, string wardName, string payment)
         {
             if (Session["UserId"] == null)
             {

@@ -7,9 +7,10 @@ using WebBanDoTrangMieng.Models.ViewModel;
 
 namespace WebBanDoTrangMieng.Areas.Admin.Controllers
 {
+    [WebBanDoTrangMieng.AdminAuthorize]
     public class ReviewController : Controller
     {
-        private QLStoreTrangMiengEntities db = new QLStoreTrangMiengEntities();
+        private readonly QLStoreTrangMiengEntities db = new QLStoreTrangMiengEntities();
 
         // GET: Admin/Review - Trang chính hiển thị danh sách sản phẩm có review
         public ActionResult Index(int page = 1, int pageSize = 10)

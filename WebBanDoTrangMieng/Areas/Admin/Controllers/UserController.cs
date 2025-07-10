@@ -7,9 +7,10 @@ using System.Data.Entity;
 
 namespace WebBanDoTrangMieng.Areas.Admin.Controllers
 {
+    [WebBanDoTrangMieng.AdminAuthorize]
     public class UserController : Controller
     {
-        private QLStoreTrangMiengEntities db = new QLStoreTrangMiengEntities();
+        private readonly QLStoreTrangMiengEntities db = new QLStoreTrangMiengEntities();
         // GET: Admin/User
         public ActionResult Index()
         {
