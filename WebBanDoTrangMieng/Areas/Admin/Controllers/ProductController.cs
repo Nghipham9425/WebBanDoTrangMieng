@@ -8,9 +8,10 @@ using System.Web.Mvc;
 
 namespace WebBanDoTrangMieng.Areas.Admin.Controllers
 {
+    [WebBanDoTrangMieng.AdminAuthorize]
     public class ProductController : Controller
     {
-        private QLStoreTrangMiengEntities db = new QLStoreTrangMiengEntities();
+        private readonly QLStoreTrangMiengEntities db = new QLStoreTrangMiengEntities();
 
         // GET: Admin/Product
         public ActionResult Index(int page = 1, string search = "")

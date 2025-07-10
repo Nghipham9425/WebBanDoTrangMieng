@@ -8,9 +8,10 @@ using WebBanDoTrangMieng.Models.ViewModel;
 
 namespace WebBanDoTrangMieng.Areas.Admin.Controllers
 {
+    [WebBanDoTrangMieng.AdminAuthorize]
     public class InventoryController : Controller
     {
-        private QLStoreTrangMiengEntities db = new QLStoreTrangMiengEntities();
+        private readonly QLStoreTrangMiengEntities db = new QLStoreTrangMiengEntities();
         // GET: Admin/Inventory
         public ActionResult Index(int page = 1, int pageSize = 10)
         {

@@ -6,9 +6,10 @@ using System.Web.Mvc;
 
 namespace WebBanDoTrangMieng.Areas.Admin.Controllers
 {
+    [WebBanDoTrangMieng.AdminAuthorize]
     public class PromotionController : Controller
     {
-        private QLStoreTrangMiengEntities db=new QLStoreTrangMiengEntities();
+        private readonly QLStoreTrangMiengEntities db = new QLStoreTrangMiengEntities();
         // GET: Admin/Promotion
         public ActionResult Index(int page=1,int pageSize=10,string status="")
         {

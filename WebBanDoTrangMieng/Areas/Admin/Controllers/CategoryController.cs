@@ -8,9 +8,10 @@ using System.Data.Entity;
 
 namespace WebBanDoTrangMieng.Areas.Admin.Controllers
 {
+    [WebBanDoTrangMieng.AdminAuthorize]
     public class CategoryController : Controller
     {
-        private QLStoreTrangMiengEntities db = new QLStoreTrangMiengEntities();
+        private readonly QLStoreTrangMiengEntities db = new QLStoreTrangMiengEntities();
         // GET: Admin/Category
         public ActionResult Index()
         {
@@ -102,7 +103,7 @@ namespace WebBanDoTrangMieng.Areas.Admin.Controllers
 
         // POST: Admin/Category/UpdateStatus/5
         [HttpPost]
-        public ActionResult UpdateStatus(int id, bool isActive)
+        public ActionResult UpdateStatus(int id)
         {
             using (var db = new QLStoreTrangMiengEntities())
             {
