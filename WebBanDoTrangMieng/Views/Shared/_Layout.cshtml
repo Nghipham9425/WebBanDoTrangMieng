@@ -11,7 +11,8 @@
     <meta name="author" content="Đồ Tráng Miệng">
     
     <!-- Favicon -->
-    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="~/Content/Images/Products/bakery-shop.png" rel="shortcut icon" type="image/png" />
+    <link href="~/Content/Images/Products/bakery-shop.png" rel="icon" type="image/png" />
     
     <!-- CSS Bundle -->
     @Styles.Render("~/Content/css")
@@ -21,6 +22,29 @@
     
     <!-- Inter Font from Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Logo Styles -->
+    <style>
+        .logo-img {
+            transition: transform 0.3s ease;
+        }
+        .logo-img:hover {
+            transform: scale(1.05);
+        }
+        .admin-logo {
+            filter: brightness(0) invert(1);
+        }
+        @@media (max-width: 576px) {
+            .logo-img {
+                height: 40px !important;
+            }
+        }
+        
+        /* Custom Alert & Modal Styles */
+        .modal-content { border-radius: 15px; overflow: hidden; }
+        .btn-close-white { filter: brightness(0) invert(1); opacity: 1; }
+        .btn-close-white:hover { opacity: 0.8; }
+    </style>
     
     <!-- Additional Styles -->
     @RenderSection("styles", required: false)
@@ -77,7 +101,7 @@
     @Scripts.Render("~/bundles/bootstrap")
     <script src="~/Scripts/layout.js"></script>
     <script src="~/Scripts/auth-modal.js"></script>
-    <script src="~/Scripts/home-video.js"></script>
+    <script src="~/Scripts/custom-alerts.js"></script>
     
     @RenderSection("scripts", required: false)
 

@@ -28,7 +28,7 @@
                 </div>
 
                 <!-- Quick Links -->
-                <div class="col-lg-2 col-md-6 mb-4">
+                <div class="col-lg-4 col-md-6 mb-4">
                     <h5 class="text-success mb-3">Liên kết</h5>
                     <ul class="list-unstyled">
                         <li class="mb-2">@Html.ActionLink("Trang chủ", "Index", "Home", null, new { @class = "text-light text-decoration-none" })</li>
@@ -39,72 +39,22 @@
                 </div>
 
                 <!-- Product Categories -->
-                <div class="col-lg-3 col-md-6 mb-4">
+                <div class="col-lg-4 col-md-6 mb-4">
                     <h5 class="text-success mb-3">Danh mục</h5>
                     <ul class="list-unstyled">
                         <li class="mb-2">
-                            <a href="#" class="text-light text-decoration-none">
-                                <i class="fas fa-cookie-bite me-2 text-success"></i>
-                                Bánh Flan
-                            </a>
+                            @Html.ActionLink("Tất cả sản phẩm", "Index", "Product", null, new { @class = "text-light text-decoration-none" })
                         </li>
                         <li class="mb-2">
-                            <a href="#" class="text-light text-decoration-none">
-                                <i class="fas fa-birthday-cake me-2 text-success"></i>
-                                Tiramisu
-                            </a>
+                            @Html.ActionLink("Bánh ngọt", "Index", "Product", new { category = "banh-ngot" }, new { @class = "text-light text-decoration-none" })
                         </li>
                         <li class="mb-2">
-                            <a href="#" class="text-light text-decoration-none">
-                                <i class="fas fa-cheese me-2 text-success"></i>
-                                Cheesecake
-                            </a>
-                        </li>
-                        <li class="mb-2">
-                            <a href="#" class="text-light text-decoration-none">
-                                <i class="fas fa-ice-cream me-2 text-success"></i>
-                                Pudding & Bánh kem
-                            </a>
-                        </li>
-                        <li class="mb-2">
-                            <a href="#" class="text-light text-decoration-none">
-                                <i class="fas fa-coffee me-2 text-success"></i>
-                                Đồ uống
-                            </a>
+                            @Html.ActionLink("Nước uống", "Index", "Product", new { category = "nuoc-uong" }, new { @class = "text-light text-decoration-none" })
                         </li>
                     </ul>
                 </div>
 
-                <!-- Customer Service -->
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <h5 class="text-success mb-3">Hỗ trợ</h5>
-                    <ul class="list-unstyled">
-                        <li class="mb-2">
-                            <a href="#" class="text-light text-decoration-none">
-                                <i class="fas fa-shield-alt me-2 text-success"></i>
-                                Chính sách bảo mật
-                            </a>
-                        </li>
-                        <li class="mb-2">
-                            <a href="#" class="text-light text-decoration-none">
-                                <i class="fas fa-file-contract me-2 text-success"></i>
-                                Điều khoản sử dụng
-                            </a>
-                        </li>
-                        <li class="mb-2">
-                            <a href="#" class="text-light text-decoration-none">
-                                <i class="fas fa-question-circle me-2 text-success"></i>
-                                FAQ
-                            </a>
-                        </li>
-                        <li class="mb-2">
-                            <a href="#" class="text-light text-decoration-none">
-                                <i class="fas fa-exchange-alt me-2 text-success"></i>
-                                Chính sách đổi trả
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+
             </div>
 
             <!-- Copyright -->
@@ -115,16 +65,16 @@
                     Tất cả quyền được bảo lưu.
                 </p>
                 <div class="mt-2">
-                    <a href="#" class="text-success text-decoration-none me-3">
+                    <a href="https://facebook.com" target="_blank" class="text-success text-decoration-none me-3" title="Facebook">
                         <i class="fab fa-facebook-f"></i>
                     </a>
-                    <a href="#" class="text-success text-decoration-none me-3">
+                    <a href="https://instagram.com" target="_blank" class="text-success text-decoration-none me-3" title="Instagram">
                         <i class="fab fa-instagram"></i>
                     </a>
-                    <a href="#" class="text-success text-decoration-none me-3">
+                    <a href="https://twitter.com" target="_blank" class="text-success text-decoration-none me-3" title="Twitter">
                         <i class="fab fa-twitter"></i>
                     </a>
-                    <a href="#" class="text-success text-decoration-none">
+                    <a href="https://youtube.com" target="_blank" class="text-success text-decoration-none" title="YouTube">
                         <i class="fab fa-youtube"></i>
                     </a>
                 </div>

@@ -149,6 +149,63 @@ namespace WebBanDoTrangMieng.Areas.Admin.Controllers
             return View(promotion);
         }
 
+        // GET: Admin/Promotion/SendEmail/5
+        public ActionResult SendEmail(int id)
+        {
+            var promotion = db.Promotions.Find(id);
+            if (promotion == null)
+                return HttpNotFound();
+
+            // Lấy danh sách khách hàng có email
+            var customers = db.Users.Where(u => u.Role == "Customer" && u.IsActive == true && !string.IsNullOrEmpty(u.Email)).ToList();
+            
+            ViewBag.Promotion = promotion;
+            ViewBag.CustomerCount = customers.Count;
+            
+            return View(customers);
+        }
+
+        // POST: Admin/Promotion/SendEmail/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SendEmail(int id, List<int> selectedCustomers, string emailSubject, string emailMessage)
+        {
+            try
+            {
+                var promotion = db.Promotions.Find(id);
+                if (promotion == null)
+                    return HttpNotFound();
+
+                if (selectedCustomers == null || !selectedCustomers.Any())
+                {
+                    TempData["Error"] = "Vui lòng chọn ít nhất một khách hàng!";
+                    return RedirectToAction("SendEmail", new { id = id });
+                }
+
+                if (string.IsNullOrEmpty(emailSubject) || string.IsNullOrEmpty(emailMessage))
+                {
+                    TempData["Error"] = "Vui lòng nhập đầy đủ tiêu đề và nội dung email!";
+                    return RedirectToAction("SendEmail", new { id = id });
+                }
+
+                // Gửi email cho các khách hàng đã chọn
+                var customers = db.Users.Where(u => selectedCustomers.Contains(u.UserId)).ToList();
+                
+                foreach (var customer in customers)
+                {
+                    WebBanDoTrangMieng.Helpers.EmailHelper.SendPromotionEmail(customer, promotion, emailSubject, emailMessage);
+                }
+
+                TempData["Success"] = $"Đã gửi email khuyến mãi thành công cho {customers.Count} khách hàng!";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Có lỗi xảy ra khi gửi email: " + ex.Message;
+                return RedirectToAction("SendEmail", new { id = id });
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

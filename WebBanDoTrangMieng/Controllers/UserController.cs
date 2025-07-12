@@ -57,6 +57,7 @@ namespace WebBanDoTrangMieng.Controllers
                     Session["UserName"] = user.UserName;
                     Session["UserRole"] = user.Role;
                     Session["Email"] = user.Email;
+                    Session["Phone"] = user.Phone;
 
                     // Tạo cookie xác thực
                     FormsAuthentication.SetAuthCookie(user.Email, false);
@@ -103,6 +104,7 @@ namespace WebBanDoTrangMieng.Controllers
                         Session["UserName"] = user.UserName;
                         Session["UserRole"] = user.Role;
                         Session["Email"] = user.Email;
+                        Session["Phone"] = user.Phone;
 
                         // Tạo cookie xác thực
                         FormsAuthentication.SetAuthCookie(user.Email, model.RememberMe);
