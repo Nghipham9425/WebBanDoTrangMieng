@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
+using System.Web.Security;
 
 namespace WebBanDoTrangMieng.Areas.Admin.Controllers
 {
@@ -11,6 +12,19 @@ namespace WebBanDoTrangMieng.Areas.Admin.Controllers
     public class UserController : Controller
     {
         private readonly QLStoreTrangMiengEntities db = new QLStoreTrangMiengEntities();
+        
+        // GET: Admin/User/Logout
+        public ActionResult Logout()
+        {
+            // Xóa session
+            Session.Clear();
+            
+            // Xóa cookie xác thực
+            FormsAuthentication.SignOut();
+            
+            return RedirectToAction("Index", "Home", new { area = "" });
+        }
+        
         // GET: Admin/User
         public ActionResult Index()
         {

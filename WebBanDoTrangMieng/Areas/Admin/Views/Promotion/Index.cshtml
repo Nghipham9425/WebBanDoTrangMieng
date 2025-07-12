@@ -51,7 +51,7 @@
                                     <th>Giảm giá</th>
                                     <th>Thời gian</th>
                                     <th>Trạng thái</th>
-                                    <th width="150">Thao tác</th>
+                                    <th width="200">Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -90,6 +90,11 @@
                                                 <a href="@Url.Action("Edit", new { id = item.PromotionId })" 
                                                    class="btn btn-outline-primary" title="Sửa">
                                                     <i class="fas fa-edit"></i>
+                                                </a>
+                                                
+                                                <a href="@Url.Action("SendEmail", new { id = item.PromotionId })" 
+                                                   class="btn btn-outline-info" title="Gửi Email Khuyến Mãi">
+                                                    <i class="fas fa-envelope"></i>
                                                 </a>
                                                 
                                                 @if (item.IsActive == true)

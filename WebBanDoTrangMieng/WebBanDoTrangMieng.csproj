@@ -162,10 +162,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\EmailHelper.cs" />
     <Compile Include="Helpers\VnPayLibrary.cs" />
     <Compile Include="Models\CartItem.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\ViewModel\AppliedPromotionVM.cs" />
+    <Compile Include="Models\ViewModel\ContactVM.cs" />
     <Compile Include="Models\ViewModel\InventoryProductVM.cs" />
     <Compile Include="Models\ViewModel\LoginVM.cs" />
     <Compile Include="Models\ViewModel\OrderStatusVM.cs" />
@@ -397,6 +399,7 @@
     <Content Include="Areas\Admin\Views\Promotion\Create.cshtml" />
     <Content Include="Areas\Admin\Views\Promotion\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Promotion\Details.cshtml" />
+    <Content Include="Areas\Admin\Views\Promotion\SendEmail.cshtml" />
     <None Include="packages.config" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />

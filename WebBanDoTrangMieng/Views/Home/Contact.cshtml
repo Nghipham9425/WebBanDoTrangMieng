@@ -1,4 +1,5 @@
-﻿@{
+﻿@model WebBanDoTrangMieng.Models.ViewModel.ContactVM
+@{
     ViewBag.Title = "Liên hệ";
 }
 
@@ -64,31 +65,81 @@
                         <h4 class="mb-0"><i class="fas fa-envelope me-2"></i> Gửi tin nhắn cho chúng tôi</h4>
                     </div>
                     <div class="card-body">
-                        <form id="contactForm">
-                            <div class="mb-3">
-                                <label for="name" class="form-label text-success fw-bold">Họ và tên</label>
-                                <input type="text" class="form-control border-success" id="name" placeholder="Nhập họ và tên của bạn" required>
+                        @* Show messages *@
+                        @if (TempData["Success"] != null)
+                        {
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label text-success fw-bold">Email</label>
-                                <input type="email" class="form-control border-success" id="email" placeholder="Nhập địa chỉ email của bạn" required>
+                        }
+                        @if (TempData["Error"] != null)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
-                            <div class="mb-3">
-                                <label for="phone" class="form-label text-success fw-bold">Số điện thoại</label>
-                                <input type="tel" class="form-control border-success" id="phone" placeholder="Nhập số điện thoại của bạn">
+                        }
+                        @if (TempData["LoginRequired"] != null && Session["Email"] == null)
+                        {
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <i class="fas fa-exclamation-triangle me-2"></i>@TempData["LoginRequired"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
-                            <div class="mb-3">
-                                <label for="subject" class="form-label text-success fw-bold">Tiêu đề</label>
-                                <input type="text" class="form-control border-success" id="subject" placeholder="Nhập tiêu đề tin nhắn">
+                        }
+
+                        @if (Session["Email"] != null)
+                        {
+                            using (Html.BeginForm("Contact", "Home", FormMethod.Post, new { @class = "contact-form", @id = "contactForm" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                
+                                <div class="mb-3">
+                                    @Html.LabelFor(m => m.Name, "Họ và tên", new { @class = "form-label text-success fw-bold" })
+                                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control border-success bg-light", placeholder = "Nhập họ và tên của bạn", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger small" })
+                                </div>
+                                
+                                <div class="mb-3">
+                                    @Html.LabelFor(m => m.Email, "Email", new { @class = "form-label text-success fw-bold" })
+                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control border-success bg-light", placeholder = "Nhập địa chỉ email của bạn", @type = "email", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger small" })
+                                </div>
+                                
+                                <div class="mb-3">
+                                    @Html.LabelFor(m => m.Phone, "Số điện thoại", new { @class = "form-label text-success fw-bold" })
+                                    @Html.TextBoxFor(m => m.Phone, new { @class = "form-control border-success bg-light", placeholder = "Nhập số điện thoại của bạn", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger small" })
+                                </div>
+                                
+                                <div class="mb-3">
+                                    @Html.LabelFor(m => m.Subject, "Tiêu đề", new { @class = "form-label text-success fw-bold" })
+                                    @Html.TextBoxFor(m => m.Subject, new { @class = "form-control border-success", placeholder = "Nhập tiêu đề tin nhắn" })
+                                    @Html.ValidationMessageFor(m => m.Subject, "", new { @class = "text-danger small" })
+                                </div>
+                                
+                                <div class="mb-3">
+                                    @Html.LabelFor(m => m.Message, "Nội dung", new { @class = "form-label text-success fw-bold" })
+                                    @Html.TextAreaFor(m => m.Message, new { @class = "form-control border-success", placeholder = "Nhập nội dung tin nhắn của bạn", rows = 5 })
+                                    @Html.ValidationMessageFor(m => m.Message, "", new { @class = "text-danger small" })
+                                </div>
+                                
+                                <button type="button" class="btn btn-success btn-lg w-100" onclick="sendEmailViaMailto()">
+                                    <i class="fas fa-paper-plane me-2"></i> Gửi tin nhắn
+                                </button>
+                            }
+                        }
+                        else
+                        {
+                            <div class="text-center py-4">
+                                <i class="fas fa-lock text-warning fa-3x mb-3"></i>
+                                <h5 class="text-warning">Vui lòng đăng nhập để gửi tin nhắn</h5>
+                                <p class="text-muted">Bạn cần có tài khoản để có thể liên hệ với chúng tôi</p>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#authModal">
+                                    <i class="fas fa-sign-in-alt me-2"></i> Đăng nhập
+                                </button>
                             </div>
-                            <div class="mb-3">
-                                <label for="message" class="form-label text-success fw-bold">Nội dung</label>
-                                <textarea class="form-control border-success" id="message" rows="5" placeholder="Nhập nội dung tin nhắn của bạn" required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-success btn-lg w-100">
-                                <i class="fas fa-paper-plane me-2"></i> Gửi tin nhắn
-                            </button>
-                        </form>
+                        }
                     </div>
                 </div>
             </div>
@@ -166,18 +217,74 @@
 </div>
 
 @section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
     <script>
         $(document).ready(function () {
-            // Form submission handling
-            $('#contactForm').submit(function (e) {
-                e.preventDefault();
-
-                // Simulate form submission
-                alert('Cảm ơn bạn đã liên hệ với chúng tôi. Chúng tôi sẽ phản hồi trong thời gian sớm nhất!');
-
-                // Reset form
-                this.reset();
-            });
+            // Auto-hide alerts after 5 seconds
+            setTimeout(function() {
+                $('.alert').fadeOut('slow');
+            }, 5000);
         });
+
+        function sendEmailViaMailto() {
+            // Lấy giá trị từ form
+            var name = $('#Name').val() || '';
+            var email = $('#Email').val() || '';
+            var phone = $('#Phone').val() || '';
+            var subject = $('#Subject').val() || '';
+            var message = $('#Message').val() || '';
+
+            // Validation đơn giản
+            if (!subject.trim()) {
+                alert('Vui lòng nhập tiêu đề tin nhắn!');
+                $('#Subject').focus();
+                return;
+            }
+            if (!message.trim()) {
+                alert('Vui lòng nhập nội dung tin nhắn!');
+                $('#Message').focus();
+                return;
+            }
+
+            // Tạo email body với thông tin khách hàng
+            var emailBody = `Xin chào Admin,
+
+Khách hàng vừa gửi tin nhắn liên hệ với thông tin sau:
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 THÔNG TIN KHÁCH HÀNG
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+👤 Họ và tên: ${name}
+📧 Email: ${email}
+📱 Số điện thoại: ${phone || 'Không cung cấp'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💬 NỘI DUNG TIN NHẮN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+${message}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Vui lòng phản hồi khách hàng trong thời gian sớm nhất.
+
+Trân trọng,
+Hệ thống Đồ Tráng Miệng`;
+
+            // Email admin thực
+            var adminEmail = 'nghiphamtrung30@gmail.com';
+            
+            // Mở Gmail với nội dung đã điền sẵn
+            var gmailUrl = 'https://mail.google.com/mail/?view=cm' +
+                '&to=' + encodeURIComponent(adminEmail) +
+                '&su=' + encodeURIComponent('[Liên hệ] ' + subject) +
+                '&body=' + encodeURIComponent(emailBody);
+            
+            window.open(gmailUrl, '_blank');
+            
+            // Hiển thị thông báo hướng dẫn
+            alert('Gmail đã mở trong tab mới với nội dung tin nhắn đã điền sẵn. Vui lòng kiểm tra và nhấn Send!');
+        }
     </script>
 }

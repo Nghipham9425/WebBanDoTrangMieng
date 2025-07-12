@@ -1,0 +1,257 @@
+﻿@model List<WebBanDoTrangMieng.User>
+@{
+    ViewBag.Title = "Gửi Email Khuyến Mãi";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    var promotion = ViewBag.Promotion as WebBanDoTrangMieng.Promotion;
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">
+                <i class="fas fa-envelope text-primary"></i>
+                Gửi Email Khuyến Mãi
+            </h2>
+            <a href="@Url.Action("Index")" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </a>
+        </div>
+
+        <!-- Promotion Info -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-tag me-2"></i>Thông tin khuyến mãi</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Mã khuyến mãi:</strong><br>
+                        <span class="badge bg-success fs-6">@promotion.Code</span>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Giảm giá:</strong><br>
+                        <span class="text-primary fw-bold">@promotion.DiscountPercent%</span>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Thời gian:</strong><br>
+                        <small>@promotion.StartDate.ToString("dd/MM/yyyy") - @promotion.EndDate.ToString("dd/MM/yyyy")</small>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <strong>Mô tả:</strong><br>
+                        <p class="mb-0">@promotion.Description</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages -->
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        <!-- Email Form -->
+        @using (Html.BeginForm("SendEmail", "Promotion", new { id = promotion.PromotionId }, FormMethod.Post, new { @class = "email-form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                <!-- Customer Selection -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-users me-2"></i>Chọn khách hàng (@ViewBag.CustomerCount khách hàng)
+                            </h5>
+                        </div>
+                        <div class="card-body" style="max-height: 400px; overflow-y: auto;">
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="selectAll">
+                                    <label class="form-check-label fw-bold" for="selectAll">
+                                        Chọn tất cả khách hàng
+                                    </label>
+                                </div>
+                                <hr>
+                            </div>
+
+                            @if (Model.Any())
+                            {
+                                foreach (var customer in Model)
+                                {
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input customer-checkbox" type="checkbox"
+                                               name="selectedCustomers" value="@customer.UserId" id="customer_@customer.UserId">
+                                        <label class="form-check-label" for="customer_@customer.UserId">
+                                            <strong>@customer.UserName</strong><br>
+                                            <small class="text-muted">📧 @customer.Email</small>
+                                        </label>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <p class="text-muted text-center">
+                                    <i class="fas fa-user-slash fa-2x mb-2"></i><br>
+                                    Không có khách hàng nào
+                                </p>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email Content -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-warning text-dark">
+                            <h5 class="mb-0">
+                                <i class="fas fa-edit me-2"></i>Nội dung email
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="emailSubject" class="form-label fw-bold">
+                                    <i class="fas fa-heading me-1"></i>Tiêu đề email
+                                </label>
+                                <input type="text" class="form-control" id="emailSubject" name="emailSubject"
+                                       placeholder="Nhập tiêu đề email khuyến mãi..."
+                                       value="🎉 Ưu đãi đặc biệt @promotion.DiscountPercent% - Mã @promotion.Code" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="emailMessage" class="form-label fw-bold">
+                                    <i class="fas fa-comment me-1"></i>Nội dung email
+                                </label>
+                                <textarea class="form-control" id="emailMessage" name="emailMessage" rows="8"
+                                          placeholder="Nhập nội dung email..." required>Chúng tôi vui mừng thông báo đến bạn về chương trình khuyến mãi đặc biệt!
+
+🎯 Ưu đãi: Giảm @promotion.DiscountPercent% cho tất cả đơn hàng
+🏷️ Mã giảm giá: @promotion.Code
+⏰ Thời gian: @promotion.StartDate.ToString("dd/MM/yyyy") - @promotion.EndDate.ToString("dd/MM/yyyy")
+
+@promotion.Description
+
+Đừng bỏ lỡ cơ hội tuyệt vời này để thưởng thức những món tráng miệng ngon nhất với giá ưu đãi!
+
+Cảm ơn bạn đã luôn tin tưởng và ủng hộ Đồ Tráng Miệng! 🧁❤️</textarea>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-success btn-lg">
+                                    <i class="fas fa-paper-plane me-2"></i>Gửi Email Khuyến Mãi
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary" onclick="previewEmail()">
+                                    <i class="fas fa-eye me-2"></i>Xem trước email
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section scripts {
+    <script>
+$(document).ready(function() {
+    // Select all functionality
+    $('#selectAll').change(function() {
+        $('.customer-checkbox').prop('checked', this.checked);
+        updateSelectedCount();
+    });
+
+    // Individual checkbox change
+    $('.customer-checkbox').change(function() {
+        updateSelectedCount();
+
+        // Update select all checkbox
+        var totalCheckboxes = $('.customer-checkbox').length;
+        var checkedCheckboxes = $('.customer-checkbox:checked').length;
+        $('#selectAll').prop('checked', totalCheckboxes === checkedCheckboxes);
+    });
+
+    // Form submission validation
+    $('.email-form').submit(function(e) {
+        var selectedCustomers = $('.customer-checkbox:checked').length;
+        var emailSubject = $('#emailSubject').val().trim();
+        var emailMessage = $('#emailMessage').val().trim();
+
+        if (selectedCustomers === 0) {
+            e.preventDefault();
+            alert('Vui lòng chọn ít nhất một khách hàng!');
+            return false;
+        }
+
+        if (!emailSubject || !emailMessage) {
+            e.preventDefault();
+            alert('Vui lòng nhập đầy đủ tiêu đề và nội dung email!');
+            return false;
+        }
+
+        return confirm(`Bạn có chắc muốn gửi email khuyến mãi cho ${selectedCustomers} khách hàng?`);
+    });
+
+    updateSelectedCount();
+});
+
+function updateSelectedCount() {
+    var count = $('.customer-checkbox:checked').length;
+    var total = $('.customer-checkbox').length;
+    var submitBtn = $('button[type="submit"]');
+
+    if (count > 0) {
+        submitBtn.html(`<i class="fas fa-paper-plane me-2"></i>Gửi Email cho ${count} khách hàng`);
+        submitBtn.removeClass('btn-secondary').addClass('btn-success');
+    } else {
+        submitBtn.html(`<i class="fas fa-paper-plane me-2"></i>Gửi Email Khuyến Mãi`);
+        submitBtn.removeClass('btn-success').addClass('btn-secondary');
+    }
+}
+
+function previewEmail() {
+    var subject = $('#emailSubject').val();
+    var message = $('#emailMessage').val();
+
+    if (!subject || !message) {
+        alert('Vui lòng nhập đầy đủ tiêu đề và nội dung email!');
+        return;
+    }
+
+    var previewWindow = window.open('', 'preview', 'width=600,height=700,scrollbars=yes');
+    previewWindow.document.write(`
+        <html>
+        <head>
+            <title>Preview Email</title>
+            <style>
+                body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+                .preview { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+                .header { background: #007bff; color: white; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+                .content { line-height: 1.6; white-space: pre-wrap; }
+            </style>
+        </head>
+        <body>
+            <div class="preview">
+                <div class="header">
+                    <h2>${subject}</h2>
+                </div>
+                <div class="content">${message}</div>
+            </div>
+        </body>
+        </html>
+    `);
+}
+    </script>
+} 

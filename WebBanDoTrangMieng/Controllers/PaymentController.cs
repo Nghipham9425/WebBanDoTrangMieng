@@ -12,7 +12,7 @@ namespace WebBanDoTrangMieng.Controllers
 {
     public class PaymentController : Controller
     {
-        private QLStoreTrangMiengEntities db = new QLStoreTrangMiengEntities();
+        private readonly QLStoreTrangMiengEntities db = new QLStoreTrangMiengEntities();
         // GET: Payment
         public ActionResult Index()
         {
@@ -95,9 +95,6 @@ namespace WebBanDoTrangMieng.Controllers
             string vnp_ResponseCode = vnpay.GetResponseData("vnp_ResponseCode");
             string vnp_TransactionStatus = vnpay.GetResponseData("vnp_TransactionStatus");
             string orderId = vnpay.GetResponseData("vnp_TxnRef");
-            string vnpayTranId = vnpay.GetResponseData("vnp_TransactionNo");
-            string amount = vnpay.GetResponseData("vnp_Amount");
-            string bankCode = vnpay.GetResponseData("vnp_BankCode");
 
             string status = "Thất bại";
             string message = "Thanh toán thất bại. Vui lòng thử lại hoặc liên hệ hỗ trợ.";
@@ -121,6 +118,9 @@ namespace WebBanDoTrangMieng.Controllers
                                 status = "Thành công";
                                 message = "Thanh toán thành công cho đơn hàng!";
                                 orderCode = order.OrderId.ToString();
+                                
+                                // Gửi email xác nhận đơn hàng
+                                EmailHelper.SendOrderConfirmationEmail(order.OrderId);
                             }
                         }
                         else
@@ -168,14 +168,13 @@ namespace WebBanDoTrangMieng.Controllers
             string vnp_SecureHash = vnpayData["vnp_SecureHash"];
             bool checkSignature = vnpay.ValidateSignature(vnp_SecureHash, vnp_HashSecret);
 
-            string rspCode = "99";
-            string message = "Unknown error";
+            string rspCode;
+            string message;
 
             if (checkSignature)
             {
                 int paymentId = int.Parse(vnpay.GetResponseData("vnp_TxnRef"));
                 decimal vnp_Amount = decimal.Parse(vnpay.GetResponseData("vnp_Amount")) / 100;
-                var db = new QLStoreTrangMiengEntities();
                 var payment = db.Payments.Find(paymentId);
                 if (payment != null)
                 {
@@ -187,7 +186,12 @@ namespace WebBanDoTrangMieng.Controllers
                             vnpay.GetResponseData("vnp_TransactionStatus") == "00")
                         {
                             payment.Status = "Success";
-                            if (order != null) order.Status = "Paid";
+                            if (order != null) 
+                            {
+                                order.Status = "Paid";
+                                // Gửi email xác nhận đơn hàng (backup từ IPN)
+                                EmailHelper.SendOrderConfirmationEmail(order.OrderId);
+                            }
                         }
                         else
                         {
@@ -230,5 +234,7 @@ namespace WebBanDoTrangMieng.Controllers
             };
             return View(vm);
         }
+
+
     }
 }

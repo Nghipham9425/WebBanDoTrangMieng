@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebBanDoTrangMieng.Models;
+using WebBanDoTrangMieng.Helpers;
 
 
 namespace WebBanDoTrangMieng.Controllers
@@ -350,6 +351,9 @@ namespace WebBanDoTrangMieng.Controllers
             }
             else // COD
             {
+                // Gửi email xác nhận đơn hàng COD
+                EmailHelper.SendOrderConfirmationEmail(order.OrderId);
+                
                 // Xóa giỏ hàng và promotion
                 Session["Cart"] = null;
                 Session["AppliedPromotion"] = null;
