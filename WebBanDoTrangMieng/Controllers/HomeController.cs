@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using WebBanDoTrangMieng.Models.ViewModel;
 
 namespace WebBanDoTrangMieng.Controllers
 {
@@ -22,9 +23,17 @@ namespace WebBanDoTrangMieng.Controllers
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            var model = new ContactVM();
+            
+            // Populate thông tin từ Session nếu user đã đăng nhập
+            if (Session["Email"] != null)
+            {
+                model.Name = Session["UserName"]?.ToString() ?? "";
+                model.Email = Session["Email"]?.ToString() ?? "";
+                model.Phone = Session["Phone"]?.ToString() ?? "";
+            }
+            
+            return View(model);
         }
     }
 }

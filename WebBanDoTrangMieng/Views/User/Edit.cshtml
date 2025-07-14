@@ -63,6 +63,94 @@
                     }
                 </div>
             </div>
+            
+            <!-- Card đổi mật khẩu -->
+            <div class="card shadow-lg border-0 mt-4">
+                <div class="card-header bg-warning text-white text-center">
+                    <h4 class="mb-0"><i class="fas fa-key me-2"></i>Đổi mật khẩu</h4>
+                </div>
+                <div class="card-body p-4">
+                    <div id="passwordAlert" style="display: none;"></div>
+                    <form id="changePasswordForm">
+                        @Html.AntiForgeryToken()
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-lock me-2 text-warning"></i>Mật khẩu hiện tại
+                            </label>
+                            <input type="password" name="currentPassword" class="form-control" placeholder="Nhập mật khẩu hiện tại" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-key me-2 text-warning"></i>Mật khẩu mới
+                            </label>
+                            <input type="password" name="newPassword" class="form-control" placeholder="Nhập mật khẩu mới (tối thiểu 6 ký tự)" required minlength="6">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-check-circle me-2 text-warning"></i>Xác nhận mật khẩu mới
+                            </label>
+                            <input type="password" name="confirmPassword" class="form-control" placeholder="Nhập lại mật khẩu mới" required minlength="6">
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-warning btn-lg text-white">
+                                <i class="fas fa-shield-alt me-2"></i>Đổi mật khẩu
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+@section scripts {
+    <script>
+        $('#changePasswordForm').on('submit', function(e) {
+            e.preventDefault();
+            
+            var formData = $(this).serialize();
+            var $submitBtn = $(this).find('button[type="submit"]');
+            
+            // Disable button và thay đổi text
+            $submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Đang xử lý...');
+            
+            $.ajax({
+                url: '@Url.Action("ChangePassword", "User")',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        $('#passwordAlert').html(
+                            '<div class="alert alert-success"><i class="fas fa-check-circle me-2"></i>' + 
+                            response.message + '</div>'
+                        ).show();
+                        $('#changePasswordForm')[0].reset();
+                    } else {
+                        $('#passwordAlert').html(
+                            '<div class="alert alert-danger"><i class="fas fa-exclamation-triangle me-2"></i>' + 
+                            response.message + '</div>'
+                        ).show();
+                    }
+                },
+                error: function() {
+                    $('#passwordAlert').html(
+                        '<div class="alert alert-danger"><i class="fas fa-exclamation-triangle me-2"></i>Có lỗi xảy ra, vui lòng thử lại!</div>'
+                    ).show();
+                },
+                complete: function() {
+                    // Enable button và reset text
+                    $submitBtn.prop('disabled', false).html('<i class="fas fa-shield-alt me-2"></i>Đổi mật khẩu');
+                    
+                    // Auto hide alert sau 5 giây
+                    setTimeout(function() {
+                        $('#passwordAlert').fadeOut();
+                    }, 5000);
+                }
+            });
+        });
+    </script>
+}

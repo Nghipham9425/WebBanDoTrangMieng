@@ -50,15 +50,11 @@
 
                 <!-- Action Buttons -->
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link text-success" title="Tìm kiếm">
-                            <i class="fas fa-search"></i>
-                        </a>
-                    </li>
+                    
                     <li class="nav-item position-relative">
                         <a href="@Url.Action("Index", "Cart")" class="nav-link text-success" title="Giỏ hàng">
                             <i class="fas fa-shopping-cart"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger small">
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger small cart-count" style="display: none;">
                                 0
                             </span>
                         </a>

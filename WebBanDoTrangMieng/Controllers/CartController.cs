@@ -174,7 +174,7 @@ namespace WebBanDoTrangMieng.Controllers
                     return Json(new { success = false, message = "Giỏ hàng trống" });
                 }
 
-                // Tính discount
+                // Tính discount cho toàn bộ giỏ hàng
                 decimal discountAmount = (cart.TotalAmount * promotion.DiscountPercent) / 100;
                 
                 // Lưu thông tin promotion vào session
@@ -187,7 +187,7 @@ namespace WebBanDoTrangMieng.Controllers
 
                 return Json(new { 
                     success = true, 
-                    message = "Áp dụng mã giảm giá thành công",
+                    message = $"Áp dụng mã giảm giá thành công! Giảm {promotion.DiscountPercent}% cho toàn bộ đơn hàng",
                     promoCode = promotion.Code,
                     discountPercent = promotion.DiscountPercent,
                     discountAmount = discountAmount.ToString("N0"),
@@ -222,6 +222,8 @@ namespace WebBanDoTrangMieng.Controllers
                 return Json(new { success = false, message = "Có lỗi xảy ra: " + ex.Message });
             }
         }
+
+
         // GET: Cart/Checkout - Trang thanh toán
         public ActionResult Checkout()
         {

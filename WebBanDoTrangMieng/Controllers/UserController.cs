@@ -330,7 +330,14 @@ namespace WebBanDoTrangMieng.Controllers
     // GET: User/Edit
         public ActionResult Edit()
         {
-            // Lấy user hiện tại từ session (hoặc cách bạn đang lưu user đăng nhập)
+            // Kiểm tra đăng nhập
+            if (Session["UserId"] == null)
+            {
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập để chỉnh sửa thông tin!";
+                return RedirectToAction("Index", "Home");
+            }
+            
+            // Lấy user hiện tại từ session
             int userId = (int)Session["UserId"];
             var user = db.Users.Find(userId);
             if (user == null)
@@ -343,6 +350,13 @@ namespace WebBanDoTrangMieng.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(string UserName, string Email, string Phone, string Address)
         {
+            // Kiểm tra đăng nhập
+            if (Session["UserId"] == null)
+            {
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập để chỉnh sửa thông tin!";
+                return RedirectToAction("Index", "Home");
+            }
+            
             int userId = (int)Session["UserId"];
             var userInDb = db.Users.Find(userId);
             if (userInDb == null)
@@ -353,10 +367,72 @@ namespace WebBanDoTrangMieng.Controllers
             userInDb.Email = Email;
             userInDb.Phone = Phone;
             userInDb.Address = Address;
+            
+            // Cập nhật session với thông tin mới
+            Session["UserName"] = UserName;
+            Session["Email"] = Email;
+            Session["Phone"] = Phone;
+            
             db.SaveChanges();
-            ViewBag.Message = "Cập nhật thành công!";
+            ViewBag.Message = "Cập nhật thông tin thành công!";
             return View(userInDb);
         }
+
+        // POST: User/ChangePassword - Đổi mật khẩu
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult ChangePassword(string currentPassword, string newPassword, string confirmPassword)
+        {
+            try
+            {
+                // Kiểm tra đăng nhập
+                if (Session["UserId"] == null)
+                {
+                    return Json(new { success = false, message = "Bạn cần đăng nhập để đổi mật khẩu!" });
+                }
+
+                // Validate input
+                if (string.IsNullOrEmpty(currentPassword) || string.IsNullOrEmpty(newPassword) || string.IsNullOrEmpty(confirmPassword))
+                {
+                    return Json(new { success = false, message = "Vui lòng điền đầy đủ thông tin!" });
+                }
+
+                if (newPassword != confirmPassword)
+                {
+                    return Json(new { success = false, message = "Mật khẩu mới và xác nhận mật khẩu không khớp!" });
+                }
+
+                if (newPassword.Length < 6)
+                {
+                    return Json(new { success = false, message = "Mật khẩu mới phải có ít nhất 6 ký tự!" });
+                }
+
+                // Lấy user hiện tại
+                int userId = (int)Session["UserId"];
+                var user = db.Users.Find(userId);
+                if (user == null)
+                {
+                    return Json(new { success = false, message = "Không tìm thấy thông tin người dùng!" });
+                }
+
+                // Kiểm tra mật khẩu hiện tại
+                if (user.Password != currentPassword)
+                {
+                    return Json(new { success = false, message = "Mật khẩu hiện tại không đúng!" });
+                }
+
+                // Cập nhật mật khẩu mới
+                user.Password = newPassword;
+                db.SaveChanges();
+
+                return Json(new { success = true, message = "Đổi mật khẩu thành công!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Có lỗi xảy ra: " + ex.Message });
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

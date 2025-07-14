@@ -53,7 +53,7 @@
 
 .product-thumbnail:hover,
 .product-thumbnail.active {
-  border-color: var(--bs-success);
+  border-color: #7d9e5f;
   transform: scale(1.05);
 }
 
@@ -63,60 +63,67 @@
 .quantity-controls {
   display: flex;
   align-items: center;
-  border: 2px solid #e9ecef;
-  border-radius: 25px;
-  overflow: hidden;
-  width: fit-content;
+  gap: 8px;
+  justify-content: center;
+  margin: 16px 0;
 }
 
 .quantity-btn {
-  width: 35px;
-  height: 35px;
-  border: none;
-  background-color: var(--bs-success);
-  color: white;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #7d9e5f;
+  background: transparent;
+  color: #7d9e5f;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
   transition: all 0.3s ease;
+  font-weight: 600;
 }
 
 .quantity-btn:hover {
-  background-color: #4a5d37;
-  transform: scale(1.1);
+  background: #7d9e5f;
+  color: white;
 }
 
 .quantity-input {
-  width: 50px;
+  width: 80px;
+  height: 40px;
   text-align: center;
-  border: none;
-  padding: 8px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
   font-weight: 600;
+  font-size: 18px;
+}
+
+.quantity-input:focus {
+  border-color: #7d9e5f;
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(125, 158, 95, 0.25);
 }
 
 /* ==========================================
    STAR RATING INTERACTIVE
    ========================================== */
-.star-rating {
+.star-rating-simple {
   display: flex;
-  direction: rtl;
   justify-content: center;
+  gap: 5px;
+  margin: 10px 0;
 }
 
-.star-rating input {
-  display: none;
-}
-
-.star-rating label {
-  cursor: pointer;
+.star-rating-simple i {
+  font-size: 24px;
   color: #ddd;
-  font-size: 20px;
-  transition: color 0.3s;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  user-select: none;
 }
 
-.star-rating input:checked ~ label,
-.star-rating label:hover,
-.star-rating label:hover ~ label {
+.star-rating-simple i:hover,
+.star-rating-simple i.active {
   color: #ffc107;
 }
 
@@ -142,7 +149,7 @@
     rgba(255, 255, 255, 0.2),
     transparent
   );
-  transition: left 0.5s ease;
+  transition: left 0.6s ease;
 }
 
 .add-to-cart-btn:hover::before {
@@ -150,54 +157,53 @@
 }
 
 .add-to-cart-btn:hover {
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(125, 158, 95, 0.3);
 }
 
 /* ==========================================
-   MODERN PRODUCT CARD DESIGN
+   MODERN PRODUCT CARDS
    ========================================== */
 .product-card-modern {
   border: none;
-  border-radius: 20px;
+  border-radius: 15px;
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-  background: #fff;
-  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .product-card-modern:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(125, 158, 95, 0.15);
 }
 
 .product-image-container {
-  height: 280px;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   position: relative;
+  overflow: hidden;
+  height: 250px;
 }
 
 .product-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: all 0.4s ease;
+  transition: transform 0.5s ease;
 }
 
 .product-card-modern:hover .product-image {
-  transform: scale(1.08);
+  transform: scale(1.1);
 }
 
 .image-count-badge {
   position: absolute;
-  bottom: 12px;
-  right: 12px;
+  top: 10px;
+  right: 10px;
   background: rgba(0, 0, 0, 0.7);
   color: white;
-  padding: 6px 10px;
-  border-radius: 20px;
+  padding: 4px 8px;
+  border-radius: 12px;
   font-size: 12px;
   font-weight: 500;
-  backdrop-filter: blur(10px);
 }
 
 .product-overlay {
@@ -206,12 +212,12 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: all 0.3s ease;
+  transition: opacity 0.3s ease;
 }
 
 .product-card-modern:hover .product-overlay {
@@ -224,75 +230,74 @@
 }
 
 .overlay-buttons .btn {
-  width: 45px;
-  height: 45px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(10px);
-  border: none;
+  border-radius: 25px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 2px solid white;
+  color: white;
+  background: transparent;
   transition: all 0.3s ease;
 }
 
 .overlay-buttons .btn:hover {
-  transform: scale(1.15);
-  background-color: rgba(255, 255, 255, 0.95) !important;
+  background: white;
+  color: #333;
+  transform: scale(1.05);
 }
 
 /* ==========================================
-   PRODUCT INFO STYLING
+   PRODUCT INFO SECTION
    ========================================== */
 .product-info {
   padding: 20px;
-  text-align: center;
 }
 
 .product-title {
+  font-size: 18px;
   font-weight: 600;
-  color: #2c3e50;
-  font-size: 16px;
-  line-height: 1.4;
   margin-bottom: 8px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.product-description {
-  font-size: 13px;
-  line-height: 1.5;
-  color: #6c757d;
-  margin-bottom: 12px;
-  height: 40px;
+  height: 2.5em;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  line-height: 1.25;
+}
+
+.product-description {
+  color: #6c757d;
+  font-size: 14px;
+  margin-bottom: 12px;
+  height: 2.8em;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1.4;
 }
 
 .product-price {
   font-size: 20px;
   font-weight: 700;
-  color: #e74c3c;
-  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #7d9e5f;
+  margin-bottom: 15px;
 }
 
+/* ==========================================
+   PRODUCT ACTIONS
+   ========================================== */
 .product-actions {
-  margin-top: 15px;
+  padding: 0 20px 20px;
 }
 
 .product-actions .btn {
   border-radius: 25px;
-  font-weight: 500;
-  font-size: 14px;
   padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
   transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
+  border: 2px solid #7d9e5f;
 }
 
 .product-actions .btn::before {
@@ -308,7 +313,7 @@
     rgba(255, 255, 255, 0.2),
     transparent
   );
-  transition: left 0.5s ease;
+  transition: left 0.6s ease;
 }
 
 .product-actions .btn:hover::before {
@@ -317,50 +322,50 @@
 
 .product-actions .btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(125, 158, 95, 0.3);
 }
 
 .product-actions .btn-outline-primary:hover {
-  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-  border-color: transparent;
+  background: #7d9e5f;
+  border-color: #7d9e5f;
 }
 
 .product-actions .btn-primary {
-  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-  border: none;
+  background: #7d9e5f;
+  border-color: #7d9e5f;
 }
 
 .product-actions .btn-primary:hover {
-  background: linear-gradient(135deg, #0056b3 0%, #003d82 100%);
+  background: #6d8a4f;
+  border-color: #6d8a4f;
 }
 
 /* ==========================================
-   LIST VIEW DESIGN
+   LIST VIEW STYLES
    ========================================== */
 .product-list-card {
   border: none;
   border-radius: 15px;
   overflow: hidden;
   transition: all 0.3s ease;
-  background: #fff;
-  border: 1px solid #f0f0f0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .product-list-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(125, 158, 95, 0.15);
 }
 
 .list-image-container {
-  height: 180px;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  overflow: hidden;
+  height: 200px;
 }
 
 .list-product-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: all 0.3s ease;
+  transition: transform 0.5s ease;
 }
 
 .product-list-card:hover .list-product-image {
@@ -372,55 +377,97 @@
 }
 
 .list-product-title {
-  font-weight: 600;
-  color: #2c3e50;
   font-size: 18px;
-  line-height: 1.4;
+  font-weight: 600;
+  margin-bottom: 8px;
 }
 
 .list-product-price {
   font-size: 22px;
   font-weight: 700;
-  color: #e74c3c;
-  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #7d9e5f;
+  margin-bottom: 8px;
 }
 
 .list-product-description {
-  font-size: 14px;
-  line-height: 1.6;
   color: #6c757d;
+  font-size: 14px;
+  margin-bottom: 15px;
 }
 
 /* ==========================================
    RESPONSIVE DESIGN
    ========================================== */
 @media (max-width: 1199px) {
-  .product-image-container { height: 260px; }
+  .product-image-container {
+    height: 260px;
+  }
+  .product-title {
+    font-size: 15px;
+    height: 40px;
+  }
 }
 
 @media (max-width: 991px) {
-  .product-image-container { height: 240px; }
-  .product-title { font-size: 15px; height: 40px; }
-  .product-price { font-size: 18px; }
-  .list-image-container { height: 160px; }
-  .list-product-title { font-size: 16px; }
-  .list-product-price { font-size: 20px; }
+  .product-image-container {
+    height: 240px;
+  }
+  .product-title {
+    font-size: 15px;
+    height: 40px;
+  }
+  .product-price {
+    font-size: 18px;
+  }
+  .list-image-container {
+    height: 160px;
+  }
+  .list-product-title {
+    font-size: 16px;
+  }
+  .list-product-price {
+    font-size: 20px;
+  }
 }
 
 @media (max-width: 767px) {
-  .product-image-container { height: 220px; }
-  .product-info { padding: 15px; }
-  .product-title { font-size: 14px; height: 36px; }
-  .product-price { font-size: 16px; }
-  .product-actions .btn { padding: 8px 16px; font-size: 13px; }
-  .list-image-container { height: 140px; }
-  .list-product-info { padding: 15px; }
-  .list-product-title { font-size: 15px; }
-  .list-product-price { font-size: 18px; }
-  .list-product-description { font-size: 13px; }
-  .quantity-controls { justify-content: center; margin: 0 auto; }
-  .product-thumbnail { margin-bottom: 10px; }
+  .product-image-container {
+    height: 220px;
+  }
+  .product-info {
+    padding: 15px;
+  }
+  .product-title {
+    font-size: 14px;
+    height: 36px;
+  }
+  .product-price {
+    font-size: 16px;
+  }
+  .product-actions .btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+  .list-image-container {
+    height: 140px;
+  }
+  .list-product-info {
+    padding: 15px;
+  }
+  .list-product-title {
+    font-size: 15px;
+  }
+  .list-product-price {
+    font-size: 18px;
+  }
+  .list-product-description {
+    font-size: 13px;
+  }
+  .quantity-controls {
+    justify-content: center;
+    margin: 0 auto;
+  }
+  .product-thumbnail {
+    margin-bottom: 10px;
+  }
 }

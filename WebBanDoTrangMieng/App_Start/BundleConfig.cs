@@ -14,15 +14,15 @@ namespace WebBanDoTrangMieng
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 
-            // Modernizr removed - not needed for this project
+
 
             bundles.Add(new Bundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.min.js"));
 
-            // Optimized CSS Bundle - Cleaned up and organized by priority
+           
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.min.css",  // Bootstrap framework (priority 1)
-                      "~/Content/Site.css",           // Global site styles (priority 2)
+                      "~/Content/Site.css",           //
                       "~/Content/components.css",     // Reusable components (priority 3)
                       "~/Content/product.css",        // Product-specific styles (priority 4)
                       "~/Content/cart.css",           // Cart-specific styles (priority 5)

@@ -123,7 +123,7 @@ const LayoutManager = {
     // Cart toggle
     $(".cart-toggle").on("click", function (e) {
       e.preventDefault();
-      CartManager.toggle();
+      window.location.href = "/Cart";
     });
 
     // User menu toggle - handled by auth-modal.js
@@ -251,48 +251,6 @@ const SearchManager = {
       $("#searchInput").val($(this).text());
       $(".search-form").submit();
     });
-  },
-};
-
-// ==========================================
-// CART MANAGER
-// ==========================================
-const CartManager = {
-  toggle: function () {
-    // Redirect to cart page or show cart modal
-    window.location.href = "/Cart";
-  },
-
-  addToCart: function (productId, quantity = 1) {
-    // AJAX call to add product to cart
-    $.ajax({
-      url: "/Cart/AddToCart",
-      method: "POST",
-      data: {
-        productId: productId,
-        quantity: quantity,
-      },
-      success: function (response) {
-        if (response.success) {
-          NotificationManager.show("Đã thêm vào giỏ hàng!", "success");
-          CartManager.updateCartCount(response.cartCount);
-        } else {
-          NotificationManager.show("Có lỗi xảy ra!", "error");
-        }
-      },
-      error: function () {
-        NotificationManager.show("Không thể kết nối server!", "error");
-      },
-    });
-  },
-
-  updateCartCount: function (count) {
-    $(".cart-count").text(count).show();
-    if (count > 0) {
-      $(".cart-count").addClass("has-items");
-    } else {
-      $(".cart-count").removeClass("has-items");
-    }
   },
 };
 

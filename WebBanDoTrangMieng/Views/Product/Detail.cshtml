@@ -262,7 +262,7 @@
 
                     <!-- Action Buttons (Bootstrap style) -->
                     <div class="d-flex gap-2 mb-4">
-                        <button class="btn btn-success flex-grow-1" onclick="addToCart()">
+                                                    <button class="btn btn-success flex-grow-1" onclick="addToCart()"
                             <i class="fas fa-shopping-cart me-2"></i>Thêm vào giỏ hàng
                         </button>
                         <button class="btn btn-outline-secondary" onclick="shareProduct()" title="Chia sẻ">
@@ -382,13 +382,14 @@
                                             @Html.Hidden("productId", Model.ProductId)
                                             <div class="mb-3">
                                                 <label class="form-label">Đánh giá *</label>
-                                                <div class="rating-input" id="ratingInput">
-                                                    @for (int i = 5; i >= 1; i--)
-                                                    {
-                                                        <input type="radio" id="star@i" name="Rating" value="@i" @(i == 5 ? "required" : "") />
-                                                        <label for="star@i" data-rating="@i">★</label>
-                                                    }
+                                                <div class="star-rating-simple" id="starRating">
+                                                    <i class="fas fa-star" data-rating="1"></i>
+                                                    <i class="fas fa-star" data-rating="2"></i>
+                                                    <i class="fas fa-star" data-rating="3"></i>
+                                                    <i class="fas fa-star" data-rating="4"></i>
+                                                    <i class="fas fa-star" data-rating="5"></i>
                                                 </div>
+                                                <input type="hidden" name="Rating" id="ratingValue" value="" required />
                                                 <small class="text-muted">Click vào sao để chọn đánh giá</small>
                                             </div>
                                             <div class="mb-3">
@@ -467,57 +468,57 @@ function addToCart() {
     });
 }
 
-// Fixed Rating stars functionality 
-    $(document).ready(function () {
-        const ratingInput = $('#ratingInput');
-        if (ratingInput.length) {
-            const stars = ratingInput.find('label');
+    // Vanilla JS Star Rating - No Dependencies
+    document.addEventListener('DOMContentLoaded', function() {
+        const starContainer = document.getElementById('starRating');
+        if (starContainer) {
+            const stars = starContainer.querySelectorAll('i');
+            const ratingInput = document.getElementById('ratingValue');
             let currentRating = 0;
 
-            // Click star
-            stars.on('click', function () {
-                const rating = parseInt($(this).data('rating'));
-                currentRating = rating;
-                $('#star' + rating).prop('checked', true);
-                updateStarDisplay(rating);
+            console.log('Star rating initialized, found', stars.length, 'stars'); // Debug
+
+            // Add click event to each star
+            stars.forEach((star, index) => {
+                star.addEventListener('click', function() {
+                    const rating = index + 1;
+                    currentRating = rating;
+                    ratingInput.value = rating;
+                    updateStars(rating);
+                    console.log('Rating selected:', rating); // Debug
+                });
+
+                star.addEventListener('mouseenter', function() {
+                    const rating = index + 1;
+                    updateStars(rating);
+                });
             });
 
-            // Hover star
-            stars.on('mouseenter', function () {
-                const rating = parseInt($(this).data('rating'));
-                updateStarDisplay(rating);
+            // Reset to current rating when mouse leaves
+            starContainer.addEventListener('mouseleave', function() {
+                updateStars(currentRating);
             });
 
-            // Mouse leave
-            ratingInput.on('mouseleave', function () {
-                updateStarDisplay(currentRating);
-            });
-
-            // Update star display
-            function updateStarDisplay(rating) {
-                stars.each(function () {
-                    const starRating = parseInt($(this).data('rating'));
-                    if (starRating <= rating) {
-                        $(this).addClass('active').css('color', '#ffc107');
+            // Update star colors
+            function updateStars(rating) {
+                stars.forEach((star, index) => {
+                    if (index < rating) {
+                        star.classList.add('active');
                     } else {
-                        $(this).removeClass('active').css('color', '#ddd');
+                        star.classList.remove('active');
                     }
                 });
             }
 
-            // Nếu đã chọn thì giữ lại khi reload (ví dụ khi submit lỗi)
-            const checked = ratingInput.find('input[type="radio"]:checked').val();
-            if (checked) {
-                currentRating = parseInt(checked);
-                updateStarDisplay(currentRating);
-            } else {
-                updateStarDisplay(0);
-            }
+            // Initialize with no rating
+            updateStars(0);
+        } else {
+            console.log('Star rating container not found!'); // Debug
         }
-
-        // Auto-hide alerts after 5 seconds
-        setTimeout(function () {
-            $('.alert').fadeOut('slow');
-        }, 5000);
     });
+
+    // Auto-hide alerts after 5 seconds
+    setTimeout(function () {
+        $('.alert').fadeOut('slow');
+    }, 5000);
 </script>

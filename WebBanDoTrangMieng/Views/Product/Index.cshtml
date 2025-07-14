@@ -413,7 +413,6 @@
                 success: function(response) {
                     if (response.success) {
                         showToast(response.message, 'success');
-                        updateCartCount();
                     } else {
                         showToast(response.message, 'error');
                     }
@@ -424,16 +423,7 @@
             });
         }
 
-        function updateCartCount() {
-            $.get('@Url.Action("GetCartCount", "Cart")', function(data) {
-                $('.cart-count').text(data.count);
-                if (data.count > 0) {
-                    $('.cart-count').show();
-                } else {
-                    $('.cart-count').hide();
-                }
-            });
-        }
+
 
         function showToast(message, type = 'success') {
             const toastHtml = `
