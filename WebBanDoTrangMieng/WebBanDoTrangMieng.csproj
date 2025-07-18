@@ -134,6 +134,7 @@
     <Compile Include="Areas\Admin\Controllers\ProductController.cs" />
     <Compile Include="Areas\Admin\Controllers\PromotionController.cs" />
     <Compile Include="Areas\Admin\Controllers\ReviewController.cs" />
+    <Compile Include="Areas\Admin\Controllers\StatisticController.cs" />
     <Compile Include="Areas\Admin\Controllers\UserController.cs" />
     <Compile Include="Category.cs">
       <DependentUpon>DessertModel.tt</DependentUpon>
@@ -173,6 +174,7 @@
     <Compile Include="Models\ViewModel\OrderStatusVM.cs" />
     <Compile Include="Models\ViewModel\ProductReviewVM.cs" />
     <Compile Include="Models\ViewModel\RegisterVM.cs" />
+    <Compile Include="Models\ViewModel\RevenueReportVM.cs" />
     <Compile Include="Models\ViewModel\ReviewVM.cs" />
     <Compile Include="obj\Debug\.NETFramework,Version=v4.7.2.AssemblyAttributes.cs" />
     <Compile Include="Order.cs">
@@ -476,6 +478,7 @@
     <Content Include="Areas\Admin\Views\Promotion\Details.cshtml" />
     <Content Include="Areas\Admin\Views\Promotion\SendEmail.cshtml" />
     <Content Include="Content\Images\Products\.gitkeep" />
+    <Content Include="Areas\Admin\Views\Statistic\Index.cshtml" />
     <None Include="packages.config" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />

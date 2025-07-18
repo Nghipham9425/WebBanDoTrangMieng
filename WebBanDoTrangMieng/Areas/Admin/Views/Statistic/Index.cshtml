@@ -1,0 +1,206 @@
+﻿@model List<WebBanDoTrangMieng.Models.ViewModel.RevenueReportVM>
+@{
+    ViewBag.Title = "Thống kê & Báo cáo";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2 class="text-primary">
+                <i class="fas fa-chart-bar"></i> Thống kê & Báo cáo doanh thu
+            </h2>
+            <p class="text-muted">Tổng quan doanh thu và hoạt động kinh doanh</p>
+        </div>
+    </div>
+
+    <!-- Filter Form -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5><i class="fas fa-filter"></i> Bộ lọc thời gian</h5>
+        </div>
+        <div class="card-body">
+            <form method="get" action="@Url.Action("Index")">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="from" class="form-label">Từ ngày:</label>
+                        <input type="date" id="from" name="from" class="form-control" value="@ViewBag.FromDate">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="to" class="form-label">Đến ngày:</label>
+                        <input type="date" id="to" name="to" class="form-control" value="@ViewBag.ToDate">
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary me-2">
+                            <i class="fas fa-search"></i> Tìm kiếm
+                        </button>
+                        <a href="@Url.Action("Index")" class="btn btn-secondary">
+                            <i class="fas fa-refresh"></i> Reset
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body text-center">
+                    <h4 class="mb-1">@ViewBag.TotalRevenue.ToString("N0") VNĐ</h4>
+                    <small>Tổng doanh thu</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body text-center">
+                    <h4 class="mb-1">@ViewBag.TotalOrders</h4>
+                    <small>Tổng đơn hàng</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body text-center">
+                    <h4 class="mb-1">@ViewBag.TotalProducts</h4>
+                    <small>Sản phẩm đã bán</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body text-center">
+                    <h4 class="mb-1">@ViewBag.AvgRevenuePerOrder.ToString("N0") VNĐ</h4>
+                    <small>Doanh thu TB/đơn</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-chart-line"></i> Biểu đồ doanh thu theo ngày</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="revenueChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5><i class="fas fa-info-circle"></i> Thông tin tổng quan</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Số ngày có doanh thu:</strong><br>
+                        <span class="badge bg-success">@Model.Count() ngày</span>
+                    </div>
+                    @if (Model.Any())
+                    {
+                        <div class="mb-3">
+                            <strong>Ngày có doanh thu cao nhất:</strong><br>
+                            @{
+                                var maxRevenueDay = Model.OrderByDescending(r => r.TotalRevenue).First();
+                            }
+                            <small class="text-success">
+                                @maxRevenueDay.Date.ToString("dd/MM/yyyy"): @maxRevenueDay.TotalRevenue.ToString("N0") VNĐ
+                            </small>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue Table -->
+    <div class="card">
+        <div class="card-header">
+            <h5><i class="fas fa-table"></i> Chi tiết doanh thu theo ngày</h5>
+        </div>
+        <div class="card-body">
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="bg-primary text-white">
+                            <tr>
+                                <th>Ngày</th>
+                                <th class="text-end">Doanh thu</th>
+                                <th class="text-center">Số đơn hàng</th>
+                                <th class="text-center">Sản phẩm bán</th>
+                                <th class="text-end">TB/đơn hàng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Date.ToString("dd/MM/yyyy")</td>
+                                    <td class="text-end fw-bold text-success">@item.TotalRevenue.ToString("N0") VNĐ</td>
+                                    <td class="text-center">@item.OrderCount</td>
+                                    <td class="text-center">@item.ProductSold</td>
+                                    <td class="text-end">@(item.OrderCount > 0 ? (item.TotalRevenue / item.OrderCount).ToString("N0") : "0") VNĐ</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">Không có dữ liệu doanh thu</h5>
+                    <p class="text-muted">Thử thay đổi khoảng thời gian tìm kiếm</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    // Khởi tạo biểu đồ doanh thu
+    const ctx = document.getElementById('revenueChart').getContext('2d');
+    const revenueChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [@Html.Raw(ViewBag.ChartLabels)],
+            datasets: [{
+                label: 'Doanh thu (VNĐ)',
+                data: [@Html.Raw(ViewBag.ChartData)],
+                borderColor: 'rgb(75, 192, 192)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                tension: 0.1,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Doanh thu theo ngày'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return new Intl.NumberFormat('vi-VN').format(value) + ' VNĐ';
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
