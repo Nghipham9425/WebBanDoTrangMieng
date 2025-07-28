@@ -43,6 +43,22 @@ namespace WebBanDoTrangMieng.Controllers
 
                 var cart = GetCart();
                 var existingItem = cart.Items.FirstOrDefault(x => x.ProductId == productId);
+                int currentCartQuantity = existingItem != null ? existingItem.Quantity : 0;
+                int totalRequested = currentCartQuantity + quantity;
+                int stock = product.StockQuantity ?? 0;
+
+                if (totalRequested > stock)
+                {
+                    int maxCanAdd = stock - currentCartQuantity;
+                    if (maxCanAdd <= 0)
+                    {
+                        return Json(new { success = false, message = "Sản phẩm đã hết hàng hoặc bạn đã thêm tối đa số lượng còn lại vào giỏ!" });
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = $"Chỉ còn {maxCanAdd} sản phẩm trong kho. Vui lòng giảm số lượng!" });
+                    }
+                }
 
                 if (existingItem != null)
                 {
@@ -82,13 +98,19 @@ namespace WebBanDoTrangMieng.Controllers
         {
             try
             {
-                var cart=GetCart();
-                var item=cart.Items.FirstOrDefault(x=>x.ProductId == productId);
-                if(item!=null)
+                var cart = GetCart();
+                var item = cart.Items.FirstOrDefault(x => x.ProductId == productId);
+                var product = db.Products.Find(productId);
+                int stock = product?.StockQuantity ?? 0;
+                if (item != null)
                 {
-                    if(quantity <= 0)
+                    if (quantity <= 0)
                     {
                         cart.Items.Remove(item);
+                    }
+                    else if (quantity > stock)
+                    {
+                        return Json(new { success = false, message = $"Chỉ còn {stock} sản phẩm trong kho. Vui lòng giảm số lượng!" });
                     }
                     else
                     {
@@ -96,11 +118,11 @@ namespace WebBanDoTrangMieng.Controllers
                     }
                 }
                 Session["Cart"] = cart;
-                return Json (new {
+                return Json(new {
                     success = true,
                     cartCount = cart.TotalItems,
                     cartTotal = cart.TotalAmount.ToString("N0"),
-                    itemTotal= (item?.TotalPrice ?? 0).ToString("N0")
+                    itemTotal = (item?.TotalPrice ?? 0).ToString("N0")
                 });
             }
             catch (Exception ex)

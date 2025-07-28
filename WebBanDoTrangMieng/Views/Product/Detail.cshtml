@@ -10,7 +10,6 @@
 
 @section styles {
     <style>
-        /* Inline CSS chỉ cho trang Detail - Tối ưu và gọn gàng */
         .rating-input {
             display: flex;
             gap: 5px;
@@ -37,7 +36,6 @@
             color: #ffc107 !important;
         }
 
-        /* Thêm messages styling */
         .alert {
             border-radius: 8px;
             border: none;
@@ -103,22 +101,6 @@
                     <div class="position-relative mb-3">
                         <div class="ratio ratio-1x1">
                             <img src="@firstImage" alt="@Model.Name" class="main-product-image rounded-4 shadow-lg object-fit-cover" id="mainImage">
-                        </div>
-
-                        <!-- Image Badges -->
-                        <div class="image-badges">
-                            @if (Model.CreatedDate.HasValue && Model.CreatedDate.Value > DateTime.Now.AddDays(-7))
-                            {
-                                <span class="badge bg-success shadow-sm">
-                                    <i class="fas fa-star me-1"></i>Mới
-                                </span>
-                            }
-                            @if (Model.StockQuantity.HasValue && Model.StockQuantity.Value < 10)
-                            {
-                                <span class="badge bg-warning text-dark shadow-sm">
-                                    <i class="fas fa-fire me-1"></i>Sắp hết
-                                </span>
-                            }
                         </div>
                     </div>
 
@@ -230,23 +212,15 @@
                         </div>
                         <div class="col-6">
                             <div class="info-item">
-                                @if (Model.StockQuantity.HasValue && Model.StockQuantity.Value > 0)
-                                {
-                                    <i class="fas fa-check-circle text-success me-2"></i>
-                                    <span class="info-label">Tình trạng:</span>
-                                    <span class="info-value text-success">Còn hàng</span>
-                                }
-                                else
-                                {
-                                    <i class="fas fa-times-circle text-danger me-2"></i>
-                                    <span class="info-label">Tình trạng:</span>
-                                    <span class="info-value text-danger">Hết hàng</span>
-                                }
+                                @* Bỏ icon và badge trạng thái, chỉ giữ text *@
+                                <span class="info-label">Tình trạng:</span>
+                                <span class="info-value @(Model.StockQuantity.HasValue && Model.StockQuantity.Value > 0 ? "text-success" : "text-danger")">
+                                    @(Model.StockQuantity.HasValue && Model.StockQuantity.Value > 0 ? "Còn hàng" : "Hết hàng")
+                                </span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Quantity Selector (Bootstrap input group) -->
                     <div class="mb-3">
                         <label class="form-label fw-semibold fs-5 text-dark mb-2">Số lượng:</label>
                         <div class="input-group" style="width: 140px;">
@@ -260,17 +234,23 @@
                         </div>
                     </div>
 
-                    <!-- Action Buttons (Bootstrap style) -->
                     <div class="d-flex gap-2 mb-4">
-                                                    <button class="btn btn-success flex-grow-1" onclick="addToCart()"
-                            <i class="fas fa-shopping-cart me-2"></i>Thêm vào giỏ hàng
-                        </button>
+                        @if (Model.StockQuantity.HasValue && Model.StockQuantity.Value == 0)
+                        {
+                            <button class="btn btn-secondary flex-grow-1" onclick="alert('Sản phẩm đã hết hàng!')">
+                                <i class="fas fa-ban me-2"></i> Thêm vào giỏ hàng
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-success flex-grow-1" onclick="addToCart()">
+                                <i class="fas fa-shopping-cart me-2"></i>Thêm vào giỏ hàng
+                            </button>
+                        }
                         <button class="btn btn-outline-secondary" onclick="shareProduct()" title="Chia sẻ">
                             <i class="fas fa-share-alt"></i>
                         </button>
                     </div>
-
-                    <!-- Social Share -->
                     <div class="d-flex align-items-center gap-3">
                         <span class="fw-semibold text-dark">Chia sẻ:</span>
                         <div class="d-flex gap-2">

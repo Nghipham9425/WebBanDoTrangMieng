@@ -96,3 +96,30 @@ body {
     gap: 0.5rem !important;
   }
 }
+
+/* ==========================================
+   CUSTOM ALERT COLORS FOR BETTER VISIBILITY
+   ========================================== */
+.alert {
+  color: #212529 !important; /* Always dark text for visibility */
+}
+.alert-success {
+  background-color: #d1e7dd !important;
+  color: #146c43 !important;
+  border-color: #badbcc !important;
+}
+.alert-danger {
+  background-color: #f8d7da !important;
+  color: #842029 !important;
+  border-color: #f5c2c7 !important;
+}
+.alert-warning {
+  background-color: #fff3cd !important;
+  color: #664d03 !important;
+  border-color: #ffecb5 !important;
+}
+.alert-info {
+  background-color: #cff4fc !important;
+  color: #055160 !important;
+  border-color: #b6effb !important;
+}

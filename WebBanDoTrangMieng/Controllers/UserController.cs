@@ -13,7 +13,6 @@ namespace WebBanDoTrangMieng.Controllers
     {
         private QLStoreTrangMiengEntities db = new QLStoreTrangMiengEntities();
 
-        // AJAX: Register từ modal
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult RegisterAjax(RegisterVM model)
@@ -85,7 +84,6 @@ namespace WebBanDoTrangMieng.Controllers
             }
         }
 
-        // AJAX: Login từ modal
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult LoginAjax(LoginVM model)

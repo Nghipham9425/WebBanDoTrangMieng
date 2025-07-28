@@ -128,24 +128,14 @@
                                  data-name="@product.Name.ToLower()">
                                 <div class="product-card-modern shadow-sm h-100">
                                     <div class="product-image-container position-relative overflow-hidden">
-                                        @if (product.CreatedDate.HasValue && product.CreatedDate.Value > DateTime.Now.AddDays(-7))
-                                        {
-                                            <span class="badge bg-success position-absolute top-0 end-0 m-2 z-3">Mới</span>
-                                        }
-                                        @if (product.StockQuantity.HasValue && product.StockQuantity.Value < 10)
-                                        {
-                                            <span class="badge bg-warning text-dark position-absolute top-0 start-0 m-2 z-3">Sắp hết</span>
-                                        }
-                                        
+                                        @* Bỏ badge Mới và Sắp hết *@
                                         <img src="@firstImage" class="product-image" alt="@product.Name">
-                                        
                                         @if (images.Length > 1)
                                         {
                                             <div class="image-count-badge">
                                                 <i class="fas fa-images me-1"></i>@images.Length
                                             </div>
                                         }
-                                        
                                         <!-- Hover overlay -->
                                         <div class="product-overlay">
                                             <div class="overlay-buttons">
@@ -174,9 +164,18 @@
                                                class="btn btn-outline-primary btn-sm">
                                                 <i class="fas fa-eye me-1"></i>Xem chi tiết
                                             </a>
-                                            <button class="btn btn-primary btn-sm" onclick="addToCart(@product.ProductId)">
-                                                <i class="fas fa-shopping-cart me-1"></i>Thêm vào giỏ
-                                            </button>
+                                            @if (product.StockQuantity == 0)
+                                            {
+                                                <button class="btn btn-secondary btn-sm" onclick="alert('Sản phẩm đã hết hàng!')">
+                                                    <i class="fas fa-shopping-cart me-1"></i>Thêm vào giỏ
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button class="btn btn-primary btn-sm" onclick="addToCart(@product.ProductId)">
+                                                    <i class="fas fa-shopping-cart me-1"></i>Thêm vào giỏ
+                                                </button>
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -210,17 +209,8 @@
                             <div class="row g-0 align-items-center">
                                 <div class="col-md-4">
                                     <div class="list-image-container position-relative overflow-hidden">
-                                        @if (product.CreatedDate.HasValue && product.CreatedDate.Value > DateTime.Now.AddDays(-7))
-                                        {
-                                            <span class="badge bg-success position-absolute top-0 end-0 m-2 z-3">Mới</span>
-                                        }
-                                        @if (product.StockQuantity.HasValue && product.StockQuantity.Value < 10)
-                                        {
-                                            <span class="badge bg-warning text-dark position-absolute top-0 start-0 m-2 z-3">Sắp hết</span>
-                                        }
-                                        
+                              
                                         <img src="@firstImage" class="list-product-image" alt="@product.Name">
-                                        
                                         @if (images.Length > 1)
                                         {
                                             <div class="image-count-badge">
@@ -249,9 +239,18 @@
                                                    class="btn btn-outline-primary btn-sm">
                                                     <i class="fas fa-eye me-1"></i>Xem chi tiết
                                                 </a>
-                                                <button class="btn btn-primary btn-sm" onclick="addToCart(@product.ProductId)">
-                                                    <i class="fas fa-shopping-cart me-1"></i>Thêm vào giỏ
-                                                </button>
+                                                @if (product.StockQuantity == 0)
+                                                {
+                                                    <button class="btn btn-secondary btn-sm" onclick="alert('Sản phẩm đã hết hàng!')">
+                                                        <i class="fas fa-shopping-cart me-1"></i>Thêm vào giỏ 
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    <button class="btn btn-primary btn-sm" onclick="addToCart(@product.ProductId)">
+                                                        <i class="fas fa-shopping-cart me-1"></i>Thêm vào giỏ
+                                                    </button>
+                                                }
                                             </div>
                                         </div>
                                     </div>
@@ -426,8 +425,12 @@
 
 
         function showToast(message, type = 'success') {
+            let bgClass = 'bg-success';
+            if (type === 'error') bgClass = 'bg-danger';
+            else if (type === 'info') bgClass = 'bg-info';
+            else if (type === 'warning') bgClass = 'bg-warning';
             const toastHtml = `
-                <div class="toast align-items-center text-white bg-${type} border-0" role="alert">
+                <div class="toast align-items-center text-white ${bgClass} border-0" role="alert">
                     <div class="d-flex">
                         <div class="toast-body">
                             <i class="fas fa-check-circle me-2"></i>${message}

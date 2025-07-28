@@ -81,38 +81,56 @@ WebBanDoTrangMieng/
 - SQL Server 2017+ hoặc SQL Server Express
 - IIS Express (có sẵn trong Visual Studio)
 
-### **2. Clone repository**
+### **2. Cấu hình Database**
 
-```bash
-git clone https://github.com/your-username/WebBanDoTrangMieng.git
-cd WebBanDoTrangMieng
-```
+1. **Cài đặt SQL Server**
 
-### **3. Cấu hình Database**
+   - Tải và cài đặt SQL Server Express từ Microsoft
+   - Hoặc sử dụng SQL Server Management Studio (SSMS)
 
-1. Mở SQL Server Management Studio
-2. Tạo database mới tên `QLStoreTrangMieng`
-3. Chạy script trong file `db_Script.txt`
-4. Cập nhật connection string trong `Web.config`:
+2. **Tạo Database**
+
+   - Mở SQL Server Management Studio
+   - Kết nối đến SQL Server instance
+   - Tạo database mới tên `QLStoreTrangMieng`
+
+3. **Import dữ liệu**
+   - Mở file `db_Script.txt` trong project
+   - Copy toàn bộ nội dung script
+   - Trong SSMS, chọn database `QLStoreTrangMieng`
+   - Mở New Query, paste script và Execute
+
+### **3. Cấu hình Connection String**
+
+1. **Mở file Web.config** trong project
+2. **Tìm section connectionStrings**
+3. **Cập nhật thông tin kết nối:**
 
 ```xml
 <connectionStrings>
   <add name="QLStoreTrangMiengEntities"
-       connectionString="data source=YOUR_SERVER;initial catalog=QLStoreTrangMieng;integrated security=True"
+       connectionString="data source=YOUR_SERVER_NAME;initial catalog=QLStoreTrangMieng;integrated security=True;MultipleActiveResultSets=True"
        providerName="System.Data.SqlClient" />
 </connectionStrings>
 ```
 
-### **4. Chạy ứng dụng**
+**Lưu ý:** Thay `YOUR_SERVER_NAME` bằng tên SQL Server instance của bạn (thường là `localhost` hoặc `.\SQLEXPRESS`)
 
-1. Mở solution trong Visual Studio
-2. Build solution (Ctrl + Shift + B)
-3. Chạy project (F5 hoặc Ctrl + F5)
+### **4. Build và chạy ứng dụng**
 
-### **5. Tài khoản mặc định**
+1. **Mở project trong Visual Studio**
 
-- **Admin:** admin@example.com / password123
-- **User:** user@example.com / password123
+   - Mở file `WebBanDoTrangMieng.sln`
+   - Đợi Visual Studio restore packages
+
+2. **Build Solution**
+
+   - Nhấn `Ctrl + Shift + B` hoặc
+   - Menu Build → Build Solution
+
+3. **Chạy ứng dụng**
+   - Nhấn `F5` để debug hoặc `Ctrl + F5` để chạy không debug
+   - Trình duyệt sẽ mở tự động với địa chỉ `http://localhost:port`
 
 ## 📊 Database Schema
 
@@ -196,30 +214,11 @@ cd WebBanDoTrangMieng
 4. Push to branch (`git push origin feature/AmazingFeature`)
 5. Tạo Pull Request
 
-## 📝 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
-## 👥 Tác giả
-
-- **Tên:** [Tên của bạn]
-- **Email:** [Email của bạn]
-- **GitHub:** [GitHub profile]
-
 ## 🙏 Acknowledgments
 
 - Bootstrap team for the amazing CSS framework
 - Font Awesome for icons
 - ASP.NET MVC community
 - Entity Framework documentation
-
----
-
-## 📞 Liên hệ
-
-Nếu có bất kỳ câu hỏi nào, vui lòng liên hệ qua:
-
-- **Email:** your.email@example.com
-- **GitHub Issues:** [Project Issues](https://github.com/your-username/WebBanDoTrangMieng/issues)
 
 **Made with ❤️ for learning purposes**
